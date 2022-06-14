@@ -150,7 +150,7 @@ function formUpdate() {
 }
 
 function addResin() {
-  var appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-4"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <button type="button" class="btn-close" aria-label="Delete"></button> </div>')
+  var appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>')
   $("#resinForm").append(appended);
 }
 

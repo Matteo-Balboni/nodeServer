@@ -16,13 +16,14 @@ const viewUrl = '_design/all_customers/_view/all';
 couch.listDatabases().then(function(dbs) {
   console.log(dbs);
    //importantissimo, serve per dare del gay a cristian
-  console.log("\x1b[45m\x1b[36m\x1b[5m    ______     _      __  _                ______            \x1b[0m");
-  console.log("\x1b[45m\x1b[36m\x1b[5m   / ____/____(_)____/ /_(_)___ _____     / ____/___ ___  __ \x1b[0m");
-  console.log("\x1b[45m\x1b[36m\x1b[5m  / /   / ___/ / ___/ __/ / __ `/ __ \\   / / __/ __ `/ / / / \x1b[0m");
-  console.log("\x1b[45m\x1b[36m\x1b[5m / /___/ /  / (__  ) /_/ / /_/ / / / /  / /_/ / /_/ / /_/ /  \x1b[0m");
-  console.log("\x1b[45m\x1b[36m\x1b[5m \\____/_/  /_/____/\\__/_/\\__,_/_/ /_/   \\____/\\__,_/\\__, /   \x1b[0m");
-  console.log("\x1b[45m\x1b[36m\x1b[5m                                                   /____/    \x1b[0m");
-  console.log("\x1b[45m\x1b[36m\x1b[5m                                                             \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m    ______     _      __  _                ______            \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m   / ____/____(_)____/ /_(_)___ _____     / ____/___ ___  __ \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m  / /   / ___/ / ___/ __/ / __ `/ __ \\   / / __/ __ `/ / / / \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m / /___/ /  / (__  ) /_/ / /_/ / / / /  / /_/ / /_/ / /_/ /  \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m \\____/_/  /_/____/\\__/_/\\__,_/_/ /_/   \\____/\\__,_/\\__, /   \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m                                                   /____/    \x1b[0m");
+  console.log("\x1b[45m\x1b[37m\x1b[5m                                                             \x1b[0m");
+  console.log("");
 });
 
 function sanificateInput(req){
@@ -64,7 +65,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function(req, res) {
   //res.render('index');
-  console.log('Connesso: ' + req.ip);
+  console.log('\x1b[46m Connesso -> \x1b[0m\x1b[4m' + req.ip + '\x1b[0m');
   couch.get(dbName, viewUrl).then(
     function(data, headers, status){
       //sort magico che ho trovato da qualche parte
@@ -132,7 +133,7 @@ app.post('/customer/update', function(req, res) {
     }]
 
   }).then(function(data, headers, status) {
-    console.log(" Aggiornato -> id:" + obj._id + " da: " + req.ip);
+    console.log("\x1b[43m Aggiornato -> \x1b[0m id:" + obj._id + " da: " + req.ip + "\x1b[0m");
     res.send("infoCliente?c=" + obj._id);
   },
   function(err) {
@@ -165,7 +166,7 @@ app.post('/customer/add', function(req, res) {
 
     }).then(
       function(data, headers, status){
-        console.log(" Aggiunto -> " + obj.NomeCliente + " " + id);
+        console.log("\x1b[42m Aggiunto -> \x1b[0m " + obj.NomeCliente + " " + id + "\x1b[0m");
         res.send(obj.NomeCliente);
       },
       function(err) {
@@ -178,7 +179,7 @@ app.post('/customer/delete', function(req, res) {
   var id = req.body.id;
   var rev = req.body.rev;
 
-  console.log(" Eliminato -> id: " + id + " rev: " + rev);
+  console.log("\x1b[41m Eliminato -> \x1b[0m id: " + id + " rev: " + rev + "\x1b[0m");
   couch.del(dbName, id, rev).then(
     function(data, headers, status) {
       res.send(data);
