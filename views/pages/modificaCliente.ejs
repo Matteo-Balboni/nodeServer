@@ -20,6 +20,7 @@
       <p id="customerId" hidden><%= customer.id%></p>
       <p id="customerRev" hidden><%= customer.value.rev%></p>
       <button type="button" name="button" class="btn btn-outline-success float-end mt-3" onclick="formUpdate()">Salva</button>
+      <a href="infoCliente?c=<%= customer.id %>" class="btn btn-outline-danger float-end mt-3 me-3">Annulla</a>
       <hr>
   </div>
   <div class="container mt-4">
