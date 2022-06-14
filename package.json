@@ -1,0 +1,18 @@
+{
+  "name": "provanode",
+  "version": "1.0.0",
+  "description": "Prova per interfacciare node a couchdb",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "nano": "^10.0.0",
+    "node-couchdb": "^1.3.0"
+  }
+}

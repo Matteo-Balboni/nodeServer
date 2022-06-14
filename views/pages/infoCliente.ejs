@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <title>Scheda Cliente</title>
+</head>
+<body>
+  <!--Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <div class="container mt-3">
+      <a href="/" class="btn btn-outline-primary">Indietro</a>
+      <h1 class="display-3 ms-4 d-inline align-middle"><%= customer.value.name %></h1>
+      <a type="button" name="button" class="btn btn-outline-primary float-end mt-3" href="modifica?c=<%= customer.id %>">Modifica</a>
+      <hr>
+  </div>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col">
+        <h3>Info Cliente</h3>
+          <div><strong>Email:</strong> <%= customer.value.email %></div>
+          <div><strong>Telefono:</strong> <%= customer.value.telefono %></div>
+          <div><strong>Token Assistenza:</strong> <%= customer.value.token %></div>
+      </div>
+      <div class="col">
+        <h3>Resine Vendute</h3>
+        <% customer.value.resine.forEach(function(resin){%>
+          <div><b><%= resin.nome %>: </b> <%= resin.numero %> </div>
+        <% }); %>
+      </div>
+
+      <div class="col">
+        <h3>Macchine</h3>
+        <div class="accordion" id="accordionExample">
+        <% var i = 0;%>
+        <% var open = 'true';%>
+        <% var collapse = '';%>
+        <% var show = 'show'; %>
+        <% customer.value.macchine.forEach(function(device){ %>
+          <% i++;%>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button <%= collapse %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="<% open %>" aria-controls="collapse<%= i %>">
+                <%= device.modello %> | <%= device.seriale %>
+              </button>
+            </h2>
+            <div id="collapse<%= i %>" class="accordion-collapse collapse <%= show %>" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <strong>Assistenze</strong>
+                <% device.assistenze.forEach(function(assistenza){ %>
+                  <p><%= assistenza %></p>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+          <% open = 'false'; %>
+          <% collapse = 'collapsed'; %>
+          <% show = '' %>
+        <% }); %>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <h3>Software</h3>
+        <div></div>
+      </div>
+
+    </div>
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" id="UpdateAlert"></div>
+  </div>
+</body>
+</html>

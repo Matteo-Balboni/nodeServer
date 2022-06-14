@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cristian Gay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="container mb-5">
+      <nav class="sticky-top bg-white pb-3" id="TitleNav">
+        <div class="container-fluid mt-4 clearfix text-right">
+          <h1 class="display-2 d-inline align-middle">Clienti</h1>
+          <button class="btn btn-outline-primary float-end mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti">Aggiunta Rapida</button>
+          <button class="btn btn-outline-danger float-end mt-3 me-1" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina Cliente</button>
+          <hr>
+          <input class="form-control" id="InputRicerca" type="text" placeholder="Cerca..." autofocus>
+        </div>
+      </nav>
+
+      <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+          <h3 class="offcanvas-title" id="offcanvasScrollingLabel">Aggiungi Cliente</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <form id="mainForm">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="NomeCliente" name="NomeCliente" placeholder="Nome Cliente" required>
+              <label for="NomeCliente">Nome Cliente</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="Email" name="Email" placeholder="email@esempio.com">
+              <label for="Email">Indirizzo Email</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="">
+              <label for="Telefono">Numero di Telefono</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="number" class="form-control" id="Token" name="Token" placeholder="">
+              <label for="Token">Numero di Token</label>
+            </div>
+
+            <fieldset>
+              <legend>Resine</legend>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="NomeResina" name="NomeResina" placeholder="">
+                <label for="NomeResina">Nome resina</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="Qta" name="Qta" placeholder="">
+                <label for="Qta">Quantità</label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Macchine</legend>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="NomeMacchina" name="NomeMacchina" placeholder="">
+                <label for="NomeMacchina">Nome Macchina</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="Seriale" name="Seriale" placeholder="">
+                <label for="Seriale">Seriale Macchina</label>
+              </div>
+            </fieldset>
+            <div class="d-grid position-sticky bottom-0 bg-white">
+              <button type="button" class="btn btn-outline-primary mb-2" name="submitMainForm" onclick="formSubmit()">Aggiungi</button>
+              <button type="reset" class="btn btn-outline-secondary" name="formReset">Reset</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <div class="list-group" id="ListaClienti">
+          <% customers.forEach(function(customer){ %>
+              <a href="infoCliente?c=<%= customer.id%>" class="fw-semibold list-group-item list-group-item-action" id="element-<%= customer.id%>"><%= customer.value.name %>
+                <p class="fw-light">token: <%= customer.value.token %></p>
+              </a> <!-- name invece di NomeCliente perchè lo chiamo così nella view di couchdb-->
+
+          <% }); %>
+        </div>
+      </div>
+      <div>
+        <div class="list-group d-none" id="ListaClientiDel">
+          <% customers.forEach(function(customer){ %>
+            <div class="d-flex" id="elementDelete-<%=customer.id%>">
+              <div class="flex-grow-1 rounded-start">
+                <a href="infoCliente?c=<%= customer.id%>" class="fw-semibold list-group-item list-group-item-action"><%= customer.value.name %>
+                  <p class="fw-light">token: <%= customer.value.token %></p>
+                </a>
+              </div>
+              <div class="d-flex align-items-stretch float-end ">
+                <button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement('<%=customer.id%>', '<%= customer.value.rev%>')">Elimina</button>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" id="DeleteAlerts"></div>
+      <div class="container mt-2 pb-5 float-none bottom-0">
+        <hr>
+        <button class="btn btn-outline-danger float-end" type="button" name="button" onclick="toggleDelete()">Elimina Cliente</button>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function(){
+        $("#InputRicerca").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#ListaClienti a").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            $("#ListaClienti").first().addClass('border-top');
+          });
+          if (value == '') {
+            $("#ListaClienti").first().removeClass('border-top');
+          }
+        });
+
+
+      });
+
+      $(window).scroll(function(){
+        if ($(this).scrollTop() > 0) {
+          $('#TitleNav').addClass('border-bottom');
+        } else {
+          $('#TitleNav').removeClass('border-bottom');
+        }
+      });
+    </script>
+    <script src="script.js" type="text/javascript" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
