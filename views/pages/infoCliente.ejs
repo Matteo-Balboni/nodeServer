@@ -14,9 +14,9 @@
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <div class="container mt-3">
-      <a href="/" class="btn btn-outline-primary">Indietro</a>
+      <a href="/" class="btn btn-outline-primary" title="Torna indietro">Indietro</a>
       <h1 class="display-3 ms-4 d-inline align-middle"><%= customer.value.name %></h1>
-      <a type="button" name="button" class="btn btn-outline-primary float-end mt-3" href="modifica?c=<%= customer.id %>">Modifica</a>
+      <a type="button" name="button" class="btn btn-outline-primary float-end mt-3" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente">Modifica</a>
       <hr>
   </div>
   <div class="container mt-4">
@@ -71,7 +71,7 @@
         <div></div>
       </div>
     </div>
-    
+
     <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" id="UpdateAlert"></div>
   </div>
 </body>
