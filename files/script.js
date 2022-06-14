@@ -154,9 +154,6 @@ function addResin() {
   $("#resinForm").append(appended);
 }
 
-function funzione inutile() {
-
-}
 
 var HttpClient = function() {
     this.post = function(aUrl, aCallback, reqBody) {
