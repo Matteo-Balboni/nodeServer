@@ -51,7 +51,11 @@ function sanificateInput(req){
     req.Seriale = null;
 
   if (!req.Software) {
-    req.Software = "Nessun Software"
+    req.Software = "Nessun Software";
+  }
+
+  if (!req.Assistenze) {
+    req.Assistenze = "";
   }
 
   return req;
@@ -69,7 +73,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function(req, res) {
   //res.render('index');
-  console.log('\x1b[46m Connesso   -> \x1b[0m\x1b[4m' + req.ip + '\x1b[0m');
+  console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
   couch.get(dbName, viewUrl).then(
     function(data, headers, status){
       //sort magico che ho trovato da qualche parte
@@ -92,7 +96,7 @@ app.get('/', function(req, res) {
   });
 });
 
-app.get('/infoCliente', function(req, res) {
+app.get('/infocliente', function(req, res) {
   const cliente = req.query.c;
   const viewUrlfull = viewUrl + '?key="' + cliente + '"';
 
@@ -132,10 +136,10 @@ app.post('/customer/update', function(req, res) {
     Resine: obj.Resine,
     Macchine: [{
       seriale: obj.Seriale,
-      modello: obj.NomeMacchina,
-      assistenze: []          //verifica se questo funziona, secondo me non funziona
+      modello: obj.NomeMacchina
     }],
-    Software: obj.Software
+    Software: obj.Software,
+    Assistenze: obj.Assistenze
 
   }).then(function(data, headers, status) {
     console.log("\x1b[43m Aggiornato -> \x1b[0m id:" + obj._id + " da: " + req.ip + "\x1b[0m");

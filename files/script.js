@@ -123,6 +123,7 @@ function formUpdate() {
   var mainF = $("#mainForm").serializeArray();
   var resinF = $("#resinForm").serializeArray();
   var softwareF = $("#softwareForm").serializeArray();
+  var txtarea = $("textarea").val();
   var arr2 = [];
 
   mainF = objectify(mainF, 'object');
@@ -144,12 +145,15 @@ function formUpdate() {
   }
   softwareF = arr2;
 
+  console.log(txtarea);
+
 
   mainF.NomeCliente = $("#customerName").text();
   mainF._id = $("#customerId").text();
   mainF._rev = $("#customerRev").text();
   mainF.Resine = resinF;
-  mainF.Software = softwareF
+  mainF.Software = softwareF;
+  mainF.Assistenze = txtarea;
   var mainF = JSON.stringify(mainF);
   console.log(JSON.stringify(resinF));
 

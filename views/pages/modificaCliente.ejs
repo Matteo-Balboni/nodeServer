@@ -84,10 +84,7 @@
               </h2>
               <div id="collapse<%= i %>" class="accordion-collapse collapse <%= show %>" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                  <strong>Assistenze</strong>
-                  <% device.assistenze.forEach(function(assistenza){ %>
-                    <p><%= assistenza %></p>
-                  <% }); %>
+                  <strong>Informazioni</strong>
                 </div>
               </div>
             </div>
@@ -117,7 +114,6 @@
                   <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>
                 </div>
               </div>
-
               <% }); %>
             <% } %>
         </form>
@@ -126,7 +122,7 @@
       <div class="col-8">
         <h3>Assistenze</h3>
         <div class="form-floating">
-          <textarea id="assistenzeArea" class="form-control mt-3" placeholder="" style="height: 250px"></textarea>
+          <textarea id="assistenzeArea" class="form-control mt-3" placeholder="" style="height: 250px" ><%= customer.value.assistenze %></textarea>
           <label for="assistenzeArea">Cronologia Assistenze</label>
         </div>
       </div>
