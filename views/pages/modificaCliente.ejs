@@ -43,57 +43,60 @@
       <div class="col">
         <form id="resinForm">
           <h3>Resine Vendute</h3>
-          <% var i = 0 %>
-          <% customer.value.resine.forEach(function(resin){%>
-            <% i++ %>
-            <div class="row mb-2 Resine" id="div<%= i %>">
-              <div class="col-7">
-                <input type="text" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
+          <% if (customer.value.resine) { %>
+            <% var i = 0 %>
+            <% customer.value.resine.forEach(function(resin){%>
+              <% i++ %>
+              <div class="row mb-2 Resine" id="div<%= i %>">
+                <div class="col-7">
+                  <input type="text" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
+                </div>
+                <div class="col-3">
+                  <input type="number" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>">
+                </div>
+                <div class="col-2">
+                  <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
+                </div>
               </div>
-              <div class="col-3">
-                <input type="number" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>">
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
-              </div>
-            </div>
 
-          <% }); %>
+              <% }); %>
+            <% } %>
         </form>
-
         <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
       </div>
 
 
       <div class="col">
         <h3>Macchine</h3>
-        <div class="accordion" id="accordionExample">
-        <% var i = 0;%>
-        <% var open = 'true';%>
-        <% var collapse = '';%>
-        <% var show = 'show'; %>
-        <% customer.value.macchine.forEach(function(device){ %>
-          <% i++;%>
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-              <button class="accordion-button <%= collapse %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="<% open %>" aria-controls="collapse<%= i %>">
-                <%= device.modello %> | <%= device.seriale %>
-              </button>
-            </h2>
-            <div id="collapse<%= i %>" class="accordion-collapse collapse <%= show %>" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <strong>Assistenze</strong>
-                <% device.assistenze.forEach(function(assistenza){ %>
-                  <p><%= assistenza %></p>
-                <% }); %>
+        <% if (customer.value.macchine) { %>
+          <div class="accordion" id="accordionExample">
+          <% var i = 0;%>
+          <% var open = 'true';%>
+          <% var collapse = '';%>
+          <% var show = 'show'; %>
+          <% customer.value.macchine.forEach(function(device){ %>
+            <% i++;%>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button <%= collapse %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="<% open %>" aria-controls="collapse<%= i %>">
+                  <%= device.modello %> | <%= device.seriale %>
+                </button>
+              </h2>
+              <div id="collapse<%= i %>" class="accordion-collapse collapse <%= show %>" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <strong>Assistenze</strong>
+                  <% device.assistenze.forEach(function(assistenza){ %>
+                    <p><%= assistenza %></p>
+                  <% }); %>
+                </div>
               </div>
             </div>
+            <% open = 'false'; %>
+            <% collapse = 'collapsed'; %>
+            <% show = '' %>
+          <% }); %>
           </div>
-          <% open = 'false'; %>
-          <% collapse = 'collapsed'; %>
-          <% show = '' %>
-        <% }); %>
-        </div>
+        <% } %>
       </div>
     <div class="row mt-3">
       <div class="col-4">
