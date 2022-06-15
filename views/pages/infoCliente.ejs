@@ -25,9 +25,11 @@
     <div class="row">
       <div class="col">
         <h3>Info Cliente</h3>
-        <% if (customer.value.email && customer.value.telefono && customer.value.token) { %>
+        <% if (customer.value.email) { %>
           <div><strong>Email:</strong> <%= customer.value.email %></div>
+        <% } %><% if (customer.value.telefono) { %>
           <div><strong>Telefono:</strong> <%= customer.value.telefono %></div>
+        <% } %><% if (customer.value.token != null) { %>
           <div><strong>Token Assistenza:</strong> <%= customer.value.token %></div>
         <% } %>
       </div>
@@ -71,12 +73,15 @@
           <% }); %>
           </div>
         <% } %>
-      </div>
     </div>
     <div class="row mt-3">
       <div class="col-4">
         <h3>Software</h3>
-        <div>Nome Software 1</div>
+        <% if (customer.value.software) { %>
+          <% customer.value.software.forEach(function(software){%>
+            <div><b><%= software.nome %>: </b> <%= software.numero %> </div>
+          <% }); %>
+        <% } %>
       </div>
       <div class="col-8">
         <h3>Assistenze</h3>

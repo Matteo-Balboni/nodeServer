@@ -50,6 +50,10 @@ function sanificateInput(req){
   if (!req.Seriale)
     req.Seriale = null;
 
+  if (!req.Software) {
+    req.Software = "Nessun Software"
+  }
+
   return req;
 }
 
@@ -130,7 +134,8 @@ app.post('/customer/update', function(req, res) {
       seriale: obj.Seriale,
       modello: obj.NomeMacchina,
       assistenze: []          //verifica se questo funziona, secondo me non funziona
-    }]
+    }],
+    Software: obj.Software
 
   }).then(function(data, headers, status) {
     console.log("\x1b[43m Aggiornato -> \x1b[0m id:" + obj._id + " da: " + req.ip + "\x1b[0m");
