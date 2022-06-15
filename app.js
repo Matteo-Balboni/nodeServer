@@ -65,7 +65,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function(req, res) {
   //res.render('index');
-  console.log('\x1b[46m Connesso -> \x1b[0m\x1b[4m' + req.ip + '\x1b[0m');
+  console.log('\x1b[46m Connesso   -> \x1b[0m\x1b[4m' + req.ip + '\x1b[0m');
   couch.get(dbName, viewUrl).then(
     function(data, headers, status){
       //sort magico che ho trovato da qualche parte
@@ -166,7 +166,7 @@ app.post('/customer/add', function(req, res) {
 
     }).then(
       function(data, headers, status){
-        console.log("\x1b[42m Aggiunto -> \x1b[0m " + obj.NomeCliente + " " + id + "\x1b[0m");
+        console.log("\x1b[42m Aggiunto   -> \x1b[0m " + obj.NomeCliente + " " + id + "\x1b[0m");
         res.send(obj.NomeCliente);
       },
       function(err) {
@@ -179,7 +179,7 @@ app.post('/customer/delete', function(req, res) {
   var id = req.body.id;
   var rev = req.body.rev;
 
-  console.log("\x1b[41m Eliminato -> \x1b[0m id: " + id + " rev: " + rev + "\x1b[0m");
+  console.log("\x1b[41m Eliminato  -> \x1b[0m id: " + id + " rev: " + rev + "\x1b[0m");
   couch.del(dbName, id, rev).then(
     function(data, headers, status) {
       res.send(data);
