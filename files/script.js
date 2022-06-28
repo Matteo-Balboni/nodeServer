@@ -33,7 +33,7 @@ function objectify(data, option) {
 }
 
 
-function deleteElement(customerID, customerREV) {
+function deleteElement(customerID, customerREV, customerName) {
 
   if(confirm("Sei sicuro di voler eliminare questo cliente?")){
     $("#element-" + customerID).remove();
@@ -47,7 +47,7 @@ function deleteElement(customerID, customerREV) {
       keys = Object.keys(resp);
       if (keys[0] == 'data') {
 
-        $("#DeleteAlerts").append('<div class="alert alert-success mb-1" role="alert" id="DeleteSuccess">Cliente Eliminato</div>');
+        $("#DeleteAlerts").append('<div class="alert alert-success mb-1" role="alert" id="DeleteSuccess">Cliente ' + customerName + ' Eliminato</div>');
         $("#DeleteAlerts").hide();
         $("#DeleteAlerts").fadeIn('fast');
 
@@ -98,7 +98,7 @@ function formSubmit() {
         respo = JSON.parse(respo);
         var deleteElement = 'deleteElement()';
         $("#ListaClienti").prepend('<a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">token: '+ respo.value.token +'</p></a>');
-        $("#ListaClientiDel").prepend('<div class="d-flex" id="elementDelete-'+ respo.id +'"><div class="flex-grow-1 rounded-start"><a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">token: '+ respo.value.token +'</p></a></div><div class="d-flex align-items-stretch float-end "><button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement(`'+ respo.id +'`, `'+ respo.value.rev +'`)">Elimina</button>');
+        $("#ListaClientiDel").prepend('<div class="d-flex" id="elementDelete-'+ respo.id +'"><div class="flex-grow-1 rounded-start"><a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">token: '+ respo.value.token +'</p></a></div><div class="d-flex align-items-stretch float-end "><button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement(`'+ respo.id +'`, `'+ respo.value.rev +'`, `'+ respo.value.name +'`)">Elimina</button>');
       });
 
       setTimeout(function(){
