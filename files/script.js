@@ -18,14 +18,14 @@ function objectify(data, option) {
   if (option == 'array') {
     parsedData = [];
     data.forEach(function() {
-      parsedData[i] = { [data[i].name] : data[i].value };
+      parsedData[i] = { [data[i].name] : data[i].value }; //array perchè array di oggetti
       i++;
     });
   }
   if (option == 'object') {
     parsedData = {};
     data.forEach(function() {
-      parsedData[data[i].name] = data[i].value;
+      parsedData[data[i].name] = data[i].value; //object perchè imposto i parametri dell'oggetto
       i++;
     });
   }
@@ -147,7 +147,7 @@ function formUpdate() {
 
   for (var i = 0, j = 0; j < softwareF.length; i++, j = j + 2) {
     if (Object.values(softwareF[j])[0] != '') {
-      arr2.push({ nome: Object.values(softwareF[j])[0], numero: Object.values(softwareF[j+1])[0] });
+      arr2.push({ nome: Object.values(softwareF[j])[0] });
     }
   }
   softwareF = arr2;
@@ -176,7 +176,7 @@ function addResin() {
   $("#resinForm").append(appended);
 }
 function addSoftware() {
-  var appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  var appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#softwareForm").append(appended);
 }
 

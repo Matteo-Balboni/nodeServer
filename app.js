@@ -177,7 +177,7 @@ app.post('/customer/add', function(req, res) {
       Macchine: [{
         seriale: obj.Seriale,
         modello: obj.NomeMacchina,
-        assistenze: []          //verifica se questo funziona, secondo me non funziona
+        assistenze: obj.Assistenze
       }]
 
     }).then(
