@@ -36,8 +36,8 @@ function objectify(data, option) {
 function deleteElement(customerID, customerREV) {
 
   if(confirm("Sei sicuro di voler eliminare questo cliente?")){
-    $("#element-" + customerID).addClass("d-none");
-    $("#elementDelete-" + customerID).addClass("d-none");
+    $("#element-" + customerID).remove();
+    $("#elementDelete-" + customerID).remove();
 
     const reqContent = '{ "id": "'+ customerID +'", "rev": "'+ customerREV +'" }';
 
