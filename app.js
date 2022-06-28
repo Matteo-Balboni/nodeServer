@@ -99,10 +99,17 @@ app.get('/', function(req, res) {
 app.get('/infocliente', function(req, res) {
   const cliente = req.query.c;
   const viewUrlfull = viewUrl + '?key="' + cliente + '"';
+  var objcheck = req.query.o;
+  objcheck ??= false; //lo setta a false se è null o undefined
 
   couch.get(dbName, viewUrlfull).then(
     function(data, headers, status){
-      res.render('pages/infoCliente', {customer:data.data.rows[0]});
+      if (objcheck == false) {
+        res.render('pages/infoCliente', {customer:data.data.rows[0]});
+      }
+      else {
+        res.send(data.data.rows[0]); //ristruttura questo in un altra funzione se ci sono problemi di prestazioni (facendo una view apposta sul db e mettendo questo in un altro app.get)
+      }
   },
     function(err){
     res.send(err);
@@ -176,7 +183,7 @@ app.post('/customer/add', function(req, res) {
     }).then(
       function(data, headers, status){
         console.log("\x1b[42m Aggiunto   -> \x1b[0m " + obj.NomeCliente + " " + id + "\x1b[0m");
-        res.send(obj.NomeCliente);
+        res.send({name: obj.NomeCliente, id: id});
       },
       function(err) {
         res.send(err);

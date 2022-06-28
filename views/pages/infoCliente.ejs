@@ -76,18 +76,14 @@
         <h3>Software</h3>
         <% if (customer.value.software) { %>
           <% customer.value.software.forEach(function(software){%>
-            <div><b><%= software.nome %>: </b> <%= software.numero %> </div>
+            <div><%= software.nome %></div>
           <% }); %>
         <% } %>
       </div>
       <div class="col-8">
         <h3>Assistenze</h3>
         <div class="form-floating">
-          <textarea id="assistenzeArea" class="form-control mt-3" placeholder="" style="height: 250px" readonly>
-            <% if (customer.value.software) { %>
-              <%= customer.value.assistenze %>
-            <% } %>
-          </textarea>
+          <textarea id="assistenzeArea" class="form-control mt-3" placeholder="" style="height: 250px" readonly><% if (customer.value.software) { %><%= customer.value.assistenze %><% } %></textarea>
           <label for="assistenzeArea">Cronologia Assistenze</label>
         </div>
       </div>
