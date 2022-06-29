@@ -145,13 +145,47 @@ app.get('/modifica', function(req, res) {
   });
 });
 
-app.get('/resin(a)?', function(req, res) {
+app.get('/resina?e?', function(req, res) {
   couch.get(resindb, resinUrl).then(
     function(data, headers, status) {
       res.render('pages/resin', {resin: data.data.rows});
     },
     function(err) {
       res.send(err);
+  });
+});
+
+app.post('/resin/update', function(req, res) {
+  //se mai migro a nano, devo assolutamente cambiare il modo di fare questo, mi sembra una cosa stupida fare così tante richieste
+  couch.update(resindb, {
+    _id: req.body.name, //si sembra strano ma è così per il serialize
+    _rev: req.body.rev,
+    name: req.body.value
+  }).then(
+    function(data, headers, status) {
+      console.log("\x1b[43m Aggiornato RESINA-> \x1b[0m id:" + req.body.name + " da: " + req.ip + "\x1b[0m");
+      res.send("Aggiornato" + req.body.name);
+    },
+    function(err) {
+      res.send(err);
+  });
+})
+
+app.post('/resin/add', function(req, res) {
+  couch.uniqid().then(function(ids) {
+    const id = ids[0];
+
+    couch.insert(resindb, {
+      _id: id,
+      name: req.body.value
+    }).then(
+      function(data, headers, status) {
+        console.log("\x1b[43m Aggiornato RESINA-> \x1b[0m id:" + id + " da: " + req.ip + "\x1b[0m");
+        res.send("Aggiornato " + id);
+      },
+      function(err) {
+        res.send(err);
+    });
   });
 });
 
@@ -233,3 +267,7 @@ app.listen(80, function() {
 app.get('script.js', function(req, res) {
   res.send('files/script.js');
 });
+
+app.get('resindbscript.js', function(req, res) {
+  res.send('files/resindbscript.js');
+})

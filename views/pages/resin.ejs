@@ -3,25 +3,54 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>DB Resine</title>
   </head>
   <body>
-    <div class="container">
-      <nav class="sticky-top bg-white pb-3" id="TitleNav">
+    <div class="container mb-5">
+      <nav class="sticky-top bg-white pb-3 mb-1" id="TitleNav">
         <div class="container-fluid mt-4 clearfix text-right">
           <h1 class="display-2 d-inline align-middle">Resine</h1>
-          <button class="btn btn-outline-primary float-end mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti">Aggiungi</button>
-          <button class="btn btn-outline-danger float-end mt-3 me-1" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina</button>
+          <button class="btn btn-outline-primary float-end mt-3" type="button" onclick="addResinToDb()" title="Aggiungi rapidamente uno o più clienti">Aggiungi</button>
+          <button class="btn btn-outline-danger float-end mt-3 me-1" type="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina</button>
+          <button class="btn btn-outline-success float-end mt-3 me-3" type="button" onclick="resindbUpdate()" title="Salva i cambiamenti">Salva</button>
           <hr>
         </div>
       </nav>
-      <% resin.forEach(function(resin){ %>
-        <p><%= resin.value %></p>
-      <% }); %>
+      <div class="container">
+        <form id="resindbform">
+        <% var i = 0 %>
+        <% resin.forEach(function(resin){ %>
+          <% i++ %>
+          <div class="row pb-2">
+            <div class="col-10">
+              <input type="text" class="form-control" id="resin<%= i %>" name="<%= resin.id %>" value="<%= resin.value.name %>" rev="<%= resin.value.rev %>">
+            </div>
+            <div class="col-2">
+              <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
+            </div>
+          </div>
+
+        <% }); %>
+        </form>
+      </div>
     </div>
 
     <!-- SCRIPT -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("body").on("click", ".btn-close", function() {
+          $( this ).parent().parent().fadeOut("fast");
+          $( this ).parent().siblings().find("*").val('');
+        })
+      });
+      function addResinToDb() {
+        const appended = $('<div class="row pb-2"><div class="col-10"><input type="text" class="form-control" name="added" rev=""></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button></div></div>');
+        $('#resindbform').append(appended);
+      };
+    </script>
+    <script src="resindbscript.js" type="text/javascript" crossorigin="anonymous"></script>
     <script src="script.js" type="text/javascript" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
   </body>

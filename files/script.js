@@ -169,7 +169,7 @@ function formUpdate() {
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
-  var mainF = JSON.stringify(mainF);
+  mainF = JSON.stringify(mainF);
   console.log(mainF);
   console.log(JSON.stringify(resinF));
 
