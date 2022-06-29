@@ -50,6 +50,10 @@ function sanificateInput(req){
   if (!req.Seriale)
     req.Seriale = null;
 
+  if(!req.Macchine){
+    req.Macchine.seriale = "Nessuna Macchina"
+  }
+
   if (!req.Software) {
     req.Software = "Nessun Software";
   }
@@ -141,10 +145,7 @@ app.post('/customer/update', function(req, res) {
     Telefono: obj.Telefono,
     token: obj.Token,
     Resine: obj.Resine,
-    Macchine: [{
-      seriale: obj.Seriale,
-      modello: obj.NomeMacchina
-    }],
+    Macchine: obj.Macchine,
     Software: obj.Software,
     Assistenze: obj.Assistenze
 
@@ -174,7 +175,7 @@ app.post('/customer/add', function(req, res) {
         numero: obj.Qta
         }
       ],
-      Macchine: [{
+      Macchine: [{ //va rifatto per funzionare come in update
         seriale: obj.Seriale,
         modello: obj.NomeMacchina,
         assistenze: obj.Assistenze

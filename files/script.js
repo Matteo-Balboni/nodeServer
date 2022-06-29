@@ -130,12 +130,14 @@ function formUpdate() {
   var mainF = $("#mainForm").serializeArray();
   var resinF = $("#resinForm").serializeArray();
   var softwareF = $("#softwareForm").serializeArray();
-  var txtarea = $("textarea").val();
+  var deviceF = $("#deviceForm").serializeArray();
+  var txtarea = $("#assistenzeArea").val();
   var arr2 = [];
 
   mainF = objectify(mainF, 'object');
   resinF = objectify(resinF, 'array');
   softwareF = objectify(softwareF, 'array');
+  deviceF = objectify(deviceF, 'array');
 
   for (var i = 0, j = 0; j < resinF.length; i++, j = j + 2) {
     if (Object.values(resinF[j])[0] != '') {
@@ -145,23 +147,30 @@ function formUpdate() {
   resinF = arr2;
   arr2 = [];
 
-  for (var i = 0, j = 0; j < softwareF.length; i++, j = j + 2) {
+  for (var i = 0, j = 0; j < softwareF.length; i++, j = j + 2) { //dai un occhio a questo ciclo perchè ora non funziona bene credo
     if (Object.values(softwareF[j])[0] != '') {
       arr2.push({ nome: Object.values(softwareF[j])[0] });
     }
   }
   softwareF = arr2;
+  arr2 = [];
 
-  console.log(txtarea);
-
+  for (var i = 0, j = 0; j < deviceF.length; i++, j = j + 3) {
+    if (Object.values(deviceF[j])[0] != '') {
+      arr2.push({ seriale: Object.values(deviceF[j])[0], modello: Object.values(deviceF[j+1])[0], info: Object.values(deviceF[j+2])[0] });
+    }
+  }
+  deviceF = arr2;
 
   mainF.NomeCliente = $("#customerName").text();
   mainF._id = $("#customerId").text();
   mainF._rev = $("#customerRev").text();
   mainF.Resine = resinF;
+  mainF.Macchine = deviceF;
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
   var mainF = JSON.stringify(mainF);
+  console.log(mainF);
   console.log(JSON.stringify(resinF));
 
   var client = new HttpClient();
@@ -176,8 +185,12 @@ function addResin() {
   $("#resinForm").append(appended);
 }
 function addSoftware() {
-  var appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  var appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Software" name="SoftwareA" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#softwareForm").append(appended);
+}
+function addDevice() {
+  var appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
+  $("#deviceForm").append(appended);
 }
 
 
