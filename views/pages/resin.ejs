@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <nav class="sticky-top bg-white pb-3" id="TitleNav">
+        <div class="container-fluid mt-4 clearfix text-right">
+          <h1 class="display-2 d-inline align-middle">Resine</h1>
+          <button class="btn btn-outline-primary float-end mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti">Aggiungi</button>
+          <button class="btn btn-outline-danger float-end mt-3 me-1" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina</button>
+          <hr>
+        </div>
+      </nav>
+      <% resin.forEach(function(resin){ %>
+        <p><%= resin.value %></p>
+      <% }); %>
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="script.js" type="text/javascript" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

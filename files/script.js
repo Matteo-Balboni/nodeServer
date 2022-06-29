@@ -147,9 +147,9 @@ function formUpdate() {
   resinF = arr2;
   arr2 = [];
 
-  for (var i = 0, j = 0; j < softwareF.length; i++, j = j + 2) { //dai un occhio a questo ciclo perchè ora non funziona bene credo
-    if (Object.values(softwareF[j])[0] != '') {
-      arr2.push({ nome: Object.values(softwareF[j])[0] });
+  for (var i = 0; i < softwareF.length; i++) { //dai un occhio a questo ciclo perchè ora non funziona bene credo
+    if (Object.values(softwareF[i])[0] != '') {
+      arr2.push({ nome: Object.values(softwareF[i])[0] });
     }
   }
   softwareF = arr2;
@@ -181,7 +181,7 @@ function formUpdate() {
 }
 
 function addResin() {
-  var appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  var appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" list="resinDatalist" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#resinForm").append(appended);
 }
 function addSoftware() {

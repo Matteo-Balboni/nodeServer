@@ -47,7 +47,13 @@
               <h3>Resine Vendute</h3>
             </div>
             <div class="col text-center">
-              <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>            </div>
+              <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
+              <datalist id="resinDatalist">
+                <% resindb.forEach(function(res){ %>
+                  <option value="<%= res.value %>">
+                <% }); %>
+              </datalist>
+            </div>
           </div>
           <% if (customer.value.resine) { %>
             <% var i = 0 %>
@@ -55,7 +61,7 @@
               <% i++ %>
               <div class="row mb-2 Resine" id="div<%= i %>">
                 <div class="col-7">
-                  <input type="text" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
+                  <input type="text" class="form-control" list="resinDatalist" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
                 </div>
                 <div class="col-3">
                   <input type="number" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>">

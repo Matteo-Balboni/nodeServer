@@ -12,6 +12,8 @@ const couch = new NodeCouchDB({
 
 const dbName = 'cristiangay';
 const viewUrl = '_design/all_customers/_view/all';
+const resindb = 'resindb';
+const resinUrl = '_design/all_resin/_view/all';
 
 couch.listDatabases().then(function(dbs) {
   console.log(dbs);
@@ -125,13 +127,31 @@ app.get('/infocliente', function(req, res) {
 app.get('/modifica', function(req, res) {
   const cliente = req.query.c;
   const viewUrlfull = viewUrl + '?key="' + cliente + '"';
+  var resin;
 
-  couch.get(dbName, viewUrlfull).then(
-    function(data, headers, status){
-      res.render('pages/modificaCliente', {customer:data.data.rows[0]});
+  couch.get(resindb, resinUrl).then(
+    function(data, headers, status) {
+      resin = data.data.rows;
+      couch.get(dbName, viewUrlfull).then(
+        function(data, headers, status){
+          res.render('pages/modificaCliente', {customer:data.data.rows[0], resindb:resin});
+      },
+        function(err){
+        res.send(err);
+      });
   },
-    function(err){
+    function(err) {
     res.send(err);
+  });
+});
+
+app.get('/resin(a)?', function(req, res) {
+  couch.get(resindb, resinUrl).then(
+    function(data, headers, status) {
+      res.render('pages/resin', {resin: data.data.rows});
+    },
+    function(err) {
+      res.send(err);
   });
 });
 
