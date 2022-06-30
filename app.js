@@ -131,7 +131,7 @@ app.get('/modifica', function(req, res) {
 
   couch.get(resindb, resinUrl).then(
     function(data, headers, status) {
-      resin = data.data.rows;
+      resin = data.data.rows[0];
       couch.get(dbName, viewUrlfull).then(
         function(data, headers, status){
           res.render('pages/modificaCliente', {customer:data.data.rows[0], resindb:resin});
@@ -148,6 +148,18 @@ app.get('/modifica', function(req, res) {
 app.get('/resina?e?', function(req, res) {
   couch.get(resindb, resinUrl).then(
     function(data, headers, status) {
+      data.data.rows[0].value.resin.sort((a, b) => {
+          let fa = a.name.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
+              fb = b.name.toLowerCase();
+
+          if (fa < fb) {
+              return -1;
+          }
+          if (fa > fb) {
+              return 1;
+          }
+          return 0;
+      });
       res.render('pages/resin', {resina:data.data.rows[0] });
     },
     function(err) {
