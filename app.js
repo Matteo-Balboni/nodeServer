@@ -148,7 +148,7 @@ app.get('/modifica', function(req, res) {
 app.get('/resina?e?', function(req, res) {
   couch.get(resindb, resinUrl).then(
     function(data, headers, status) {
-      res.render('pages/resin', {resin: data.data.rows});
+      res.render('pages/resin', {resina:data.data.rows[0] });
     },
     function(err) {
       res.send(err);
@@ -156,36 +156,18 @@ app.get('/resina?e?', function(req, res) {
 });
 
 app.post('/resin/update', function(req, res) {
-  //se mai migro a nano, devo assolutamente cambiare il modo di fare questo, mi sembra una cosa stupida fare così tante richieste
+  //niente mauro alla fine ho fatto un documento solo come dicevi tu perchè era troppo poco consistente
   couch.update(resindb, {
-    _id: req.body.name, //si sembra strano ma è così per il serialize
+    _id: req.body.id, //si sembra strano ma è così per il serialize
     _rev: req.body.rev,
-    name: req.body.value
+    resin: req.body.resin
   }).then(
     function(data, headers, status) {
-      console.log("\x1b[43m Aggiornato RESINA-> \x1b[0m id:" + req.body.name + " da: " + req.ip + "\x1b[0m");
-      res.send("Aggiornato" + req.body.name);
+      console.log("\x1b[43m Aggiornato RESINE-> \x1b[0m id:" + req.body.id + " da: " + req.ip + "\x1b[0m");
+      res.send('/')
     },
     function(err) {
-      res.send(err);
-  });
-})
-
-app.post('/resin/add', function(req, res) {
-  couch.uniqid().then(function(ids) {
-    const id = ids[0];
-
-    couch.insert(resindb, {
-      _id: id,
-      name: req.body.value
-    }).then(
-      function(data, headers, status) {
-        console.log("\x1b[43m Aggiornato RESINA-> \x1b[0m id:" + id + " da: " + req.ip + "\x1b[0m");
-        res.send("Aggiornato " + id);
-      },
-      function(err) {
-        res.send(err);
-    });
+      console.log(err);
   });
 });
 
@@ -250,9 +232,9 @@ app.post('/customer/delete', function(req, res) {
   var id = req.body.id;
   var rev = req.body.rev;
 
-  console.log("\x1b[41m Eliminato  -> \x1b[0m id: " + id + " rev: " + rev + "\x1b[0m");
   couch.del(dbName, id, rev).then(
     function(data, headers, status) {
+      console.log("\x1b[41m Eliminato  -> \x1b[0m id: " + id + " rev: " + rev + "\x1b[0m");
       res.send(data);
     },
     function(err) {

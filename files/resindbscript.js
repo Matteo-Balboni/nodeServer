@@ -1,27 +1,21 @@
 function resindbUpdate() {
   var form = $('#resindbform').serializeArray();
-  var revs = [];
-  $('#resindbform').find('input').each(function() {
-    revs.push($( this ).attr('rev'));
-  });
+  var arr2 = [];
 
-  form.forEach((item, index) => {
-    item['rev'] = revs[index];
-  });
+  for (var i = 0; i < form.length; i++) {
+    if (form[i].value != '') {
+      arr2.push({ name: form[i].value });
+    }
+  }
+  form = {};
+  form.id = $('#resindbform').attr('docid');
+  form.rev = $('#resindbform').attr('docrev');
+  form.resin = arr2;
 
   console.log(form);
-  var client = new HttpClient();
-  form.forEach((item, i) => {
-    if (item.name == 'added') {
-      client.post('resin/add', function(response) {
-        console.log(response);
-      }, JSON.stringify(item));
-    }
-    else {
-      client.post('resin/update', function(response) {
-        console.log(response);
-      }, JSON.stringify(item));
-    }
-  });
 
+  var client = new HttpClient();
+  client.post('resin/update', function(response) {
+    document.location = 'resin';
+  }, JSON.stringify(form));
 }

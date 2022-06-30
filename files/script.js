@@ -134,9 +134,10 @@ function formUpdate() {
   var txtarea = $("#assistenzeArea").val();
   var arr2 = [];
 
+  console.log(softwareF);
+
   mainF = objectify(mainF, 'object');
   resinF = objectify(resinF, 'array');
-  softwareF = objectify(softwareF, 'array');
   deviceF = objectify(deviceF, 'array');
 
   for (var i = 0, j = 0; j < resinF.length; i++, j = j + 2) {
@@ -147,13 +148,14 @@ function formUpdate() {
   resinF = arr2;
   arr2 = [];
 
-  for (var i = 0; i < softwareF.length; i++) { //dai un occhio a questo ciclo perchè ora non funziona bene credo
-    if (Object.values(softwareF[i])[0] != '') {
-      arr2.push({ nome: Object.values(softwareF[i])[0] });
+  for (var i = 0; i < softwareF.length; i++) {
+    if (softwareF[i].value != '') {
+      arr2.push({ nome: softwareF[i].value });
     }
   }
   softwareF = arr2;
   arr2 = [];
+  console.log(softwareF);
 
   for (var i = 0, j = 0; j < deviceF.length; i++, j = j + 3) {
     if (Object.values(deviceF[j])[0] != '') {
@@ -170,8 +172,8 @@ function formUpdate() {
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
   mainF = JSON.stringify(mainF);
-  console.log(mainF);
-  console.log(JSON.stringify(resinF));
+  //console.log(mainF);
+  //console.log(JSON.stringify(resinF));
 
   var client = new HttpClient();
   client.post('customer/update', function(response) {

@@ -49,8 +49,8 @@
             <div class="col text-center">
               <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
               <datalist id="resinDatalist">
-                <% resindb.forEach(function(res){ %>
-                  <option value="<%= res.value.name %>">
+                <% resindb.value.resin.forEach(function(res){ %>
+                  <option value="<%= res.name %>">
                 <% }); %>
               </datalist>
             </div>

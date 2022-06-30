@@ -10,29 +10,44 @@
   <body>
     <div class="container mb-5">
       <nav class="sticky-top bg-white pb-3 mb-1" id="TitleNav">
-        <div class="container-fluid mt-4 clearfix text-right">
-          <h1 class="display-2 d-inline align-middle">Resine</h1>
-          <button class="btn btn-outline-primary float-end mt-3" type="button" onclick="addResinToDb()" title="Aggiungi rapidamente uno o più clienti">Aggiungi</button>
-          <button class="btn btn-outline-danger float-end mt-3 me-1" type="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina</button>
-          <button class="btn btn-outline-success float-end mt-3 me-3" type="button" onclick="resindbUpdate()" title="Salva i cambiamenti">Salva</button>
+        <div class="row mt-4 align-items-center clearfix">
+          <div class="col-9">
+            <h1 class="display-2 d-inline align-middle">Resine</h1>
+          </div>
+          <div class="col text-center">
+            <div class="row gx-2">
+              <div class="col-xl-4 mb-1">
+                <button class="btn btn-outline-primary w-100" type="button" onclick="addResinToDb()" title="Aggiungi rapidamente uno o più clienti">Aggiungi</button>
+              </div>
+              <div class="col-xl-4 mb-1">
+                <a href="/" class="btn btn-outline-danger w-100" type="button" title="Annulla i cambiamenti e torna indietro">Annulla</a>
+              </div>
+              <div class="col-xl-4 mb-1">
+                <button class="btn btn-outline-success w-100" type="button" onclick="resindbUpdate()" title="Salva i cambiamenti">Salva</button>
+              </div>
+            </div>
+          </div>
+
           <hr>
         </div>
       </nav>
       <div class="container">
-        <form id="resindbform">
-        <% var i = 0 %>
-        <% resin.forEach(function(resin){ %>
-          <% i++ %>
-          <div class="row pb-2">
-            <div class="col-10">
-              <input type="text" class="form-control" id="resin<%= i %>" name="<%= resin.id %>" value="<%= resin.value.name %>" rev="<%= resin.value.rev %>">
+        <form id="resindbform" docid="<%= resina.id %>" docrev="<%= resina.value.rev %>">
+        <% if (resina.value.resin != []) { %>
+          <% var i = 0 %>
+          <% resina.value.resin.forEach(function(resin){ %>
+            <% i++ %>
+            <div class="row pb-2">
+              <div class="col-10">
+                <input type="text" class="form-control" id="resin<%= i %>" name="Resina<%= i %>" value="<%= resin.name %>">
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
+              </div>
             </div>
-            <div class="col-2">
-              <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
-            </div>
-          </div>
 
-        <% }); %>
+          <% }); %>
+        <% } %>
         </form>
       </div>
     </div>
@@ -46,7 +61,7 @@
         })
       });
       function addResinToDb() {
-        const appended = $('<div class="row pb-2"><div class="col-10"><input type="text" class="form-control" name="added" rev=""></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button></div></div>');
+        const appended = $('<div class="row pb-2"><div class="col-10"><input type="text" class="form-control" name="added" rev="" value=""></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button></div></div>');
         $('#resindbform').append(appended);
       };
     </script>
