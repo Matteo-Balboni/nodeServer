@@ -161,6 +161,15 @@
         $( this ).parent().siblings().find("*").val('');
       })
     });
+
+    $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13 && !$(document.activeElement).is('textarea')) {
+          event.preventDefault();
+          formUpdate();
+        }
+      });
+    });
   </script>
 
 </body>

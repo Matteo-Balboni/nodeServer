@@ -48,6 +48,7 @@
 
           <% }); %>
         <% } %>
+          <button type="submit" class="d-none" aria-hidden="true" onsubmit="resindbUpdate()"></button> <!--questo è qua solo per la cosa dell'invio, in caso basta metterlo come disabled e invio non va più -->
         </form>
       </div>
     </div>
@@ -60,6 +61,16 @@
           $( this ).parent().siblings().find("*").val('');
         })
       });
+
+      $(document).ready(function() {
+        $(window).keydown(function(event){
+          if(event.keyCode == 13) {
+            event.preventDefault();
+            resindbUpdate();
+          }
+        });
+      });
+
       function addResinToDb() {
         const appended = $('<div class="row pb-2"><div class="col-10"><input type="text" class="form-control" name="added" rev="" value=""></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button></div></div>');
         $('#resindbform').prepend(appended);

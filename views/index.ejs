@@ -24,7 +24,7 @@
           <h3 class="offcanvas-title" id="offcanvasScrollingLabel">Aggiungi Cliente</h3>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
+        <div class="offcanvas-body" id="formOffCanvas">
           <form id="mainForm">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="NomeCliente" name="NomeCliente" placeholder="Nome Cliente" required>
@@ -121,13 +121,20 @@
           }
         });
       });
-
       $(window).scroll(function(){
         if ($(this).scrollTop() > 0) {
           $('#TitleNav').addClass('border-bottom');
         } else {
           $('#TitleNav').removeClass('border-bottom');
         }
+      });
+      $(document).ready(function() {
+        $(window).keydown(function(event){
+          if(event.keyCode == 13 && $(document.activeElement).parents('#formOffCanvas').length != 0) {
+            event.preventDefault();
+            formSubmit();
+          }
+        });
       });
     </script>
     <script src="script.js" type="text/javascript" crossorigin="anonymous"></script>
