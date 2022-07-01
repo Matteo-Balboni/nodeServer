@@ -9,11 +9,22 @@
   </head>
   <body>
     <div class="container mb-5">
-      <nav class="sticky-top bg-white pb-3" id="TitleNav">
-        <div class="container-fluid mt-4 clearfix text-right">
-          <h1 class="display-2 d-inline align-middle">Clienti</h1>
-          <button class="btn btn-outline-primary float-end mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti">Aggiunta Rapida</button>
-          <button class="btn btn-outline-danger float-end mt-3 me-1" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina Cliente</button>
+      <nav class="container sticky-top bg-white pb-3" id="TitleNav">
+        <div class="row mt-4 align-items-center clearfix">
+          <div class="col-9 pb-2">
+            <h1 class="display-2 d-inline align-middle">Clienti</h1>
+          </div>
+          <div class="col text-center">
+            <div class="row align-items-top gx-2">
+              <div class="col-xl-6 mb-1">
+                <button class="btn btn-outline-danger w-100" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti">Elimina Cliente</button>
+              </div>
+              <div class="col-xl-6 mb-1">
+                <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti">Aggiunta Rapida</button>
+              </div>
+            </div>
+          </div>
+
           <hr>
           <input class="form-control" id="InputRicerca" type="text" placeholder="Cerca..." autofocus>
         </div>

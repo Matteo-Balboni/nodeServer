@@ -28,7 +28,7 @@ couch.listDatabases().then(function(dbs) {
   console.log("");
 });
 
-function sanificateInput(req){
+function sanitize(req){
   //non è una buona sanificazione, ma dovrebbe prevenire il blocco accidentale del db
   req.NomeCliente = '' + req.NomeCliente;
   if (!req.Email)
@@ -191,7 +191,7 @@ app.post('/resin/update', function(req, res) {
 });
 
 app.post('/customer/update', function(req, res) {
-  var obj = sanificateInput(req.body);
+  var obj = sanitize(req.body);
   couch.update(dbName, {
     _id: obj._id,
     _rev: obj._rev,
@@ -214,7 +214,7 @@ app.post('/customer/update', function(req, res) {
 });
 
 app.post('/customer/add', function(req, res) {
-  var obj = sanificateInput(req.body);
+  var obj = sanitize(req.body);
 
   couch.uniqid().then(function(ids) {
     const id = ids[0];
