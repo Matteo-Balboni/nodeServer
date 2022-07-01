@@ -157,7 +157,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $("body").on("click", ".btn-close", function() {
-        $( this ).parent().parent().fadeOut("fast");
+        $( this ).parent().parent().fadeOut(100);
         $( this ).parent().siblings().find("*").val('');
       })
     });

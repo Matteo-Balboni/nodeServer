@@ -80,8 +80,13 @@ function deleteElement(customerID, customerREV, customerName) {
 function formSubmit() {
   var formDump = $("#mainForm").serializeArray();
   //var formDump = $("#mainForm").serialize();  cambiando le parti commentate riporti alla richiesta nella query (customer/add? poi lo stringone), in teoria così è più adatto però
-  var objCliente = JSON.stringify(objectify(formDump, 'object')); //la request accetta il json in versione stringa evidentemente
+  var objCliente = objectify(formDump, 'object'); //la request accetta il json in versione stringa evidentemente
+  objCliente.Macchine = [], objCliente.Macchine[0] = {};
+  objCliente.Macchine[0].seriale = objCliente.Seriale;
+  objCliente.Macchine[0].modello = objCliente.NomeMacchina;
+  objCliente.Macchine[0].info = '';
 
+  objCliente = JSON.stringify(objCliente);
   if ($("#NomeCliente").val() != "") {
     var client = new HttpClient();
 
@@ -134,14 +139,12 @@ function formUpdate() {
   var txtarea = $("#assistenzeArea").val();
   var arr2 = [];
 
-  console.log(softwareF);
-
   mainF = objectify(mainF, 'object');
   resinF = objectify(resinF, 'array');
   deviceF = objectify(deviceF, 'array');
 
   for (var i = 0, j = 0; j < resinF.length; i++, j = j + 2) {
-    if (Object.values(resinF[j])[0] != '') {
+    if (Object.values(resinF[j])[0] != '' || Object.values(resinF[j+1])[0] > 0) {
       arr2.push({ nome: Object.values(resinF[j])[0], numero: Object.values(resinF[j+1])[0] });
     }
   }
@@ -155,10 +158,9 @@ function formUpdate() {
   }
   softwareF = arr2;
   arr2 = [];
-  console.log(softwareF);
 
   for (var i = 0, j = 0; j < deviceF.length; i++, j = j + 3) {
-    if (Object.values(deviceF[j])[0] != '') {
+    if (Object.values(deviceF[j])[0] != '' || Object.values(deviceF[j+1])[0] != '' || Object.values(deviceF[j+2])[0] != '' ) {
       arr2.push({ seriale: Object.values(deviceF[j])[0], modello: Object.values(deviceF[j+1])[0], info: Object.values(deviceF[j+2])[0] });
     }
   }

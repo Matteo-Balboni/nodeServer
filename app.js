@@ -32,36 +32,46 @@ function sanificateInput(req){
   //non è una buona sanificazione, ma dovrebbe prevenire il blocco accidentale del db
   req.NomeCliente = '' + req.NomeCliente;
   if (!req.Email)
-    req.Email = "Nessuna";
+    req.Email = '';
 
   if (!req.Telefono)
-    req.Telefono = "Nessuno";
+    req.Telefono = '';
 
   if (!req.Token)
     req.Token = 0;
 
   if (!req.NomeResina)
-    req.NomeResina = "Nessuna Resina";
+    req.NomeResina = '';
 
   if (!req.Qta)
     req.Qta = null;
 
-  if (!req.NomeMacchina)
-    req.NomeMacchina = "Nessuna macchina";
-
-  if (!req.Seriale)
-    req.Seriale = null;
-
-  if(!req.Macchine){
-    req.Macchine.seriale = "Nessuna Macchina"
+  if (!req.Resine || req.Resine.length == 0){
+    req.Resine[0] = {};
+    req.Resine[0].nome = '';
+    req.Resine[0].numero = 0;
   }
 
-  if (!req.Software) {
-    req.Software = "Nessun Software";
+  if (!req.NomeMacchina)
+    req.NomeMacchina = '';
+
+  if (!req.Seriale)
+    req.Seriale = '';
+
+  if (!req.Macchine || req.Macchine.length == 0){
+    req.Macchine[0] = {};
+    req.Macchine[0].seriale = '';
+    req.Macchine[0].modello = '';
+    req.Macchine[0].info = '';
+  }
+
+  if (!req.Software || req.Software.length == 0) {
+    req.Software[0] = {};
+    req.Software[0].nome = '';
   }
 
   if (!req.Assistenze) {
-    req.Assistenze = "";
+    req.Assistenze = '';
   }
 
   return req;
@@ -223,11 +233,7 @@ app.post('/customer/add', function(req, res) {
         numero: obj.Qta
         }
       ],
-      Macchine: [{ //va rifatto per funzionare come in update
-        seriale: obj.Seriale,
-        modello: obj.NomeMacchina,
-        assistenze: obj.Assistenze
-      }]
+      Macchine: obj.Macchine
 
     }).then(
       function(data, headers, status){
