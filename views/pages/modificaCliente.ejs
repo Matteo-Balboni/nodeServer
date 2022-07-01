@@ -41,20 +41,20 @@
           </div>
       </form>
       <div class="col">
-        <form id="resinForm">
-          <div class="row">
-            <div class="col">
-              <h3>Resine Vendute</h3>
-            </div>
-            <div class="col text-center">
-              <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
-              <datalist id="resinDatalist">
-                <% resindb.value.resin.forEach(function(res){ %>
-                  <option value="<%= res.name %>">
-                <% }); %>
-              </datalist>
-            </div>
+        <div class="row">
+          <div class="col">
+            <h3>Resine Vendute</h3>
           </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
+            <datalist id="resinDatalist">
+              <% resindb.value.resin.forEach(function(res){ %>
+                <option value="<%= res.name %>">
+              <% }); %>
+            </datalist>
+          </div>
+        </div>
+        <form id="resinForm">
           <% if (customer.value.resine) { %>
             <% var i = 0 %>
             <% customer.value.resine.forEach(function(resin){%>
@@ -76,17 +76,16 @@
         </form>
       </div>
 
-
       <div class="col">
-        <form id="deviceForm">
-          <div class="row">
-            <div class="col">
-              <h3>Macchine</h3>
-            </div>
-            <div class="col">
-              <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="adddevice" onclick="addDevice()" title="Aggiungi una macchina">Aggiungi Macchina</button>
-            </div>
+        <div class="row">
+          <div class="col">
+            <h3>Macchine</h3>
           </div>
+          <div class="col">
+            <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="adddevice" onclick="addDevice()" title="Aggiungi una macchina">Aggiungi Macchina</button>
+          </div>
+        </div>
+        <form id="deviceForm">
         <% if (customer.value.macchine) { %>
           <% var i = 0 %>
           <% customer.value.macchine.forEach(function(device){ %>
@@ -110,8 +109,6 @@
                 <button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button>
               </div>
             </div>
-
-
           <% }); %>
         </form>
       </div>
@@ -119,15 +116,15 @@
     </div>
     <div class="row mt-3 pb-5">
       <div class="col-4">
-        <form id="softwareForm">
-          <div class="row">
-            <div class="col">
-              <h3>Software</h3>
-            </div>
-            <div class="col text-center">
-              <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addsoftware" onclick="addSoftware()" title="Aggiungi un software">Aggiungi Software</button>
-            </div>
+        <div class="row">
+          <div class="col">
+            <h3>Software</h3>
           </div>
+          <div class="col text-center">
+            <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addsoftware" onclick="addSoftware()" title="Aggiungi un software">Aggiungi Software</button>
+          </div>
+        </div>
+        <form id="softwareForm">
           <% if (customer.value.software) { %>
             <% var i = 0 %>
             <% customer.value.software.forEach(function(software){%>
@@ -140,8 +137,8 @@
                   <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>
                 </div>
               </div>
-              <% }); %>
-            <% } %>
+            <% }); %>
+          <% } %>
         </form>
       </div>
       <div class="col-8">

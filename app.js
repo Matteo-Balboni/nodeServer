@@ -40,13 +40,8 @@ function sanificateInput(req){
   if (!req.Token)
     req.Token = 0;
 
-  if (!req.NomeResina)
-    req.NomeResina = '';
-
-  if (!req.Qta)
-    req.Qta = null;
-
   if (!req.Resine || req.Resine.length == 0){
+    req.Resine = [];
     req.Resine[0] = {};
     req.Resine[0].nome = '';
     req.Resine[0].numero = 0;
@@ -59,6 +54,7 @@ function sanificateInput(req){
     req.Seriale = '';
 
   if (!req.Macchine || req.Macchine.length == 0){
+    req.Macchine = [];
     req.Macchine[0] = {};
     req.Macchine[0].seriale = '';
     req.Macchine[0].modello = '';
@@ -66,6 +62,7 @@ function sanificateInput(req){
   }
 
   if (!req.Software || req.Software.length == 0) {
+    req.Software = [];
     req.Software[0] = {};
     req.Software[0].nome = '';
   }
@@ -228,12 +225,10 @@ app.post('/customer/add', function(req, res) {
       Email: obj.Email,
       Telefono: obj.Telefono,
       token: obj.Token,
-      Resine: [{
-        nome: obj.NomeResina,
-        numero: obj.Qta
-        }
-      ],
-      Macchine: obj.Macchine
+      Resine: obj.Resine,
+      Macchine: obj.Macchine,
+      Software: obj.Software,
+      Assistenze: ''
 
     }).then(
       function(data, headers, status){

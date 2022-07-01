@@ -81,10 +81,12 @@ function formSubmit() {
   var formDump = $("#mainForm").serializeArray();
   //var formDump = $("#mainForm").serialize();  cambiando le parti commentate riporti alla richiesta nella query (customer/add? poi lo stringone), in teoria così è più adatto però
   var objCliente = objectify(formDump, 'object'); //la request accetta il json in versione stringa evidentemente
-  objCliente.Macchine = [], objCliente.Macchine[0] = {};
-  objCliente.Macchine[0].seriale = objCliente.Seriale;
-  objCliente.Macchine[0].modello = objCliente.NomeMacchina;
-  objCliente.Macchine[0].info = '';
+
+  objCliente.Resine = [];
+  objCliente.Resine[0] = {nome: objCliente.NomeResina, numero: objCliente.Qta};
+  objCliente.Macchine = [];
+  objCliente.Macchine[0] = {seriale: objCliente.Seriale, modello: objCliente.NomeMacchina, info: ''};
+  objCliente.Software = [];
 
   objCliente = JSON.stringify(objCliente);
   if ($("#NomeCliente").val() != "") {
@@ -185,16 +187,19 @@ function formUpdate() {
 }
 
 function addResin() {
-  var appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" list="resinDatalist" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
-  $("#resinForm").append(appended);
+  const appended = $('<div class="row mb-2"><div class="col-7"> <input type="text" class="form-control" list="resinDatalist" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  $("#resinForm").prepend(appended);
+  $("#resinForm input").first().focus();
 }
 function addSoftware() {
-  var appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Software" name="SoftwareA" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
-  $("#softwareForm").append(appended);
+  const appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Software" name="SoftwareA" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  $("#softwareForm").prepend(appended);
+  $("#softwareForm input").first().focus();
 }
 function addDevice() {
-  var appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
-  $("#deviceForm").append(appended);
+  const appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
+  $("#deviceForm").prepend(appended);
+  $("#deviceForm input").first().focus();
 }
 
 
