@@ -11,6 +11,29 @@ function toggleDelete(){
   $("#ListaClientiDel").toggleClass("d-none");
 }
 
+var HttpClient = function() {
+    this.post = function(aUrl, aCallback, reqBody) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() {
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+        anHttpRequest.open( "POST", aUrl, true );
+        anHttpRequest.setRequestHeader("Content-Type", "application/json"); //questo è assolutamente necessario, non ti far neanche venire in mente di toglierlo
+        anHttpRequest.setRequestHeader("Accept", "application/json");
+        anHttpRequest.send(reqBody); //body della richiesta, cambia per cambiare i dati che arrivano al server IMPORTANTE: SEMBRA CHE I DATI DEBBANO ESSERE JSON STRINGIFICATO
+    }
+    this.get = function(aUrl, aCallback) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() {
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+        anHttpRequest.open( "GET", aUrl, true );
+        anHttpRequest.send( null );
+    }
+}
+
 function objectify(data, option) {
   var i = 0;
   var parsedData;
@@ -79,8 +102,7 @@ function deleteElement(customerID, customerREV, customerName) {
 
 function formSubmit() {
   var formDump = $("#mainForm").serializeArray();
-  //var formDump = $("#mainForm").serialize();  cambiando le parti commentate riporti alla richiesta nella query (customer/add? poi lo stringone), in teoria così è più adatto però
-  var objCliente = objectify(formDump, 'object'); //la request accetta il json in versione stringa evidentemente
+  var objCliente = objectify(formDump, 'object');
 
   objCliente.Resine = [];
   objCliente.Resine[0] = {nome: objCliente.NomeResina, numero: objCliente.Qta};
@@ -88,11 +110,10 @@ function formSubmit() {
   objCliente.Macchine[0] = {seriale: objCliente.Seriale, modello: objCliente.NomeMacchina, info: ''};
   objCliente.Software = [];
 
-  objCliente = JSON.stringify(objCliente);
+  objCliente = JSON.stringify(objCliente); //la request accetta il json in versione stringa evidentemente
   if ($("#NomeCliente").val() != "") {
     var client = new HttpClient();
 
-    //client.post('customer/add?' + formDump, function(response) {
     client.post('customer/add', function(response) {
       response = JSON.parse(response);
 
@@ -175,15 +196,14 @@ function formUpdate() {
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
+  //console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
   mainF = JSON.stringify(mainF);
-  //console.log(mainF);
-  //console.log(JSON.stringify(resinF));
 
-  var client = new HttpClient();
-  client.post('customer/update', function(response) {
-    document.location = response;
-    console.log(response);
-  }, mainF);
+  // var client = new HttpClient();
+  // client.post('customer/update', function(response) {
+  //   document.location = response;
+  //   console.log(response);
+  // }, mainF);
 }
 
 function addResin() {
@@ -200,28 +220,4 @@ function addDevice() {
   const appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
   $("#deviceForm").prepend(appended);
   $("#deviceForm input").first().focus();
-}
-
-
-var HttpClient = function() {
-    this.post = function(aUrl, aCallback, reqBody) {
-        var anHttpRequest = new XMLHttpRequest();
-        anHttpRequest.onreadystatechange = function() {
-            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                aCallback(anHttpRequest.responseText);
-        }
-        anHttpRequest.open( "POST", aUrl, true );
-        anHttpRequest.setRequestHeader("Content-Type", "application/json"); //questo è assolutamente necessario, non ti far neanche venire in mente di toglierlo
-        anHttpRequest.setRequestHeader("Accept", "application/json");
-        anHttpRequest.send(reqBody); //body della richiesta, cambia per cambiare i dati che arrivano al server IMPORTANTE: SEMBRA CHE I DATI DEBBANO ESSERE JSON STRINGIFICATO
-    }
-    this.get = function(aUrl, aCallback) {
-        var anHttpRequest = new XMLHttpRequest();
-        anHttpRequest.onreadystatechange = function() {
-            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                aCallback(anHttpRequest.responseText);
-        }
-        anHttpRequest.open( "GET", aUrl, true );
-        anHttpRequest.send( null );
-    }
 }

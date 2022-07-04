@@ -10,6 +10,36 @@ const couch = new NodeCouchDB({
   }
 });
 
+var tokenIdNum = 123; //domani fare un documento in resindb che lo gestisca, magari anche con un parametro last modified che dica appunto l'ultima modifica
+//così da poter verificare anche quando resettare il numero al cambio dell'anno
+
+function getToken(tokenquantity) {
+
+  var date = new Date();
+  const options = { year: '2-digit', month: '2-digit'};
+  const dateArr = new Intl.DateTimeFormat('it-IT', options).formatToParts(date);
+  const year = dateArr[2].value;
+  const month = dateArr[0].value;
+  var quantityLetter = '';
+
+  switch (tokenquantity) {
+    case 20:
+      quantityLetter = 'V';
+      break;
+    case 50:
+      quantityLetter = 'C';
+      break;
+    default:
+      quantityLetter = 'D';
+      break;
+  }
+
+  var tokenid = "T" + year + month + "-" + quantityLetter + String(tokenIdNum++).padStart(5, '0');
+  date.setFullYear(date.getFullYear() + 1);
+  const token = { TokenId: tokenid, ExpirationDate: date.toString(), Quantity: tokenquantity };
+  return token;
+}
+
 const dbName = 'cristiangay';
 const viewUrl = '_design/all_customers/_view/all';
 const resindb = 'resindb';
@@ -253,6 +283,11 @@ app.post('/customer/delete', function(req, res) {
     function(err) {
       res.send(err);
     });
+});
+
+app.get('/t', function(req, res) {
+  console.log(getToken(10));
+  res.send('');
 });
 
 app.listen(80, function() {
