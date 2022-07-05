@@ -199,11 +199,11 @@ function formUpdate() {
   //console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
   mainF = JSON.stringify(mainF);
 
-  // var client = new HttpClient();
-  // client.post('customer/update', function(response) {
-  //   document.location = response;
-  //   console.log(response);
-  // }, mainF);
+  var client = new HttpClient();
+  client.post('customer/update', function(response) {
+    document.location = response;
+    console.log(response);
+  }, mainF);
 }
 
 function addResin() {

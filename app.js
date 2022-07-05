@@ -10,40 +10,13 @@ const couch = new NodeCouchDB({
   }
 });
 
-var tokenIdNum = 123; //domani fare un documento in resindb che lo gestisca, magari anche con un parametro last modified che dica appunto l'ultima modifica
-//così da poter verificare anche quando resettare il numero al cambio dell'anno
-
-function getToken(tokenquantity) {
-
-  var date = new Date();
-  const options = { year: '2-digit', month: '2-digit'};
-  const dateArr = new Intl.DateTimeFormat('it-IT', options).formatToParts(date);
-  const year = dateArr[2].value;
-  const month = dateArr[0].value;
-  var quantityLetter = '';
-
-  switch (tokenquantity) {
-    case 20:
-      quantityLetter = 'V';
-      break;
-    case 50:
-      quantityLetter = 'C';
-      break;
-    default:
-      quantityLetter = 'D';
-      break;
-  }
-
-  var tokenid = "T" + year + month + "-" + quantityLetter + String(tokenIdNum++).padStart(5, '0');
-  date.setFullYear(date.getFullYear() + 1);
-  const token = { TokenId: tokenid, ExpirationDate: date.toString(), Quantity: tokenquantity };
-  return token;
-}
-
 const dbName = 'cristiangay';
 const viewUrl = '_design/all_customers/_view/all';
 const resindb = 'resindb';
 const resinUrl = '_design/all_resin/_view/all';
+const tokenUrl = '_design/all_resin/_view/tokenSerialView'
+const resinDocId = 'd83ef8426b5175d49b501145b1001043';
+const tokenDocId = '27c178f04e717b96b94d316bc200174b';
 
 couch.listDatabases().then(function(dbs) {
   console.log(dbs);
@@ -183,10 +156,10 @@ app.get('/modifica', function(req, res) {
 });
 
 app.get('/resina?e?', function(req, res) {
-  couch.get(resindb, resinUrl).then(
+  couch.get(resindb, resinUrl + '?key="' + resinDocId + '"').then(
     function(data, headers, status) {
       data.data.rows[0].value.resin.sort((a, b) => {
-          let fa = a.name.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
+          let fa = a.name.toLowerCase(),
               fb = b.name.toLowerCase();
 
           if (fa < fb) {
@@ -207,7 +180,7 @@ app.get('/resina?e?', function(req, res) {
 app.post('/resin/update', function(req, res) {
   //niente mauro alla fine ho fatto un documento solo come dicevi tu perchè era troppo poco consistente
   couch.update(resindb, {
-    _id: req.body.id, //si sembra strano ma è così per il serialize
+    _id: req.body.id,
     _rev: req.body.rev,
     resin: req.body.resin
   }).then(
@@ -285,8 +258,71 @@ app.post('/customer/delete', function(req, res) {
     });
 });
 
-app.get('/t', function(req, res) {
-  console.log(getToken(10));
+function getToken(tokenquantity) {
+  return couch.get(resindb, tokenUrl + '?key="' + tokenDocId + '"').then(
+    async function(data, headers, status) {
+      var date = new Date();
+      const options = { year: '2-digit', month: '2-digit'};
+      const dateArr = new Intl.DateTimeFormat('it-IT', options).formatToParts(date);
+      const year = dateArr[2].value;
+      const month = dateArr[0].value;
+      var quantityLetter = '';
+
+      switch (tokenquantity) {
+        case 20:
+          quantityLetter = 'V';
+          break;
+        case 50:
+          quantityLetter = 'C';
+          break;
+        default:
+          quantityLetter = 'D';
+          break;
+      }
+      var serial = String(data.data.rows[0].value.tokenSerial);
+
+      if (Number(year) > Number(String(data.data.rows[0].value.lastUpdated.year).slice(2))) {   //funzionerà a meno che non venga utilizzato per un secolo (letteralmente)
+        serial = '0';
+
+      }
+      var tokenid = "T" + year + month + "-" + quantityLetter + serial.padStart(5, '0');
+      date.setFullYear(date.getFullYear() + 1);
+      const token = { TokenId: tokenid, ExpirationDate: date.toString(), Quantity: tokenquantity };
+      const newSerial = Number(serial) + 1;
+
+      await updateTokenSerial(data.data.rows[0].value.rev, newSerial);
+      return token;
+    },
+    function(err) {
+      console.log(err);
+      return 'err';
+    }
+  );
+}
+
+function updateTokenSerial(rev, newSerial) {
+  var date = new Date();
+  couch.update(resindb, {
+    _id: tokenDocId,
+    _rev: rev,
+    tokenSerial: newSerial,
+    lastUpdated: {
+      year: date.getUTCFullYear(),  //ci metto utc giusto perchè non sono sicuro di quale vogliano e questo dovrebbe andare bene
+      utcFullDate: date.getUTCDate()
+    }
+
+  }).then(function(data, headers, status) {
+    console.log("\x1b[43m Aggiornato -> \x1b[0m SERIALE TOKEN\x1b[0m");
+  },
+  function(err) {
+    console.log(err);
+    return 'err';
+  });
+}
+
+app.get('/t', async function(req, res) {
+  var x = await getToken(10);
+  console.log(x);
   res.send('');
 });
 
@@ -300,4 +336,4 @@ app.get('script.js', function(req, res) {
 
 app.get('resindbscript.js', function(req, res) {
   res.send('files/resindbscript.js');
-})
+});
