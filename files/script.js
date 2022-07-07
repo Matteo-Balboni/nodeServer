@@ -161,6 +161,8 @@ function formUpdate() {
   var deviceF = $("#deviceForm").serializeArray();
   var txtarea = $("#assistenzeArea").val();
   var arr2 = [];
+  var tokenExp = $("#TokenExpirationDate").attr("fulldate");
+  console.log(tokenExp);
 
   mainF = objectify(mainF, 'object');
   resinF = objectify(resinF, 'array');
@@ -192,12 +194,14 @@ function formUpdate() {
   mainF.NomeCliente = $("#customerName").text();
   mainF._id = $("#customerId").text();
   mainF._rev = $("#customerRev").text();
+  mainF.Token = { TokenId: mainF.TokenId, ExpirationDate: tokenExp, Quantity: mainF.TokenQty };
   mainF.Resine = resinF;
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
-  //console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
+  console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
   mainF = JSON.stringify(mainF);
+  console.log(mainF);
 
   var client = new HttpClient();
   client.post('customer/update', function(response) {

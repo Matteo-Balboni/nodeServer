@@ -50,7 +50,7 @@
               <label for="Telefono">Numero di Telefono</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="number" class="form-control" id="Token" name="Token" placeholder="">
+              <input type="number" class="form-control" id="Token" name="Token" placeholder="" value="10">
               <label for="Token">Numero di Token</label>
             </div>
 
@@ -90,7 +90,7 @@
         <div class="list-group" id="ListaClienti">
           <% customers.forEach(function(customer){ %>
               <a href="infoCliente?c=<%= customer.id%>" class="fw-semibold list-group-item list-group-item-action" id="element-<%= customer.id%>"><%= customer.value.name %>
-                <p class="fw-light">token: <%= customer.value.token %></p>
+                <p class="fw-light">token: <%= customer.value.token.Quantity %> | scandenza: <% if(customer.value.token.ExpirationDate){ %><%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'})%><%}%></p>
               </a> <!-- name invece di NomeCliente perchè lo chiamo così nella view di couchdb-->
 
           <% }); %>

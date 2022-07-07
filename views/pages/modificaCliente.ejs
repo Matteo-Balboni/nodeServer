@@ -35,9 +35,25 @@
             <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="" value="<%= customer.value.telefono %>">
             <label for="Telefono">Numero di Telefono</label>
           </div>
-          <div class="form-floating mb-2">
-            <input type="number" class="form-control" id="Token" name="Token" placeholder="" value="<%= customer.value.token %>">
-            <label for="Token">Token</label>
+          <div class="row gx-1">
+            <div class="col-5">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" readonly>
+                <label for="TokenId">ID Token</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" readonly>
+                <label for="TokenExpirationDate">Scadenza</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating mb-2">
+                <input type="number" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value="<%= customer.value.token.Quantity %>">
+                <label for="TokenQuantity">Quantità</label>
+              </div>
+            </div>
           </div>
       </form>
       <div class="col">

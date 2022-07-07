@@ -13,8 +13,8 @@ const couch = new NodeCouchDB({
 const dbName = 'cristiangay';
 const viewUrl = '_design/all_customers/_view/all';
 const resindb = 'resindb';
-const resinUrl = '_design/all_resin/_view/all';
-const tokenUrl = '_design/all_resin/_view/tokenSerialView'
+const resinUrl = '_design/all_resin/_view/all?key="d83ef8426b5175d49b501145b1001043"';
+const tokenUrl = '_design/all_resin/_view/tokenSerialView?key="27c178f04e717b96b94d316bc200174b"'
 const resinDocId = 'd83ef8426b5175d49b501145b1001043';
 const tokenDocId = '27c178f04e717b96b94d316bc200174b';
 
@@ -31,7 +31,7 @@ couch.listDatabases().then(function(dbs) {
   console.log("");
 });
 
-function sanitize(req){
+async function sanitize(req){
   //non è una buona sanificazione, ma dovrebbe prevenire il blocco accidentale del db
   req.NomeCliente = '' + req.NomeCliente;
   if (!req.Email)
@@ -40,8 +40,10 @@ function sanitize(req){
   if (!req.Telefono)
     req.Telefono = '';
 
-  if (!req.Token)
-    req.Token = 0;
+  if (!req.Token || req.Token.TokenId == ''){
+    req.Token = {};
+    req.Token = await getToken(10);  //questo non credo di poterlo lasciare nel prodotto finito
+  }
 
   if (!req.Resine || req.Resine.length == 0){
     req.Resine = [];
@@ -49,12 +51,6 @@ function sanitize(req){
     req.Resine[0].nome = '';
     req.Resine[0].numero = 0;
   }
-
-  if (!req.NomeMacchina)
-    req.NomeMacchina = '';
-
-  if (!req.Seriale)
-    req.Seriale = '';
 
   if (!req.Macchine || req.Macchine.length == 0){
     req.Macchine = [];
@@ -156,7 +152,7 @@ app.get('/modifica', function(req, res) {
 });
 
 app.get('/resina?e?', function(req, res) {
-  couch.get(resindb, resinUrl + '?key="' + resinDocId + '"').then(
+  couch.get(resindb, resinUrl).then(
     function(data, headers, status) {
       data.data.rows[0].value.resin.sort((a, b) => {
           let fa = a.name.toLowerCase(),
@@ -193,8 +189,8 @@ app.post('/resin/update', function(req, res) {
   });
 });
 
-app.post('/customer/update', function(req, res) {
-  var obj = sanitize(req.body);
+app.post('/customer/update', async function(req, res) {
+  var obj = await sanitize(req.body);
   couch.update(dbName, {
     _id: obj._id,
     _rev: obj._rev,
@@ -213,13 +209,14 @@ app.post('/customer/update', function(req, res) {
   },
   function(err) {
     res.send(err);
+    console.log(err);
   });
 });
 
-app.post('/customer/add', function(req, res) {
-  var obj = sanitize(req.body);
+app.post('/customer/add', async function(req, res) {
+  var obj = await sanitize(req.body);
 
-  couch.uniqid().then(function(ids) {
+  couch.uniqid().then(async function(ids) {
     const id = ids[0];
 
     couch.insert(dbName, {
@@ -227,7 +224,7 @@ app.post('/customer/add', function(req, res) {
       NomeCliente: obj.NomeCliente,
       Email: obj.Email,
       Telefono: obj.Telefono,
-      token: obj.Token,
+      token: await getToken(obj.Token),
       Resine: obj.Resine,
       Macchine: obj.Macchine,
       Software: obj.Software,
@@ -259,7 +256,7 @@ app.post('/customer/delete', function(req, res) {
 });
 
 function getToken(tokenquantity) {
-  return couch.get(resindb, tokenUrl + '?key="' + tokenDocId + '"').then(
+  return couch.get(resindb, tokenUrl).then(
     async function(data, headers, status) {
       var date = new Date();
       const options = { year: '2-digit', month: '2-digit'};
@@ -283,11 +280,10 @@ function getToken(tokenquantity) {
 
       if (Number(year) > Number(String(data.data.rows[0].value.lastUpdated.year).slice(2))) {   //funzionerà a meno che non venga utilizzato per un secolo (letteralmente)
         serial = '0';
-
       }
       var tokenid = "T" + year + month + "-" + quantityLetter + serial.padStart(5, '0');
       date.setFullYear(date.getFullYear() + 1);
-      const token = { TokenId: tokenid, ExpirationDate: date.toString(), Quantity: tokenquantity };
+      const token = { TokenId: tokenid, ExpirationDate: date, Quantity: tokenquantity };
       const newSerial = Number(serial) + 1;
 
       await updateTokenSerial(data.data.rows[0].value.rev, newSerial);
@@ -295,7 +291,6 @@ function getToken(tokenquantity) {
     },
     function(err) {
       console.log(err);
-      return 'err';
     }
   );
 }
@@ -321,8 +316,11 @@ function updateTokenSerial(rev, newSerial) {
 }
 
 app.get('/t', async function(req, res) {
+  var date;
   var x = await getToken(10);
   console.log(x);
+  date = x.ExpirationDate;
+  console.log(date.toLocaleString('it-IT')); //questo mi conferma che viene effettivamente salvata come Date()
   res.send('');
 });
 

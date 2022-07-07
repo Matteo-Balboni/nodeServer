@@ -32,7 +32,7 @@
           <div><strong>Telefono:</strong> <%= customer.value.telefono %></div>
           <%}else{%> <div>Nessun numero di Telefono.</div> <%} %>
         <% if(customer.value.token != null){%>
-          <div><strong>Token Assistenza:</strong> <%= customer.value.token %></div>
+          <div><strong>Token Assistenza:</strong> <%= customer.value.token.Quantity %></div>
           <%}else{%> <div>Token non specificati.</div> <%} %>
       </div>
       <div class="col">
