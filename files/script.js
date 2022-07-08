@@ -192,8 +192,8 @@ function formUpdate() {
   deviceF = arr2;
 
   mainF.NomeCliente = $("#customerName").text();
-  mainF._id = $("#customerId").text();
-  mainF._rev = $("#customerRev").text();
+  mainF._id = $("#customerName").attr("customerId");
+  mainF._rev = $("#customerName").attr("customerRev");
   mainF.Token = { TokenId: mainF.TokenId, ExpirationDate: tokenExp, Quantity: mainF.TokenQty };
   mainF.Resine = resinF;
   mainF.Macchine = deviceF;
