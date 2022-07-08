@@ -13,42 +13,83 @@
 <body>
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <div class="container mt-3">
-      <a href="/" class="btn btn-outline-primary" title="Torna indietro">Indietro</a>
-      <% if (customer.value.name) { %>
-      <h1 class="display-3 ms-4 d-inline align-middle"><%= customer.value.name %></h1>
-      <% } %>
-      <a type="button" name="button" class="btn btn-outline-primary float-end mt-3" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente">Modifica</a>
-      <hr>
-  </div>
+  <nav class="container">
+    <div class="row mt-3 align-items-center">
+      <div class="col-2 col-md-1 text-start">
+        <a href="/" class="btn btn-outline-primary" title="Torna indietro">Indietro</a>
+      </div>
+      <div class="col-7 col-md-9 text-truncate">
+        <% if (customer.value.name) { %>
+          <h1 class="display-3 ms-4 d-inline align-middle"><%= customer.value.name %></h1>
+          <% } %>
+      </div>
+      <div class="col-2 text-end">
+        <a type="button" name="button" class="btn btn-outline-primary" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente">Modifica</a>
+      </div>
+        <hr>
+    </div>
+  </nav>
+
   <div class="container mt-4">
     <div class="row">
-      <div class="col">
+      <div class="col-sm">
         <h3>Info Cliente</h3>
         <% if(customer.value.email != ''){%>
-          <div><strong>Email:</strong> <%= customer.value.email %></div>
+          <div class="form-floating mb-2 text-truncate">
+            <input type="email" class="form-control" id="Email" name="Email" placeholder="email@esempio.com" value="<%= customer.value.email %>" readonly>
+            <label for="Email">Email</label>
+          </div>
           <%}else{%> <div>Nessuna Email.</div> <%} %>
         <% if(customer.value.telefono != ''){%>
-          <div><strong>Telefono:</strong> <%= customer.value.telefono %></div>
+          <div class="form-floating mb-2 text-truncate">
+            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="" value="<%= customer.value.telefono %>"readonly>
+            <label for="Telefono">Numero di Telefono</label>
+          </div>
           <%}else{%> <div>Nessun numero di Telefono.</div> <%} %>
-        <% if(customer.value.token != null){%>
-          <div><strong>Token Assistenza:</strong> <%= customer.value.token.Quantity %></div>
+        <% if(customer.value.token.TokenId != ''){%>
+          <div class="row gx-1">
+            <div class="col-lg-5">
+              <div class="form-floating mb-1 text-truncate">
+                <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" readonly>
+                <label for="TokenId">ID Token</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating mb-1 text-truncate">
+                <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" readonly>
+                <label for="TokenExpirationDate">Scadenza</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating mb-2 text-truncate">
+                <input type="text" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value="<%= customer.value.token.Quantity %>" readonly>
+                <label for="TokenQuantity">Quantità</label>
+              </div>
+            </div>
+          </div>
           <%}else{%> <div>Token non specificati.</div> <%} %>
       </div>
-      <div class="col">
+      <div class="col-sm text-truncate">
         <h3>Resine Vendute</h3>
         <% if (customer.value.resine) { %>
           <% customer.value.resine.forEach(function(resin){%>
             <% if(customer.value.resine.length == 1 && resin.nome == '' && resin.numero == ''){ %>
               <div>Nessuna Resina.</div>
             <% }else{ %>
-            <div><b><%= resin.nome %>: </b> <%= resin.numero %> </div>
+              <div class="row mb-2 gx-2">
+                <div class="col">
+                  <input type="text" class="form-control" list="resinDatalist" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>" readonly>
+                </div>
+                <div class="col-3 text-nowrap">
+                  <input type="text" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>" readonly>
+                </div>
+              </div>
             <% } %>
           <% }); %>
         <% } %>
       </div>
 
-      <div class="col">
+      <div class="col-md">
         <h3>Macchine</h3>
         <% if (customer.value.macchine) { %>
           <div class="accordion" id="accordionExample">
@@ -81,23 +122,27 @@
           </div>
         <% } %>
     </div>
-    <div class="row mt-3">
-      <div class="col-4">
+    <div class="row mt-3 pb-5">
+      <div class="col-sm-4">
         <h3>Software</h3>
         <% if (customer.value.software) { %>
           <% customer.value.software.forEach(function(software){%>
             <% if(customer.value.software.length == 1 && software.nome == ''){ %>
               <div>Nessun Software.</div>
             <% }else{ %>
-            <div><%= software.nome %></div>
+              <div class="row mb-2" id="div<%= i %>">
+                <div class="col">
+                  <input type="text" class="form-control" id="Software<%= i %>" name="Software<%= i %>" placeholder="" value="<%= software.nome %>" readonly>
+                </div>
+              </div>
             <% } %>
           <% }); %>
         <% } %>
       </div>
-      <div class="col-8">
+      <div class="col-sm-8">
         <h3>Assistenze</h3>
         <div class="form-floating">
-          <textarea id="assistenzeArea" class="form-control mt-3" placeholder="" style="height: 250px" readonly><% if (customer.value.software) { %><%= customer.value.assistenze %><% } %></textarea>
+          <textarea id="assistenzeArea" class="form-control " placeholder="" style="height: 250px" readonly><% if (customer.value.software) { %><%= customer.value.assistenze %><% } %></textarea>
           <label for="assistenzeArea">Cronologia Assistenze</label>
         </div>
       </div>

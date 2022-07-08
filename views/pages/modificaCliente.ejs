@@ -13,56 +13,70 @@
 <body>
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <div class="container mt-3">
-      <a href="infoCliente?c=<%= customer.id %>" class="btn btn-outline-danger" title="Annulla cambiamenti e torna indietro">Indietro</a>
+  <nav class="container">
+    <div class="row mt-3 align-items-center">
+      <div class="col-2 col-md-1 text-start">
+        <a href="infoCliente?c=<%= customer.id %>" class="btn btn-outline-danger" title="Annulla cambiamenti e torna indietro">Indietro</a>
+      </div>
+      <div class="col-5 col-sm-6 col-md-8 col-lg-9 text-truncate">
+        <h1 class="display-3 ms-4 d-inline align-middle" id="customerName" customerId="<%= customer.id%>" customerRev="<%= customer.value.rev%>"><%= customer.value.name %></h1>
+        <!-- <p id="customerId" hidden><%= customer.id%></p>
+        <p id="customerRev" hidden><%= customer.value.rev%></p> -->
+      </div>
+      <div class="col-5 col-sm-4 col-md-3 col-lg-2">
+        <div class="row row-cols-2 gx-1">
+          <div class="col-6">
+            <a href="infoCliente?c=<%= customer.id %>" class="btn btn-outline-danger w-100" title="Annulla cambiamenti e torna indietro">Annulla</a>
+          </div>
+          <div class="col-6">
+            <button type="button" name="button" class="btn btn-outline-success w-100" onclick="formUpdate()" title="Salva i cambiamenti">Salva</button>
+          </div>
+        </div>
+      </div>
 
-      <h1 class="display-3 ms-4 d-inline align-middle" id="customerName"><%= customer.value.name %></h1>
-      <p id="customerId" hidden><%= customer.id%></p>
-      <p id="customerRev" hidden><%= customer.value.rev%></p>
-      <button type="button" name="button" class="btn btn-outline-success float-end mt-3" onclick="formUpdate()" title="Salva i cambiamenti">Salva</button>
-      <a href="infoCliente?c=<%= customer.id %>" class="btn btn-outline-danger float-end mt-3 me-3" title="Annulla cambiamenti e torna indietro">Annulla</a>
       <hr>
-  </div>
+    </div>
+  </nav>
   <div class="container mt-4">
     <div class="row">
-      <form class="col" id="mainForm">
+      <form class="col-sm" id="mainForm">
         <h3>Info Cliente</h3>
-          <div class="form-floating mb-2">
+          <div class="form-floating mb-2 text-truncate">
             <input type="email" class="form-control" id="Email" name="Email" placeholder="email@esempio.com" value="<%= customer.value.email %>">
             <label for="Email">Email</label>
           </div>
-          <div class="form-floating mb-2">
+          <div class="form-floating mb-2 text-truncate">
             <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="" value="<%= customer.value.telefono %>">
             <label for="Telefono">Numero di Telefono</label>
           </div>
           <div class="row gx-1">
-            <div class="col-5">
-              <div class="form-floating">
+            <div class="col-lg-5">
+              <div class="form-floating mb-1 text-truncate">
                 <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" readonly>
                 <label for="TokenId">ID Token</label>
               </div>
             </div>
             <div class="col">
-              <div class="form-floating">
+              <div class="form-floating mb-1 text-truncate">
                 <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" readonly>
                 <label for="TokenExpirationDate">Scadenza</label>
               </div>
             </div>
             <div class="col">
-              <div class="form-floating mb-2">
+              <div class="form-floating mb-2 text-truncate">
                 <input type="number" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value="<%= customer.value.token.Quantity %>">
                 <label for="TokenQuantity">Quantità</label>
               </div>
             </div>
           </div>
       </form>
-      <div class="col">
+      <div class="col-sm">
         <div class="row">
           <div class="col">
             <h3>Resine Vendute</h3>
           </div>
-          <div class="col text-center">
-            <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
+          <div class="col text-end text-lg-center">
+            <button type="button" class="btn btn-outline-primary btn-sm align-text-top pb-1" name="addresin" onclick="addResin()" title="Aggiungi una tipologia di resina">Aggiungi Resina</button>
             <datalist id="resinDatalist">
               <% resindb.value.resin.forEach(function(res){ %>
                 <option value="<%= res.name %>">
@@ -75,14 +89,14 @@
             <% var i = 0 %>
             <% customer.value.resine.forEach(function(resin){%>
               <% i++ %>
-              <div class="row mb-2 Resine" id="div<%= i %>">
+              <div class="row mb-2 Resine gx-2" id="div<%= i %>">
                 <div class="col-7">
                   <input type="text" class="form-control" list="resinDatalist" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
                 </div>
-                <div class="col-3">
+                <div class="col-3 text-nowrap">
                   <input type="number" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>">
                 </div>
-                <div class="col-2">
+                <div class="col text-center">
                   <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
                 </div>
               </div>
@@ -92,12 +106,12 @@
         </form>
       </div>
 
-      <div class="col">
+      <div class="col-lg">
         <div class="row">
           <div class="col">
             <h3>Macchine</h3>
           </div>
-          <div class="col">
+          <div class="col text-nowrap text-end text-lg-center mb-2">
             <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="adddevice" onclick="addDevice()" title="Aggiungi una macchina">Aggiungi Macchina</button>
           </div>
         </div>
@@ -108,20 +122,20 @@
             <% i++ %>
             <div class="row mb-2">
               <div class="col-10 border rounded">
-                <div class="form-floating">
+                <div class="form-floating text-nowrap">
                   <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="Macchina<%= i %>seriale" placeholder="" value="<%= device.seriale %>">
                   <label for="serialeMacchina">Seriale</label>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating text-nowrap">
                   <input type="text" id="modelloMacchina" class="form-control mb-1" name="Macchina<%= i %>modello" placeholder="" value="<%= device.modello %>">
                   <label for="modelloMacchina">Modello</label>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating text-nowrap">
                   <textarea id="infoMacchina" class="form-control mt-2 mb-2" name="Macchina<%= i %>info" placeholder="" style="height: 100px" ><%= device.info %></textarea>
                   <label for="infoMacchina">Informazioni Macchina</label>
                 </div>
               </div>
-              <div class="col-2">
+              <div class="col-2 text-center">
                 <button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button>
               </div>
             </div>
@@ -131,12 +145,12 @@
       <% } %>
     </div>
     <div class="row mt-3 pb-5">
-      <div class="col-4">
+      <div class="col-sm-4">
         <div class="row">
           <div class="col">
             <h3>Software</h3>
           </div>
-          <div class="col text-center">
+          <div class="col text-end text-lg-center mb-2">
             <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addsoftware" onclick="addSoftware()" title="Aggiungi un software">Aggiungi Software</button>
           </div>
         </div>
@@ -149,7 +163,7 @@
                 <div class="col-10">
                   <input type="text" class="form-control" id="Software<%= i %>" name="Software<%= i %>" placeholder="" value="<%= software.nome %>">
                 </div>
-                <div class="col-2">
+                <div class="col-2 text-center">
                   <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>
                 </div>
               </div>
@@ -157,10 +171,10 @@
           <% } %>
         </form>
       </div>
-      <div class="col-8">
+      <div class="col-sm-8">
         <h3>Assistenze</h3>
-        <div class="form-floating">
-          <textarea id="assistenzeArea" class="form-control mt-3" placeholder="" style="height: 250px" ><%= customer.value.assistenze %></textarea>
+        <div class="form-floating text-truncate">
+          <textarea id="assistenzeArea" class="form-control" placeholder="" style="height: 250px" ><%= customer.value.assistenze %></textarea>
           <label for="assistenzeArea">Cronologia Assistenze</label>
         </div>
       </div>
