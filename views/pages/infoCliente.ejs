@@ -13,7 +13,7 @@
 <body>
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <nav class="container">
+  <nav class="container sticky-top bg-white">
     <div class="row mt-3 align-items-center">
       <div class="col-2 col-md-1 text-start">
         <a href="/" class="btn btn-outline-primary" title="Torna indietro">Indietro</a>
@@ -34,18 +34,15 @@
     <div class="row">
       <div class="col-sm">
         <h3>Info Cliente</h3>
-        <% if(customer.value.email != ''){%>
           <div class="form-floating mb-2 text-truncate">
-            <input type="email" class="form-control" id="Email" name="Email" placeholder="email@esempio.com" value="<%= customer.value.email %>" readonly>
+            <input type="email" class="form-control" id="Email" name="Email" placeholder="email@esempio.com" value="<% if(customer.value.email != ''){%><%= customer.value.email %><%}%>" readonly>
             <label for="Email">Email</label>
           </div>
-          <%}else{%> <div>Nessuna Email.</div> <%} %>
-        <% if(customer.value.telefono != ''){%>
+
           <div class="form-floating mb-2 text-truncate">
-            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="" value="<%= customer.value.telefono %>"readonly>
+            <input type="tel" class="form-control" id="Telefono" name="Telefono" placeholder="+39 1234567890" value="<% if(customer.value.telefono != ''){%><%= customer.value.telefono %><%}%>" readonly>
             <label for="Telefono">Numero di Telefono</label>
           </div>
-          <%}else{%> <div>Nessun numero di Telefono.</div> <%} %>
         <% if(customer.value.token.TokenId != ''){%>
           <div class="row gx-1">
             <div class="col-lg-5">
