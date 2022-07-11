@@ -117,7 +117,7 @@ app.get('/infocliente', function(req, res) {
   couch.get(dbName, viewUrlfull).then(
     function(data, headers, status){
       if (objcheck == false) {
-        res.render('pages/infoCliente', {customer:data.data.rows[0]});
+        res.render('pages/infoClienteFlex', {customer:data.data.rows[0]});
       }
       else {
         res.send(data.data.rows[0]); //ristruttura questo in un altra funzione se ci sono problemi di prestazioni (facendo una view apposta sul db e mettendo questo in un altro app.get)
@@ -140,7 +140,7 @@ app.get('/modifica', function(req, res) {
       resin = data.data.rows[0];
       couch.get(dbName, viewUrlfull).then(
         function(data, headers, status){
-          res.render('pages/modificaCliente', {customer:data.data.rows[0], resindb:resin});
+          res.render('pages/modificaClienteFlex', {customer:data.data.rows[0], resindb:resin});
       },
         function(err){
         res.send(err);

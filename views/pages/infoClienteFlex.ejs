@@ -13,20 +13,22 @@
 <body>
   <!--Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <nav class="container sticky-top bg-white">
-    <div class="row mt-3 align-items-center">
-      <div class="col-2 col-md-1 text-start">
-        <a href="/" class="btn btn-outline-primary" title="Torna indietro">Indietro</a>
+  <nav class="sticky-top bg-white">
+    <div class="container">
+      <div class="d-flex flex-row align-items-center ">
+        <div class="text-start mt-2 mt-sm-0">
+          <a href="/" class="btn btn-outline-primary" title="Torna indietro">Indietro</a>
+        </div>
+        <div class="flex-grow-1 text-truncate text-start mt-2 mt-sm-0">
+          <% if (customer.value.name) { %>
+            <h1 class="display-3 ms-4 d-inline align-middle"><%= customer.value.name %></h1>
+            <% } %>
+        </div>
+        <div class="me-1 mt-2 mt-sm-0">
+          <a type="button" name="button" class="btn btn-outline-primary" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente">Modifica</a>
+        </div>
       </div>
-      <div class="col-7 col-md-9 text-truncate">
-        <% if (customer.value.name) { %>
-          <h1 class="display-3 ms-4 d-inline align-middle"><%= customer.value.name %></h1>
-          <% } %>
-      </div>
-      <div class="col-2 text-end">
-        <a type="button" name="button" class="btn btn-outline-primary" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente">Modifica</a>
-      </div>
-        <hr>
+      <hr>
     </div>
   </nav>
 
@@ -118,6 +120,7 @@
           <% }); %>
           </div>
         <% } %>
+        </div>
     </div>
     <div class="row mt-3 pb-5">
       <div class="col-sm-4">
