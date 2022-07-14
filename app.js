@@ -407,3 +407,7 @@ app.get('script.js', function(req, res) {
 app.get('resindbscript.js', function(req, res) {
   res.send('files/resindbscript.js');
 });
+
+app.get('*', function(req, res){
+  res.status(404).render('pages/notFound');
+});

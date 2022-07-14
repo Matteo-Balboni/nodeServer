@@ -14,22 +14,17 @@
           <div class="flex-grow-1 text-truncate text-start">
             <h1 class="display-2 d-inline align-middle">Macchine</h1>
           </div>
-          <div class="text-center">
-            <div class="row gx-2">
-              <div class="col-xl-4 mb-1">
-                <button class="btn btn-outline-primary w-100" type="button" onclick="addDeviceToDb()" title="Aggiungi una riga per inserire altre macchine">Aggiungi</button>
-              </div>
-              <div class="col-xl-4 mb-1">
-                <a href="/" class="btn btn-outline-danger w-100" type="button" title="Annulla i cambiamenti e torna indietro">Annulla</a>
-              </div>
-              <div class="col-xl-4 mb-1">
-                <button class="btn btn-outline-success w-100" type="button" onclick="devicesdbUpdate()" title="Salva i cambiamenti">Salva</button>
-              </div>
-            </div>
+          <div class="me-1 mb-1">
+            <button class="btn btn-outline-primary" type="button" onclick="addDeviceToDb()" title="Aggiungi una riga per inserire altre macchine">Aggiungi</button>
           </div>
-
-          <hr>
+          <div class="me-1 mb-1">
+            <a href="/" class="btn btn-outline-danger" type="button" title="Annulla i cambiamenti e torna indietro">Annulla</a>
+          </div>
+          <div class="me-1 mb-1">
+            <button class="btn btn-outline-success" type="button" onclick="devicesdbUpdate()" title="Salva i cambiamenti">Salva</button>
+          </div>
         </div>
+        <hr>
       </nav>
       <div class="container">
         <form id="devicesdbform" docid="<%= macchine.id %>" docrev="<%= macchine.value.rev %>">
