@@ -13,10 +13,15 @@ const couch = new NodeCouchDB({
 const dbName = 'cristiangay';
 const viewUrl = '_design/all_customers/_view/all';
 const resindb = 'resindb';
-const resinUrl = '_design/all_resin/_view/all?key="d83ef8426b5175d49b501145b1001043"';
+const allUrl = '_design/all_resin/_view/all'
+const resinUrl = '_design/all_resin/_view/resinView?key="d83ef8426b5175d49b501145b1001043"';
 const tokenUrl = '_design/all_resin/_view/tokenSerialView?key="27c178f04e717b96b94d316bc200174b"'
+const softwareUrl ='_design/all_resin/_view/softwareView?key="bda7c6faee2f1d25ffd9dcef370037e5"'
+const devicesUrl = '_design/all_resin/_view/devicesView?key="5cc5e050c903f8137dbf0af46d00024c"'
 const resinDocId = 'd83ef8426b5175d49b501145b1001043';
 const tokenDocId = '27c178f04e717b96b94d316bc200174b';
+const softwareDocId = 'bda7c6faee2f1d25ffd9dcef370037e5'
+const devicesDocId = '5cc5e050c903f8137dbf0af46d00024c'
 
 couch.listDatabases().then(function(dbs) {
   console.log(dbs);
@@ -135,12 +140,14 @@ app.get('/modifica', function(req, res) {
   const viewUrlfull = viewUrl + '?key="' + cliente + '"';
   var resin;
 
-  couch.get(resindb, resinUrl).then(
+  couch.get(resindb, allUrl).then(
     function(data, headers, status) {
-      resin = data.data.rows[0];
+      devices = data.data.rows[1];
+      software = data.data.rows[2]; //si lo so che è orribile fare così, ma funziona (e probabilmente mi creerà problemi in futuro)
+      resin = data.data.rows[3];
       couch.get(dbName, viewUrlfull).then(
         function(data, headers, status){
-          res.render('pages/modificaClienteFlex', {customer:data.data.rows[0], resindb:resin});
+          res.render('pages/modificaClienteFlex', {customer:data.data.rows[0], resindb:resin, softwaredb:software, devicedb:devices});
       },
         function(err){
         res.send(err);
@@ -148,44 +155,6 @@ app.get('/modifica', function(req, res) {
   },
     function(err) {
     res.send(err);
-  });
-});
-
-app.get('/resina?e?', function(req, res) {
-  couch.get(resindb, resinUrl).then(
-    function(data, headers, status) {
-      data.data.rows[0].value.resin.sort((a, b) => {
-          let fa = a.name.toLowerCase(),
-              fb = b.name.toLowerCase();
-
-          if (fa < fb) {
-              return -1;
-          }
-          if (fa > fb) {
-              return 1;
-          }
-          return 0;
-      });
-      res.render('pages/resin', {resina:data.data.rows[0] });
-    },
-    function(err) {
-      res.send(err);
-  });
-});
-
-app.post('/resin/update', function(req, res) {
-  //niente mauro alla fine ho fatto un documento solo come dicevi tu perchè era troppo poco consistente
-  couch.update(resindb, {
-    _id: req.body.id,
-    _rev: req.body.rev,
-    resin: req.body.resin
-  }).then(
-    function(data, headers, status) {
-      console.log("\x1b[43m Aggiornato RESINE-> \x1b[0m id:" + req.body.id + " da: " + req.ip + "\x1b[0m");
-      res.send('/')
-    },
-    function(err) {
-      console.log(err);
   });
 });
 
@@ -255,6 +224,118 @@ app.post('/customer/delete', function(req, res) {
     });
 });
 
+app.get('/resina?e?', function(req, res) {
+  couch.get(resindb, resinUrl).then(
+    function(data, headers, status) {
+      data.data.rows[0].value.resin.sort((a, b) => {
+          let fa = a.name.toLowerCase(),
+              fb = b.name.toLowerCase();
+
+          if (fa < fb) {
+              return -1;
+          }
+          if (fa > fb) {
+              return 1;
+          }
+          return 0;
+      });
+      res.render('pages/resin', {resina:data.data.rows[0] });
+    },
+    function(err) {
+      res.send(err);
+  });
+});
+
+app.post('/resin/update', function(req, res) {
+  //niente mauro alla fine ho fatto un documento solo come dicevi tu perchè era troppo poco consistente
+  couch.update(resindb, {
+    _id: req.body.id,
+    _rev: req.body.rev,
+    resin: req.body.resin
+  }).then(
+    function(data, headers, status) {
+      console.log("\x1b[43m Aggiornato RESINE-> \x1b[0m id:" + req.body.id + " da: " + req.ip + "\x1b[0m");
+      res.send('/')
+    },
+    function(err) {
+      console.log(err);
+  });
+});
+
+app.get('/software', function(req, res) {
+  couch.get(resindb, softwareUrl).then(
+    function(data, headers, status) {
+      data.data.rows[0].value.software.sort((a, b) => {
+          let fa = a.name.toLowerCase(),
+              fb = b.name.toLowerCase();
+
+          if (fa < fb) {
+              return -1;
+          }
+          if (fa > fb) {
+              return 1;
+          }
+          return 0;
+      });
+      res.render('pages/software', {software:data.data.rows[0] });
+    },
+    function(err) {
+      res.send(err);
+  });
+});
+
+app.post('/software/update', function(req, res) {
+  couch.update(resindb, {
+    _id: req.body.id,
+    _rev: req.body.rev,
+    software: req.body.software
+  }).then(
+    function(data, headers, status) {
+      console.log("\x1b[43m Aggiornato SOFTWARE-> \x1b[0m id:" + req.body.id + " da: " + req.ip + "\x1b[0m");
+      res.send('/')
+    },
+    function(err) {
+      console.log(err);
+  });
+});
+
+app.get('/macchine', function(req, res) {
+  couch.get(resindb, devicesUrl).then(
+    function(data, headers, status) {
+      data.data.rows[0].value.devices.sort((a, b) => {
+          let fa = a.name.toLowerCase(),
+              fb = b.name.toLowerCase();
+
+          if (fa < fb) {
+              return -1;
+          }
+          if (fa > fb) {
+              return 1;
+          }
+          return 0;
+      });
+      res.render('pages/devices', {macchine:data.data.rows[0] });
+    },
+    function(err) {
+      res.send(err);
+  });
+});
+
+app.post('/devices/update', function(req, res) {
+  couch.update(resindb, {
+    _id: req.body.id,
+    _rev: req.body.rev,
+    devices: req.body.devices
+  }).then(
+    function(data, headers, status) {
+      console.log("\x1b[43m Aggiornato MACCHINE-> \x1b[0m id:" + req.body.id + " da: " + req.ip + "\x1b[0m");
+      res.send('/')
+    },
+    function(err) {
+      console.log(err);
+  });
+});
+
 function getToken(tokenquantity) {
   return couch.get(resindb, tokenUrl).then(
     async function(data, headers, status) {
@@ -314,15 +395,6 @@ function updateTokenSerial(rev, newSerial) {
     return 'err';
   });
 }
-
-app.get('/t', async function(req, res) {
-  var date;
-  var x = await getToken(10);
-  console.log(x);
-  date = x.ExpirationDate;
-  console.log(date.toLocaleString('it-IT')); //questo mi conferma che viene effettivamente salvata come Date()
-  res.send('');
-});
 
 app.listen(80, function() {
   console.log("Server started on port 80");

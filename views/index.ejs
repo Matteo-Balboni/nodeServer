@@ -77,6 +77,18 @@
                 <label for="Seriale">Seriale Macchina</label>
               </div>
             </fieldset>
+
+            <fieldset>
+              <legend>Software</legend>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="NomeSoftware" name="Software" placeholder="">
+                <label for="NomeSoftware">Nome Software</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="ChiaveSoftware" name="ChiaveSoftware" placeholder="">
+                <label for="ChiaveSoftware">Chiave Sfotware</label>
+              </div>
+            </fieldset>
             <div class="d-grid position-sticky bottom-0 bg-white">
               <button type="button" class="btn btn-outline-primary mb-2" name="submitMainForm" onclick="formSubmit()">Aggiungi</button>
               <button type="reset" class="btn btn-outline-secondary" name="formReset">Reset</button>
@@ -102,7 +114,7 @@
             <div class="d-flex" id="elementDelete-<%=customer.id%>">
               <div class="flex-grow-1 rounded-start">
                 <a href="infoCliente?c=<%= customer.id%>" class="fw-semibold list-group-item list-group-item-action"><%= customer.value.name %>
-                  <p class="fw-light">token: <%= customer.value.token %></p>
+                  <p class="fw-light">token: <%= customer.value.token.Quantity %> | scandenza: <% if(customer.value.token.ExpirationDate){ %><%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'})%><%}%></p>
                 </a>
               </div>
               <div class="d-flex align-items-stretch float-end ">

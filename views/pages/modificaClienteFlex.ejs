@@ -106,6 +106,11 @@
           </div>
           <div class="col text-nowrap text-end text-lg-center mb-2">
             <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="adddevice" onclick="addDevice()" title="Aggiungi una macchina">Aggiungi Macchina</button>
+            <datalist id="deviceDatalist">
+              <% devicedb.value.devices.forEach(function(dev){ %>
+                <option value="<%= dev.name %>">
+              <% }); %>
+            </datalist>
           </div>
         </div>
         <form id="deviceForm">
@@ -120,7 +125,7 @@
                   <label for="serialeMacchina">Seriale</label>
                 </div>
                 <div class="form-floating text-nowrap">
-                  <input type="text" id="modelloMacchina" class="form-control mb-1" name="Macchina<%= i %>modello" placeholder="" value="<%= device.modello %>">
+                  <input type="text" id="modelloMacchina" list="deviceDatalist" class="form-control mb-1" name="Macchina<%= i %>modello" placeholder="" value="<%= device.modello %>">
                   <label for="modelloMacchina">Modello</label>
                 </div>
                 <div class="form-floating text-nowrap">
@@ -145,6 +150,11 @@
           </div>
           <div class="col text-end text-lg-center mb-2">
             <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addsoftware" onclick="addSoftware()" title="Aggiungi un software">Aggiungi Software</button>
+            <datalist id="softwareDatalist">
+              <% softwaredb.value.software.forEach(function(sof){ %>
+                <option value="<%= sof.name %>">
+              <% }); %>
+            </datalist>
           </div>
         </div>
         <form id="softwareForm">
@@ -154,7 +164,7 @@
               <% i++ %>
               <div class="row mb-2" id="div<%= i %>">
                 <div class="col-10">
-                  <input type="text" class="form-control" id="Software<%= i %>" name="Software<%= i %>" placeholder="" value="<%= software.nome %>">
+                  <input type="text" class="form-control" id="Software<%= i %>" list="softwareDatalist" name="Software<%= i %>" placeholder="" value="<%= software.nome %>">
                 </div>
                 <div class="col-2 text-center">
                   <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>
