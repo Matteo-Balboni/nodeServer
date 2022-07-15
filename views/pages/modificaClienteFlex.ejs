@@ -45,13 +45,13 @@
           <div class="row gx-1">
             <div class="col-lg-5">
               <div class="form-floating mb-1 text-truncate">
-                <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" readonly>
+                <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" >
                 <label for="TokenId">ID Token</label>
               </div>
             </div>
             <div class="col">
               <div class="form-floating mb-1 text-truncate">
-                <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" readonly>
+                <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" >
                 <label for="TokenExpirationDate">Scadenza</label>
               </div>
             </div>
@@ -61,6 +61,7 @@
                 <label for="TokenQuantity">Quantità</label>
               </div>
             </div>
+            <button type="button" name="btnTokenDelete" class="btn btn-outline-danger btn-sm">Elimina Token</button>
           </div>
       </form>
       <div class="col-sm">

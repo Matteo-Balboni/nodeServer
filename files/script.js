@@ -204,7 +204,7 @@ function formUpdate() {
   console.log(mainF);
 
   var client = new HttpClient();
-  client.post('customer/update', function(response) {
+  client.post('fakeUpdate', function(response) { //qua hai cambiato per fare la prova per i token ricordati di rimettere customer/update
     document.location = response;
     console.log(response);
   }, mainF);

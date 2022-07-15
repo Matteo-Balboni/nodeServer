@@ -45,9 +45,9 @@ async function sanitize(req){
   if (!req.Telefono)
     req.Telefono = '';
 
-  if (!req.Token || req.Token.TokenId == ''){
-    req.Token = {};
-    req.Token = await getToken(10);  //questo non credo di poterlo lasciare nel prodotto finito
+  if (!req.Token || req.Token.TokenId == '' || req.Token.Quantity == ''){
+    let num = req?.Token?.Quantity;  //facendo così però non copro il caso in cui non abbia i token, forse dovrei implementare un qualche attributo che dice se li ha o no
+    req.Token = await getToken(num || 10);  //no ok però così non può ritornare 0
   }
 
   if (!req.Resine || req.Resine.length == 0){
@@ -181,6 +181,11 @@ app.post('/customer/update', async function(req, res) {
     console.log(err);
   });
 });
+
+app.post('/fakeUpdate', async function(req, res) {
+  var obj = await sanitize(req.body);
+  console.log(obj);
+}); //questa andrà poi rimossa una volta fatti i test
 
 app.post('/customer/add', async function(req, res) {
   var obj = await sanitize(req.body);
