@@ -68,7 +68,7 @@ function deleteElement(customerID, customerREV, customerName) {
     client.post('customer/delete', function(response) {
       resp = JSON.parse(response);
       keys = Object.keys(resp);
-      if (keys[0] == 'data') {
+      if (keys[0] == 'ok') {
 
         $("#DeleteAlerts").append('<div class="alert alert-success mb-1" role="alert" id="DeleteSuccess">Cliente ' + customerName + ' Eliminato</div>');
         $("#DeleteAlerts").hide();
