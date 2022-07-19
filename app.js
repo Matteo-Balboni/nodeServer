@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const nano = require('nano')({
-  url: 'http://Admin:Admin@127.0.0.1:5984',
+  url: 'http://Matteo_dqube:Test123@127.0.0.1:5984',
   requestDefaults: {
     jar: true
   }
@@ -23,20 +23,21 @@ const tokenDocId = '27c178f04e717b96b94d316bc200174b';
 const softwareDocId = 'bda7c6faee2f1d25ffd9dcef370037e5';
 const devicesDocId = '5cc5e050c903f8137dbf0af46d00024c';
 
+//importantissimo, serve per dare del gay a cristian
+console.log("\x1b[45m\x1b[37m\x1b[5m    ______     _      __  _                ______            \x1b[0m");
+console.log("\x1b[45m\x1b[37m\x1b[5m   / ____/____(_)____/ /_(_)___ _____     / ____/___ ___  __ \x1b[0m");
+console.log("\x1b[45m\x1b[37m\x1b[5m  / /   / ___/ / ___/ __/ / __ `/ __ \\   / / __/ __ `/ / / / \x1b[0m");
+console.log("\x1b[45m\x1b[37m\x1b[5m / /___/ /  / (__  ) /_/ / /_/ / / / /  / /_/ / /_/ / /_/ /  \x1b[0m");
+console.log("\x1b[45m\x1b[37m\x1b[5m \\____/_/  /_/____/\\__/_/\\__,_/_/ /_/   \\____/\\__,_/\\__, /   \x1b[0m");
+console.log("\x1b[45m\x1b[37m\x1b[5m                                                   /____/    \x1b[0m");
+console.log("\x1b[45m\x1b[37m\x1b[5m                                                             \x1b[0m");
+console.log("");
+
 nano.db.list().then(function(dbs) {
-   //importantissimo, serve per dare del gay a cristian
-  console.log("\x1b[45m\x1b[37m\x1b[5m    ______     _      __  _                ______            \x1b[0m");
-  console.log("\x1b[45m\x1b[37m\x1b[5m   / ____/____(_)____/ /_(_)___ _____     / ____/___ ___  __ \x1b[0m");
-  console.log("\x1b[45m\x1b[37m\x1b[5m  / /   / ___/ / ___/ __/ / __ `/ __ \\   / / __/ __ `/ / / / \x1b[0m");
-  console.log("\x1b[45m\x1b[37m\x1b[5m / /___/ /  / (__  ) /_/ / /_/ / / / /  / /_/ / /_/ / /_/ /  \x1b[0m");
-  console.log("\x1b[45m\x1b[37m\x1b[5m \\____/_/  /_/____/\\__/_/\\__,_/_/ /_/   \\____/\\__,_/\\__, /   \x1b[0m");
-  console.log("\x1b[45m\x1b[37m\x1b[5m                                                   /____/    \x1b[0m");
-  console.log("\x1b[45m\x1b[37m\x1b[5m                                                             \x1b[0m");
-  console.log("");
-  console.log(dbs);
-},
-function(err) {
-  console.log(err);
+    console.log(dbs);
+  },
+  function(err) {
+    console.log("Errore nell'autenticazione");
 });
 
 async function sanitize(req){
@@ -112,6 +113,21 @@ app.get('/', function(req, res) {
       res.render('index', {customers:data.rows});
   },
     function(err){
+    res.send(err);
+  });
+});
+
+app.get('/login',async function(req, res) {
+  res.render('pages/login');
+});
+
+app.post('/auth',async function(req, res) {
+  nano.auth(req.body.username, req.body.password).then(function(data) {
+    console.log(data);
+    res.redirect('/');
+  },
+  function(err) {
+    console.log(err);
     res.send(err);
   });
 });
