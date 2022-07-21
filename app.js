@@ -2,11 +2,26 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const nano = require('nano')({
-  url: 'http://Matteo_dqube:Test123@127.0.0.1:5984',
+  url: 'http://Admin:Admin@127.0.0.1:5984',
   requestDefaults: {
     jar: true
   }
 });
+const cookieParser = require('cookie-parser');
+const { adminAuth, userAuth } = require("./middleware/auth.js");
+
+const app = express();
+
+//middleware
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false})); //leggi meglio anche questo
+app.set('auth', path.join(__dirname, 'auth'));
+app.use("/auth", require("./auth/route")); //questo è il coso che mi ha fatto aggiungere l'autenticazione
+
+app.set('view engine', 'ejs'); //questo specifica che ejs è il view engine, senza questo non va un cazz
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'files'))); //serve per linkare il file js in modo che la pagina ci possa accedere
 
 const maindb = nano.db.use('cristiangay');
 const designName = 'all_customers';
@@ -82,54 +97,43 @@ async function sanitize(req){
   return req;
 }
 
-const app = express();
-
-//middleware, potrei cercarli per capire cosa fanno ma ora no
-app.set('view engine', 'ejs'); //questo specifica che ejs è il view engine, senza questo non va un cazz
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'files'))); //serve per linkare il file js in modo che la pagina ci possa accedere
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
 app.get('/', function(req, res) {
-  //res.render('index');
-  console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
-  maindb.view(designName, viewName).then(
-    function(data){
-      //sort magico che ho trovato da qualche parte
-      data.rows.sort((a, b) => {
-          let fa = a.value.name.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
-              fb = b.value.name.toLowerCase();
+  const authToken = req.cookies.jwt;
+  if (authToken) {
+    console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
+    maindb.view(designName, viewName).then(
+      function(data){
+        //sort magico che ho trovato da qualche parte
+        data.rows.sort((a, b) => {
+            let fa = a.value.name.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
+                fb = b.value.name.toLowerCase();
 
-          if (fa < fb) {
-              return -1;
-          }
-          if (fa > fb) {
-              return 1;
-          }
-          return 0;
-      });
-      res.render('index', {customers:data.rows});
-  },
-    function(err){
-    res.send(err);
-  });
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        });
+        res.render('index', {customers:data.rows});
+    },
+      function(err){
+      res.send(err);
+    });
+  } else {
+    res.redirect('/login');
+  }
+
 });
 
 app.get('/login',async function(req, res) {
   res.render('pages/login');
 });
 
-app.post('/auth',async function(req, res) {
-  nano.auth(req.body.username, req.body.password).then(function(data) {
-    console.log(data);
-    res.redirect('/');
-  },
-  function(err) {
-    console.log(err);
-    res.send(err);
-  });
+app.get('/logout',async function(req, res) {
+  res.cookie("jwt", "", { maxAge: "1" });
+  res.redirect('/login');
 });
 
 app.get('/infocliente', function(req, res) {
@@ -196,11 +200,6 @@ app.post('/customer/update', async function(req, res) {
     console.log(err);
   });
 });
-
-// app.post('/fakeUpdate', async function(req, res) {
-//   var obj = await sanitize(req.body);
-//   console.log(obj);
-// }); //questa andrà poi rimossa una volta fatti i test
 
 app.post('/customer/add', async function(req, res) {
   var obj = await sanitize(req.body);
@@ -428,6 +427,10 @@ app.get('script.js', function(req, res) {
 app.get('resindbscript.js', function(req, res) {
   res.send('files/resindbscript.js');
 });
+
+app.get('not-authorized', function(req, res) {
+  res.render('pages/unauthorized');
+})
 
 app.get('*', function(req, res){
   res.status(404).render('pages/notFound');
