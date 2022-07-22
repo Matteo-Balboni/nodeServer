@@ -8,7 +8,7 @@ const nano = require('nano')({
   }
 });
 const cookieParser = require('cookie-parser');
-const { adminAuth, userAuth } = require("./middleware/auth.js");
+const { adminAuth, userAuth } = require("./files/middleware/auth.js");
 
 const app = express();
 
@@ -16,8 +16,8 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false})); //leggi meglio anche questo
-app.set('auth', path.join(__dirname, 'auth'));
-app.use("/auth", require("./auth/route")); //questo è il coso che mi ha fatto aggiungere l'autenticazione
+app.set('auth', path.join(__dirname, 'files/auth'));
+app.use("/auth", require("./files/auth/route")); //questo è il coso che mi ha fatto aggiungere l'autenticazione
 
 app.set('view engine', 'ejs'); //questo specifica che ejs è il view engine, senza questo non va un cazz
 app.set('views', path.join(__dirname, 'views'));
@@ -155,7 +155,7 @@ app.get('/infocliente', function(req, res) {
   });
 });
 
-app.get('/modifica', function(req, res) {
+app.get('/modifica', adminAuth, function(req, res) {
   const cliente = req.query.c;
   var resin;
 
@@ -177,7 +177,7 @@ app.get('/modifica', function(req, res) {
   });
 });
 
-app.post('/customer/update', async function(req, res) {
+app.post('/customer/update', adminAuth, async function(req, res) {
   var obj = await sanitize(req.body);
   maindb.insert({
     _id: obj._id,
@@ -201,7 +201,7 @@ app.post('/customer/update', async function(req, res) {
   });
 });
 
-app.post('/customer/add', async function(req, res) {
+app.post('/customer/add', adminAuth, async function(req, res) {
   var obj = await sanitize(req.body);
 
   nano.uuids().then(async function(ids) {
@@ -229,7 +229,7 @@ app.post('/customer/add', async function(req, res) {
   });
 });
 
-app.post('/customer/delete', function(req, res) {
+app.post('/customer/delete', adminAuth, function(req, res) {
   var id = req.body.id;
   var rev = req.body.rev;
 
@@ -244,7 +244,7 @@ app.post('/customer/delete', function(req, res) {
     });
 });
 
-app.get('/resina?e?', function(req, res) {
+app.get('/resina?e?', adminAuth, function(req, res) {
   resindb.view(resinDes, resinUrl, {key: resinDocId}).then(
     function(data) {
       data.rows[0].value.resin.sort((a, b) => {
@@ -266,7 +266,7 @@ app.get('/resina?e?', function(req, res) {
   });
 });
 
-app.post('/resin/update', function(req, res) {
+app.post('/resin/update', adminAuth, function(req, res) {
   //niente mauro alla fine ho fatto un documento solo come dicevi tu perchè era troppo poco consistente
   resindb.insert({
     _id: req.body.id,
@@ -282,7 +282,7 @@ app.post('/resin/update', function(req, res) {
   });
 });
 
-app.get('/software', function(req, res) {
+app.get('/software', adminAuth, function(req, res) {
   resindb.view(resinDes, softwareUrl, {key: softwareDocId}).then(
     function(data) {
       data.rows[0].value.software.sort((a, b) => {
@@ -304,7 +304,7 @@ app.get('/software', function(req, res) {
   });
 });
 
-app.post('/software/update', function(req, res) {
+app.post('/software/update', adminAuth, function(req, res) {
   resindb.insert({
     _id: req.body.id,
     _rev: req.body.rev,
@@ -319,7 +319,7 @@ app.post('/software/update', function(req, res) {
   });
 });
 
-app.get('/macchine', function(req, res) {
+app.get('/macchine', adminAuth, function(req, res) {
   resindb.view(resinDes, devicesUrl, {key: devicesDocId}).then(
     function(data) {
       data.rows[0].value.devices.sort((a, b) => {
@@ -341,7 +341,7 @@ app.get('/macchine', function(req, res) {
   });
 });
 
-app.post('/devices/update', function(req, res) {
+app.post('/devices/update', adminAuth, function(req, res) {
   resindb.insert({
     _id: req.body.id,
     _rev: req.body.rev,
@@ -428,9 +428,13 @@ app.get('resindbscript.js', function(req, res) {
   res.send('files/resindbscript.js');
 });
 
+app.get('bootstrap-icons.css', async function(req, res) {
+  res.send('css/bootstrap-icons/bootstrap-icons.css');
+});
+
 app.get('not-authorized', function(req, res) {
   res.render('pages/unauthorized');
-})
+});
 
 app.get('*', function(req, res){
   res.status(404).render('pages/notFound');
