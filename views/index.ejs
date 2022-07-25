@@ -13,12 +13,16 @@
       <nav class="container sticky-top bg-white pb-3" id="TitleNav">
         <div class="d-flex flex-row align-items-center">
           <div class="dropdown text-start mt-2 mt-sm-0 me-3">
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="dropdown"><i class="bi bi-list"></i></button>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="dropdown" ><i class="bi bi-list"></i></button>
             <ul class="dropdown-menu">
+              <% if(role == 'admin'){ %>
               <li><a class="dropdown-item" href="/resine">Gestione Resine</a></li>
               <li><a class="dropdown-item" href="/software">Gestione Software</a></li>
               <li><a class="dropdown-item" href="/macchine">Gestione Macchine</a></li>
               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/adminInterface">Interfaccia Amministratore</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <% } %>
               <li><a class="dropdown-item" href="/logout">Logout</a></li>
             </ul>
           </div>
@@ -26,14 +30,16 @@
             <h1 class="display-2 d-inline align-middle">Clienti</h1>
           </div>
           <div class="me-1 mt-2 mt-sm-0 text-center">
-            <div class="d-flex flex-row">
-              <div class="me-2 mb-1">
-                <button class="btn btn-outline-danger" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti"><i class="bi bi-x-lg"></i><span class="ms-1 d-none d-md-inline">Elimina Cliente</span></button>
+            <% if (role == 'admin') { %>
+              <div class="d-flex flex-row">
+                <div class="me-2 mb-1">
+                  <button class="btn btn-outline-danger" type="button" name="button" onclick="toggleDelete()" title="Elimina uno o più clienti"><i class="bi bi-x-lg"></i><span class="ms-1 d-none d-md-inline">Elimina Cliente</span></button>
+                </div>
+                <div class="mb-1">
+                  <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti"><i class="bi bi-plus-lg"></i><span class="ms-1 d-none d-md-inline">Aggiunta Rapida</span></button>
+                </div>
               </div>
-              <div class="mb-1">
-                <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" title="Aggiungi rapidamente uno o più clienti"><i class="bi bi-plus-lg"></i><span class="ms-1 d-none d-md-inline">Aggiunta Rapida</span></button>
-              </div>
-            </div>
+            <% } %>
           </div>
 
         </div>
@@ -139,7 +145,6 @@
       <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" id="DeleteAlerts"></div>
       <div class="container mt-2 pb-5 float-none bottom-0">
         <hr>
-        <button class="btn btn-outline-danger float-end" type="button" name="button" onclick="provajs()">Elimina Cliente</button>
       </div>
     </div>
     <script>

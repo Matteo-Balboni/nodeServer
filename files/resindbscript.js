@@ -16,7 +16,7 @@ function resindbUpdate() {
 
   var client = new HttpClient();
   client.post('resin/update', function(response) {
-    document.location = 'resin'; //vabbè questo è ovviamente da cambiare in caso voglia che vada su un altra pagina
+    document.location = '/'; //vabbè questo è ovviamente da cambiare in caso voglia che vada su un altra pagina
   }, JSON.stringify(form));
 }
 
@@ -38,7 +38,7 @@ function softwaredbUpdate() {
 
   var client = new HttpClient();
   client.post('software/update', function(response) {
-    document.location = 'software'; //vabbè questo è ovviamente da cambiare in caso voglia che vada su un altra pagina
+    document.location = '/'; //vabbè questo è ovviamente da cambiare in caso voglia che vada su un altra pagina
   }, JSON.stringify(form));
 }
 
@@ -60,6 +60,6 @@ function devicesdbUpdate() {
 
   var client = new HttpClient();
   client.post('devices/update', function(response) {
-    document.location = 'macchine'; //vabbè questo è ovviamente da cambiare in caso voglia che vada su un altra pagina
+    document.location = '/'; //vabbè questo è ovviamente da cambiare in caso voglia che vada su un altra pagina
   }, JSON.stringify(form));
 }

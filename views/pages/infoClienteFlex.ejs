@@ -25,7 +25,9 @@
             <% } %>
         </div>
         <div class="me-1 mt-2 mt-sm-0">
-          <a class="btn btn-outline-primary" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente"><i class="bi bi-pencil-square"></i><span class="ms-1 d-none d-md-inline">Modifica</span></a>
+          <% if (role == 'admin') { %>
+            <a class="btn btn-outline-primary" href="modifica?c=<%= customer.id %>" title="Modifica i dati del cliente"><i class="bi bi-pencil-square"></i><span class="ms-1 d-none d-md-inline">Modifica</span></a>
+          <% } %>
         </div>
       </div>
       <hr>

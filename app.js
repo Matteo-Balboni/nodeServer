@@ -9,6 +9,7 @@ const nano = require('nano')({
 });
 const cookieParser = require('cookie-parser');
 const { adminAuth, userAuth } = require("./files/middleware/auth.js");
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -37,6 +38,8 @@ const resinDocId = 'd83ef8426b5175d49b501145b1001043';
 const tokenDocId = '27c178f04e717b96b94d316bc200174b';
 const softwareDocId = 'bda7c6faee2f1d25ffd9dcef370037e5';
 const devicesDocId = '5cc5e050c903f8137dbf0af46d00024c';
+const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
+
 
 //importantissimo, serve per dare del gay a cristian
 console.log("\x1b[45m\x1b[37m\x1b[5m    ______     _      __  _                ______            \x1b[0m");
@@ -97,9 +100,9 @@ async function sanitize(req){
   return req;
 }
 
-app.get('/', function(req, res) {
-  const authToken = req.cookies.jwt;
-  if (authToken) {
+app.get('/',async function(req, res) {
+  const role = await getRole(req);
+  if (role == 'user' || role == 'admin') {
     console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
     maindb.view(designName, viewName).then(
       function(data){
@@ -116,7 +119,7 @@ app.get('/', function(req, res) {
             }
             return 0;
         });
-        res.render('index', {customers:data.rows});
+        res.render('index', {customers:data.rows, role: role});
     },
       function(err){
       res.send(err);
@@ -124,7 +127,6 @@ app.get('/', function(req, res) {
   } else {
     res.redirect('/login');
   }
-
 });
 
 app.get('/login',async function(req, res) {
@@ -136,15 +138,16 @@ app.get('/logout',async function(req, res) {
   res.redirect('/login');
 });
 
-app.get('/infocliente', function(req, res) {
+app.get('/infocliente', userAuth, function(req, res) {
   const cliente = req.query.c;
   var objcheck = req.query.o;
   objcheck ??= false; //lo setta a false se è null o undefined
 
   maindb.view(designName, viewName, {key: cliente}).then(
-    function(data){
+    async function(data){
       if (objcheck == false) {
-        res.render('pages/infoClienteFlex', {customer:data.rows[0]});
+        let role = await getRole(req);
+        res.render('pages/infoClienteFlex', {customer:data.rows[0], role: role});
       }
       else {
         res.send(data.rows[0]); //ristruttura questo in un altra funzione se ci sono problemi di prestazioni (facendo una view apposta sul db e mettendo questo in un altro app.get)
@@ -416,6 +419,27 @@ function updateTokenSerial(rev, newSerial) {
   });
 }
 
+async function getRole(req) {
+  const token = req.cookies.jwt;
+  if (token) {
+    return jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return "none";
+      } else {
+        if (decodedToken.role == "admin") {
+          return "admin";
+        } else if (decodedToken.role == "user") {
+          return "user";
+        } else {
+          return "none";
+        }
+      }
+    });
+  } else {
+    return 0;
+  }
+}
+
 app.listen(80, function() {
   console.log("Server started on port 80");
 });
@@ -428,11 +452,8 @@ app.get('resindbscript.js', function(req, res) {
   res.send('files/resindbscript.js');
 });
 
-app.get('bootstrap-icons.css', async function(req, res) {
-  res.send('css/bootstrap-icons/bootstrap-icons.css');
-});
-
-app.get('not-authorized', function(req, res) {
+app.get('/not_authorized', function(req, res) {
+  console.log("non aut");
   res.render('pages/unauthorized');
 });
 

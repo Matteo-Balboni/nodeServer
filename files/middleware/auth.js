@@ -6,34 +6,40 @@ exports.adminAuth = async function(req, res, next) {
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json({ message: "Non autorizzato" })
+        //return res.status(401).json({ message: "Non autorizzato" })
+        return res.redirect('/not_authorized');
       } else {
         if (decodedToken.role !== "admin") {
-          return res.status(401).json({ message: "Non autorizzato" })
+          //return res.status(401).json({ message: "Non autorizzato" })
+          return res.redirect('/not_authorized');
         } else {
           next()
         }
       }
     })
   } else {
-    return res.status(401).json({ message: "Non autorizzato, token non disponibile" });
+    //return res.status(401).json({ message: "Non autorizzato, token non disponibile" });
+    return res.redirect('/not_authorized');
   }
 }
-exports.userAuth = (req, res, next) => {
+exports.userAuth = async function(req, res, next) {
   const token = req.cookies.jwt
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json({ message: "Non autorizzato" })
+        //return res.status(401).json({ message: "Non autorizzato" })
+        return res.redirect('/not_authorized');
       } else {
         if (decodedToken.role !== "user" && decodedToken.role !== "admin") {
-          return res.status(401).json({ message: "Non autorizzato" })
+          //return res.status(401).json({ message: "Non autorizzato" })
+          return res.redirect('/not_authorized');
         } else {
           next()
         }
       }
     })
   } else {
-    return res.status(401).json({ message: "Non autorizzato, token non disponibile" })
+    //return res.status(401).json({ message: "Non autorizzato, token non disponibile" })
+    return res.redirect('/not_authorized');
   }
 }
