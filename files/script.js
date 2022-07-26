@@ -194,7 +194,7 @@ function formUpdate() {
   mainF.NomeCliente = $("#customerName").text();
   mainF._id = $("#customerName").attr("customerId");
   mainF._rev = $("#customerName").attr("customerRev");
-  mainF.Token = { TokenId: mainF.TokenId, ExpirationDate: tokenExp, Quantity: mainF.TokenQty };
+  mainF.Token = { TokenId: mainF.TokenId, ExpirationDate: tokenExp, Quantity: mainF.TokenQty, NoToken: mainF.NoToken };
   mainF.Resine = resinF;
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
@@ -204,7 +204,7 @@ function formUpdate() {
   console.log(mainF);
 
   var client = new HttpClient();
-  client.post('customer/update', function(response) { //qua hai cambiato per fare la prova per i token ricordati di rimettere customer/update
+  client.post('customer/update', function(response) {
     document.location = response;
     console.log(response);
   }, mainF);

@@ -67,9 +67,14 @@ async function sanitize(req){
   if (!req.Telefono)
     req.Telefono = '';
 
-  if (!req.Token || req.Token.TokenId == '' || req.Token.Quantity == ''){
-    let num = req?.Token?.Quantity;  //facendo così però non copro il caso in cui non abbia i token, forse dovrei implementare un qualche attributo che dice se li ha o no
-    req.Token = await getToken(num || 10);  //no ok però così non può ritornare 0
+  if (!req?.Token || !req.Token?.TokenId || req.Token.Quantity == ''){
+    if (req.Token?.NoToken == 'true') {
+      req.Token.TokenId = '';
+      req.Token.Quantity = 0;
+    } else {
+      let num = req?.Token?.Quantity;
+      req.Token = await getToken(num || 10);
+    }
   }
 
   if (!req.Resine || req.Resine.length == 0){

@@ -44,25 +44,34 @@
             <label for="Telefono">Numero di Telefono</label>
           </div>
           <div class="row gx-1">
-            <div class="col-lg-5">
-              <div class="form-floating mb-1 text-truncate">
-                <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" >
-                <label for="TokenId">ID Token</label>
+            <% if(customer.value.token?.NoToken == 'true'){ %>
+              <div class="col">
+                <div>
+                  <input type="text" class="form-control d-none" id="NoToken" name="NoToken" placeholder="" value="true">
+                </div>
               </div>
-            </div>
-            <div class="col">
-              <div class="form-floating mb-1 text-truncate">
-                <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" >
-                <label for="TokenExpirationDate">Scadenza</label>
+              <button type="button" name="btnTokenAdd" id="tokenAdd" class="btn btn-outline-primary btn-sm">Aggiungi Token</button>
+            <% } else { %>
+              <div class="col-lg-5">
+                <div class="form-floating mb-1 text-truncate">
+                  <input type="text" class="form-control" id="TokenId" name="TokenId" placeholder="" value="<%= customer.value.token.TokenId %>" >
+                  <label for="TokenId">ID Token</label>
+                </div>
               </div>
-            </div>
-            <div class="col">
-              <div class="form-floating mb-2 text-truncate">
-                <input type="number" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value="<%= customer.value.token.Quantity %>">
-                <label for="TokenQuantity">Quantità</label>
+              <div class="col">
+                <div class="form-floating mb-1 text-truncate">
+                  <input type="text" class="form-control" id="TokenExpirationDate" name="TokenExpDate" placeholder="" fulldate="<%= customer.value.token.ExpirationDate %>" value="<%= new Date(customer.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'}) %>" >
+                  <label for="TokenExpirationDate">Scadenza</label>
+                </div>
               </div>
-            </div>
-            <button type="button" name="btnTokenDelete" class="btn btn-outline-danger btn-sm">Elimina Token</button>
+              <div class="col">
+                <div class="form-floating mb-2 text-truncate">
+                  <input type="number" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value="<%= customer.value.token.Quantity %>">
+                  <label for="TokenQuantity">Quantità</label>
+                </div>
+              </div>
+              <button type="button" name="btnTokenDelete" id="tokenDel" class="btn btn-outline-danger btn-sm">Elimina Token</button>
+            <% } %>
           </div>
       </form>
       <div class="col-sm mt-2 mt-sm-0">
@@ -191,6 +200,27 @@
       $("body").on("click", ".btn-close", function() {
         $( this ).parent().parent().fadeOut(100);
         $( this ).parent().siblings().find("*").val('');
+      })
+    });
+
+    $(document).ready(function() {
+      $("body").on("click", "#tokenDel", function() {
+        $( this ).siblings().remove();
+        $( this ).siblings().find("*").val(''); //continua poi da qua facendo la cosa per aggiungere un token
+        $( this ).fadeOut(100);
+        $( this ).parent().append('<button type="button" name="btnTokenAdd" id="tokenAdd" class="btn btn-outline-primary btn-sm">Aggiungi Token</button>');
+        $( this ).parent().append('<div class="col"><div><input type="text" class="form-control d-none" id="NoToken" name="NoToken" placeholder="" value="true"></div></div>');
+        $( this ).remove();
+      })
+    });
+
+    $(document).ready(function() {
+      $("body").on("click", "#tokenAdd", function() {
+        //da fare la parte dell'add
+        $( this ).siblings().remove();
+        $( this ).parent().append('<div class="col"><div class="form-floating mb-2 text-truncate"><input type="number" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value=""><label for="TokenQuantity">Quantità Token</label></div></div>');
+        $( this ).parent().append('<button type="button" name="btnTokenDelete" id="tokenDel" class="btn btn-outline-danger btn-sm">Elimina Token</button>');
+        $( this ).remove();
       })
     });
 

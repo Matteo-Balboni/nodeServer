@@ -14,13 +14,13 @@
         <div class="d-flex flex-row align-items-center">
           <div class="dropdown text-start mt-2 mt-sm-0 me-3">
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="dropdown" ><i class="bi bi-list"></i></button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu shadow">
               <% if(role == 'admin'){ %>
               <li><a class="dropdown-item" href="/resine">Gestione Resine</a></li>
               <li><a class="dropdown-item" href="/software">Gestione Software</a></li>
               <li><a class="dropdown-item" href="/macchine">Gestione Macchine</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/adminInterface">Interfaccia Amministratore</a></li>
+              <li><a class="dropdown-item" href="/admin_interface">Interfaccia Amministratore</a></li>
               <li><hr class="dropdown-divider"></li>
               <% } %>
               <li><a class="dropdown-item" href="/logout">Logout</a></li>
