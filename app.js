@@ -219,7 +219,7 @@ app.post('/customer/add', adminAuth, async function(req, res) {
       NomeCliente: obj.NomeCliente,
       Email: obj.Email,
       Telefono: obj.Telefono,
-      token: await getToken(obj.Token),
+      token: obj.Token,  //ci lascio solo obj.Token perchè lo genera in sanitize
       Resine: obj.Resine,
       Macchine: obj.Macchine,
       Software: obj.Software,
@@ -244,7 +244,7 @@ app.post('/customer/delete', adminAuth, function(req, res) {
   maindb.destroy(id, rev).then(
     function(data) {
       console.log("\x1b[41m Eliminato  -> \x1b[0m id: " + id + " rev: " + rev + "\x1b[0m");
-      console.log(data);
+      //console.log(data);
       res.send(data);
     },
     function(err) {
@@ -364,7 +364,11 @@ app.post('/devices/update', adminAuth, function(req, res) {
   });
 });
 
-function getToken(tokenquantity) {
+app.get('/admin_interface', adminAuth, function(req, res) {
+  res.render('pages/admin');
+});
+
+async function getToken(tokenquantity) {
   return resindb.view(resinDes, tokenUrl).then(
     async function(data) {
       var date = new Date();
@@ -393,9 +397,9 @@ function getToken(tokenquantity) {
       var tokenid = "T" + year + month + "-" + quantityLetter + serial.padStart(5, '0');
       date.setFullYear(date.getFullYear() + 1);
       const token = { TokenId: tokenid, ExpirationDate: date, Quantity: tokenquantity };
-      const newSerial = Number(serial) + 1;
+      const newSerial = Number(data.rows[0].value.tokenSerial);
 
-      await updateTokenSerial(data.rows[0].value.rev, newSerial);
+      updateTokenSerial(data.rows[0].value.rev, newSerial + 1);
       return token;
     },
     function(err) {
@@ -404,7 +408,7 @@ function getToken(tokenquantity) {
   );
 }
 
-function updateTokenSerial(rev, newSerial) {
+async function updateTokenSerial(rev, newSerial) {
   var date = new Date();
   resindb.insert({
     _id: tokenDocId,
@@ -412,15 +416,17 @@ function updateTokenSerial(rev, newSerial) {
     tokenSerial: newSerial,
     lastUpdated: {
       year: date.getUTCFullYear(),  //ci metto utc giusto perchè non sono sicuro di quale vogliano e questo dovrebbe andare bene
-      utcFullDate: date.getUTCDate()
+      utcDay: date.getUTCDate(),
+      Month: date.getUTCMonth() + 1
     }
 
   }).then(function(data, headers, status) {
     console.log("\x1b[43m Aggiornato -> \x1b[0m SERIALE TOKEN\x1b[0m");
+    return true;
   },
   function(err) {
-    console.log(err);
-    return 'err';
+    console.log(err);  //mi da un errore quando faccio andare questa funzione, da sistemare
+    return false;
   });
 }
 

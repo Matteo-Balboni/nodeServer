@@ -104,11 +104,16 @@ function formSubmit() {
   var formDump = $("#mainForm").serializeArray();
   var objCliente = objectify(formDump, 'object');
 
+  objCliente.Token = {Quantity: objCliente.TokenN}
   objCliente.Resine = [];
   objCliente.Resine[0] = {nome: objCliente.NomeResina, numero: objCliente.Qta};
   objCliente.Macchine = [];
   objCliente.Macchine[0] = {seriale: objCliente.Seriale, modello: objCliente.NomeMacchina, info: ''};
   objCliente.Software = [];
+
+  delete objCliente.TokenN, delete objCliente.NomeResina, delete objCliente.Qta, delete objCliente.Seriale, delete objCliente.NomeMacchina;
+
+  //console.log(objCliente);
 
   objCliente = JSON.stringify(objCliente); //la request accetta il json in versione stringa evidentemente
   if ($("#NomeCliente").val() != "") {
