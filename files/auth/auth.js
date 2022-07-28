@@ -19,7 +19,7 @@ exports.register = async function(req, res, next) {
         role: role
 
       }).then(async function(data) {
-        const maxAge = 3 * 60 * 60; //età massima messa come 3 ore (in secondi)
+        const maxAge = 10 * 60 * 60; //età massima messa come 10 ore (in secondi)
         const token = jwt.sign(
           { id: data.id, username, role},
           jwtSecret,
@@ -73,7 +73,7 @@ exports.login = async function(req, res, next) {
     } else {
       bcrypt.compare(password, user.docs[0].password).then(function(result) {
         if (result) {
-          const maxAge = 3 * 60 * 60;
+          const maxAge = 10 * 60 * 60;
           const token = jwt.sign(
             { id: user.docs[0]._id, username: username, role: user.docs[0].role},
             jwtSecret,
