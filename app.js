@@ -16,7 +16,7 @@ const app = express();
 //middleware
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false})); //leggi meglio anche questo
+app.use(bodyParser.urlencoded({extended: false}));
 app.set('auth', path.join(__dirname, 'files/auth'));
 app.use("/auth", require("./files/auth/route")); //questo è il coso che mi ha fatto aggiungere l'autenticazione
 
@@ -41,15 +41,14 @@ const devicesDocId = '5cc5e050c903f8137dbf0af46d00024c';
 const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
 
 
-//importantissimo, serve per dare del gay a cristian
-console.log("\x1b[45m\x1b[37m\x1b[5m    ______     _      __  _                ______            \x1b[0m");
-console.log("\x1b[45m\x1b[37m\x1b[5m   / ____/____(_)____/ /_(_)___ _____     / ____/___ ___  __ \x1b[0m");
-console.log("\x1b[45m\x1b[37m\x1b[5m  / /   / ___/ / ___/ __/ / __ `/ __ \\   / / __/ __ `/ / / / \x1b[0m");
-console.log("\x1b[45m\x1b[37m\x1b[5m / /___/ /  / (__  ) /_/ / /_/ / / / /  / /_/ / /_/ / /_/ /  \x1b[0m");
-console.log("\x1b[45m\x1b[37m\x1b[5m \\____/_/  /_/____/\\__/_/\\__,_/_/ /_/   \\____/\\__,_/\\__, /   \x1b[0m");
-console.log("\x1b[45m\x1b[37m\x1b[5m                                                   /____/    \x1b[0m");
-console.log("\x1b[45m\x1b[37m\x1b[5m                                                             \x1b[0m");
-console.log("");
+//Initial ASCII art
+console.log('\x1b[47m\x1b[34m  _____ \x1b[30m  ______  __  __  ______  ______    \x1b[0m');
+console.log('\x1b[47m\x1b[34m /\\  __-.\x1b[30m/\\  __ \\/\\ \\/\\ \\/\\  == \\/\\  ___\\   \x1b[0m');
+console.log('\x1b[47m\x1b[34m \\ \\ \\/\\ \x1b[30m\\ \\ \\/\\_\\ \\ \\_\\ \\ \\  __<\\ \\  __\\   \x1b[0m');
+console.log('\x1b[47m\x1b[34m  \\ \\____-\x1b[30m\\ \\___\\_\\ \\_____\\ \\_____\\ \\_____\\ \x1b[0m');
+console.log('\x1b[47m\x1b[34m   \\/____/ \x1b[30m\\/___/_/\\/_____/\\/_____/\\/_____/ ');
+console.log('\x1b[47m           \x1b[30m                                 \x1b[0m');
+console.log('\x1b[44m -----< DQUBE Customer Service Server >-----\x1b[0m\n');
 
 nano.db.list().then(function(dbs) {
     console.log(dbs);
@@ -108,7 +107,7 @@ async function sanitize(req){
 app.get('/',async function(req, res) {
   const role = await getRole(req);
   if (role == 'user' || role == 'admin') {
-    console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
+    //console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
     maindb.view(designName, viewName).then(
       function(data){
         //sort magico che ho trovato da qualche parte
@@ -140,6 +139,7 @@ app.get('/login',async function(req, res) {
 
 app.get('/logout',async function(req, res) {
   res.cookie("jwt", "", { maxAge: "1" });
+  console.log('\x1b[46m Logout da  -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
   res.redirect('/login');
 });
 
@@ -200,7 +200,7 @@ app.post('/customer/update', adminAuth, async function(req, res) {
     Assistenze: obj.Assistenze
 
   }).then(function(data) {
-    console.log("\x1b[43m Aggiornato -> \x1b[0m id:" + obj._id + " da: " + req.ip + "\x1b[0m");
+    console.log("\x1b[43m Aggiornato -> \x1b[0m id: " + obj._id + " da: " + req.ip + "\x1b[0m");
     res.send("infoCliente?c=" + obj._id);
   },
   function(err) {
@@ -425,7 +425,7 @@ async function updateTokenSerial(rev, newSerial) {
     return true;
   },
   function(err) {
-    console.log(err);  //mi da un errore quando faccio andare questa funzione, da sistemare
+    console.log(err);
     return false;
   });
 }

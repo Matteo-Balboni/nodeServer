@@ -85,6 +85,7 @@ exports.login = async function(req, res, next) {
             httpOnly: true, //guarda meglio cosa fa
             maxAge: maxAge * 1000  //qua invece va in ms
           });
+          console.log('\x1b[46m Login da   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
           res.redirect('/');
           //res.status(200).json({ message: "Login effettuato", user});
         } else {

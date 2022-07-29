@@ -205,12 +205,14 @@
 
     $(document).ready(function() {
       $("body").on("click", "#tokenDel", function() {
-        $( this ).siblings().remove();
-        $( this ).siblings().find("*").val(''); //continua poi da qua facendo la cosa per aggiungere un token
-        $( this ).fadeOut(100);
-        $( this ).parent().append('<button type="button" name="btnTokenAdd" id="tokenAdd" class="btn btn-outline-primary btn-sm">Aggiungi Token</button>');
-        $( this ).parent().append('<div class="col"><div><input type="text" class="form-control d-none" id="NoToken" name="NoToken" placeholder="" value="true"></div></div>');
-        $( this ).remove();
+        if (confirm('Sicuro di voler eliminare il token?')) {
+          $( this ).siblings().remove();
+          $( this ).siblings().find("*").val(''); //continua poi da qua facendo la cosa per aggiungere un token
+          $( this ).fadeOut(100);
+          $( this ).parent().append('<button type="button" name="btnTokenAdd" id="tokenAdd" class="btn btn-outline-primary btn-sm">Aggiungi Token</button>');
+          $( this ).parent().append('<div class="col"><div><input type="text" class="form-control d-none" id="NoToken" name="NoToken" placeholder="" value="true"></div></div>');
+          $( this ).remove();
+        }
       })
     });
 

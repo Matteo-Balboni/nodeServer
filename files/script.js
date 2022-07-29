@@ -129,9 +129,18 @@ function formSubmit() {
 
       client.get('infocliente?c=' + response.id + '&o=true', function(respo) {
         respo = JSON.parse(respo);
-        var deleteElement = 'deleteElement()';
-        $("#ListaClienti").prepend('<a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">token: '+ respo.value.token +'</p></a>');
-        $("#ListaClientiDel").prepend('<div class="d-flex" id="elementDelete-'+ respo.id +'"><div class="flex-grow-1 rounded-start"><a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">token: '+ respo.value.token +'</p></a></div><div class="d-flex align-items-stretch float-end "><button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement(`'+ respo.id +'`, `'+ respo.value.rev +'`, `'+ respo.value.name +'`)">Elimina</button>');
+        var tokenDsiplay = '';
+        var tokenDate = '';
+        if (!respo.value.token.NoToken) {
+          if(respo.value.token.ExpirationDate){
+            tokenDate = new Date(respo.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'});
+          }
+          tokenDisplay = 'token: ' + respo.value.token.Quantity + ' | scadenza: ' + tokenDate;
+        } else {
+          tokenDsiplay = 'No token';
+        }
+        $("#ListaClienti").prepend('<a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">'+ tokenDisplay +'</p></a>');
+        $("#ListaClientiDel").prepend('<div class="d-flex" id="elementDelete-'+ respo.id +'"><div class="flex-grow-1 rounded-start"><a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">'+ tokenDisplay +'</p></a></div><div class="d-flex align-items-stretch float-end "><button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement(`'+ respo.id +'`, `'+ respo.value.rev +'`, `'+ respo.value.name +'`)">Elimina</button>');
       });
 
       setTimeout(function(){
@@ -225,12 +234,12 @@ function addResin() {
   $("#resinForm input").first().focus();
 }
 function addSoftware() {
-  const appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Software" list="softwareDatalist" name="SoftwareA" placeholder=""> </div> <div class="col-2"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  const appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Software" list="softwareDatalist" name="SoftwareA" placeholder=""> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#softwareForm").prepend(appended);
   $("#softwareForm input").first().focus();
 }
 function addDevice() {
-  const appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" list="deviceDatalist" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
+  const appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" list="deviceDatalist" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2 text-center"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
   $("#deviceForm").prepend(appended);
   $("#deviceForm input").first().focus();
 }
