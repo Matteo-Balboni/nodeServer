@@ -23,12 +23,27 @@
             <input type="password" id="password" class="form-control" name="password" value="" placeholder="">
             <label for="password">Password</label>
           </div>
+          <div class="container mb-2">
+            <input type="checkbox" id="showpwd" class="form-check-input" onclick="showPass()" value="false" checked="false">
+            <label class="form-check-label user-select-none" for="showpwd">Mostra Password</label>
+          </div>
           <div class="d-grid justify-content-md-end">
             <button type="submit" class="btn btn-outline-primary">Accedi</button>
           </div>
         </form>
       </div>
     </div>
+    <script type="text/javascript">
+      document.getElementById("showpwd").checked = false;
+      function showPass() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+      }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
   </body>
 </html>
