@@ -68,8 +68,8 @@
               <label for="Telefono">Numero di Telefono</label>
             </div>
             <div class="form-check mb-1">
-              <input class="form-check-input" type="checkbox" value="" id="tokenCheck">
-              <label class="form-check-label" for="tokenCheck">Utilizza token?</label>
+              <input class="form-check-input" type="checkbox" value="" id="tokenCheck" checked>
+              <label class="form-check-label user-select-none" for="tokenCheck">Utilizza token?</label>
             </div>
             <div class="form-floating mb-3">
               <input type="number" class="form-control" id="Token" name="TokenN" placeholder="" value="10">
@@ -194,9 +194,13 @@
         if (scroll !== null) {
           window.scroll({top: scroll, left: 0, behavior: 'instant'});
         }
+        tokenChecker();
       });
       window.addEventListener("beforeunload", () => {
         sessionStorage.setItem("window-scroll", window.pageYOffset );
+      });
+      $('#tokenCheck').click(function() {
+        tokenChecker();
       });
     </script>
     <script src="script.js" type="text/javascript" crossorigin="anonymous"></script>

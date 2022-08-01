@@ -11,6 +11,19 @@ function toggleDelete(){
   $("#ListaClientiDel").toggleClass("d-none");
 }
 
+function tokenChecker() {
+  if ($('#tokenCheck').prop('checked')) {
+    $('#Token').prop( "disabled", false );
+    $('#Token').val(10);
+    $('#Token').attr('notoken', false);
+  } else {
+    $('#Token').prop( "disabled", true );
+    $('#Token').val('');
+    $('#Token').attr('notoken', true);
+  }
+}
+
+
 var HttpClient = function() {
     this.post = function(aUrl, aCallback, reqBody) {
         var anHttpRequest = new XMLHttpRequest();
@@ -104,7 +117,7 @@ function formSubmit() {
   var formDump = $("#mainForm").serializeArray();
   var objCliente = objectify(formDump, 'object');
 
-  objCliente.Token = {Quantity: objCliente.TokenN}
+  objCliente.Token = {Quantity: objCliente.TokenN, NoToken: $('#Token').attr('notoken')}
   objCliente.Resine = [];
   objCliente.Resine[0] = {nome: objCliente.NomeResina, numero: objCliente.Qta};
   objCliente.Macchine = [];
@@ -129,16 +142,17 @@ function formSubmit() {
 
       client.get('infocliente?c=' + response.id + '&o=true', function(respo) {
         respo = JSON.parse(respo);
-        var tokenDsiplay = '';
-        var tokenDate = '';
+        let tokenDisplay = '';
+        let tokenDate = '';
         if (!respo.value.token.NoToken) {
           if(respo.value.token.ExpirationDate){
             tokenDate = new Date(respo.value.token.ExpirationDate).toLocaleString('it-IT', {day:'numeric', month:'numeric', year:'numeric'});
           }
           tokenDisplay = 'token: ' + respo.value.token.Quantity + ' | scadenza: ' + tokenDate;
         } else {
-          tokenDsiplay = 'No token';
+          tokenDisplay = 'No token';
         }
+        console.log(tokenDisplay);
         $("#ListaClienti").prepend('<a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">'+ tokenDisplay +'</p></a>');
         $("#ListaClientiDel").prepend('<div class="d-flex" id="elementDelete-'+ respo.id +'"><div class="flex-grow-1 rounded-start"><a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">'+ tokenDisplay +'</p></a></div><div class="d-flex align-items-stretch float-end "><button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement(`'+ respo.id +'`, `'+ respo.value.rev +'`, `'+ respo.value.name +'`)">Elimina</button>');
       });

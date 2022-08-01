@@ -47,7 +47,7 @@ console.log('\x1b[47m\x1b[34m /\\  __-.\x1b[30m/\\  __ \\/\\ \\/\\ \\/\\  == \\/
 console.log('\x1b[47m\x1b[34m \\ \\ \\/\\ \x1b[30m\\ \\ \\/\\_\\ \\ \\_\\ \\ \\  __<\\ \\  __\\   \x1b[0m');
 console.log('\x1b[47m\x1b[34m  \\ \\____-\x1b[30m\\ \\___\\_\\ \\_____\\ \\_____\\ \\_____\\ \x1b[0m');
 console.log('\x1b[47m\x1b[34m   \\/____/ \x1b[30m\\/___/_/\\/_____/\\/_____/\\/_____/ ');
-console.log('\x1b[47m           \x1b[30m                                 \x1b[0m');
+console.log('\x1b[47m\x1b[34m        \x1b[30m                                    \x1b[0m');
 console.log('\x1b[44m -----< DQUBE Customer Service Server >-----\x1b[0m\n');
 
 nano.db.list().then(function(dbs) {
@@ -112,16 +112,15 @@ app.get('/',async function(req, res) {
       function(data){
         //sort magico che ho trovato da qualche parte
         data.rows.sort((a, b) => {
-            let fa = a.value.name.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
-                fb = b.value.name.toLowerCase();
-
-            if (fa < fb) {
-                return -1;
-            }
-            if (fa > fb) {
-                return 1;
-            }
-            return 0;
+          let fa = a.value.name.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
+              fb = b.value.name.toLowerCase();
+          if (fa < fb) {
+            return -1;
+          }
+          if (fa > fb) {
+            return 1;
+          }
+          return 0;
         });
         res.render('index', {customers:data.rows, role: role});
     },
