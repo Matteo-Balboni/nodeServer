@@ -173,9 +173,12 @@
             <% var i = 0 %>
             <% customer.value.software.forEach(function(software){%>
               <% i++ %>
-              <div class="row mb-2" id="div<%= i %>">
-                <div class="col-10">
+              <div class="row mb-2 gx-2" id="div<%= i %>">
+                <div class="col-5">
                   <input type="text" class="form-control" id="Software<%= i %>" list="softwareDatalist" name="Software<%= i %>" placeholder="" value="<%= software.nome %>">
+                </div>
+                <div class="col-5">
+                  <input type="text" class="form-control" id="Software<%= i %>Dongle" name="Software<%= i %>Dongle" value="<%= software?.dongle %>">
                 </div>
                 <div class="col-2 text-center">
                   <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>

@@ -132,9 +132,12 @@
             <% if(customer.value.software.length == 1 && software.nome == ''){ %>
               <div>Nessun Software.</div>
             <% }else{ %>
-              <div class="row mb-2" id="div<%= i %>">
+              <div class="row mb-2 gx-2" id="div<%= i %>">
                 <div class="col">
                   <input type="text" class="form-control" id="Software<%= i %>" name="Software<%= i %>" placeholder="" value="<%= software.nome %>" readonly>
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" id="Software<%= i %>Dongle" name="Software<%= i %>Dongle" placeholder="" value="<%= software.dongle %>" readonly>
                 </div>
               </div>
             <% } %>

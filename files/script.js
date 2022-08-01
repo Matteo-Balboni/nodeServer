@@ -123,10 +123,10 @@ function formSubmit() {
   objCliente.Macchine = [];
   objCliente.Macchine[0] = {seriale: objCliente.Seriale, modello: objCliente.NomeMacchina, info: ''};
   objCliente.Software = [];
+  objCliente.Software[0] = {nome: objCliente.NomeSoftware, dongle: objCliente.ChiaveSoftware};
+  console.log(objCliente);
 
-  delete objCliente.TokenN, delete objCliente.NomeResina, delete objCliente.Qta, delete objCliente.Seriale, delete objCliente.NomeMacchina;
-
-  //console.log(objCliente);
+  delete objCliente.TokenN, delete objCliente.NomeResina, delete objCliente.Qta, delete objCliente.Seriale, delete objCliente.NomeMacchina, delete objCliente.NomeSoftware, delete objCliente.ChiaveSoftware;
 
   objCliente = JSON.stringify(objCliente); //la request accetta il json in versione stringa evidentemente
   if ($("#NomeCliente").val() != "") {
@@ -190,31 +190,27 @@ function formUpdate() {
   var txtarea = $("#assistenzeArea").val();
   var arr2 = [];
   var tokenExp = $("#TokenExpirationDate").attr("fulldate");
-  console.log(tokenExp);
-
   mainF = objectify(mainF, 'object');
-  resinF = objectify(resinF, 'array');
-  deviceF = objectify(deviceF, 'array');
 
-  for (var i = 0, j = 0; j < resinF.length; i++, j = j + 2) {
-    if (Object.values(resinF[j])[0] != '' || Object.values(resinF[j+1])[0] > 0) {
-      arr2.push({ nome: Object.values(resinF[j])[0], numero: Object.values(resinF[j+1])[0] });
+  for (var i = 0; i < resinF.length; i = i + 2) {
+    if (resinF[i].value != '' || resinF[i+1].value > 0) {
+      arr2.push({ nome: resinF[i].value, numero: resinF[i+1].value });
     }
   }
   resinF = arr2;
   arr2 = [];
 
-  for (var i = 0; i < softwareF.length; i++) {
+  for (var i = 0; i < softwareF.length; i = i + 2) {
     if (softwareF[i].value != '') {
-      arr2.push({ nome: softwareF[i].value });
+      arr2.push({ nome: softwareF[i].value, dongle: softwareF[i+1].value });
     }
   }
   softwareF = arr2;
   arr2 = [];
 
-  for (var i = 0, j = 0; j < deviceF.length; i++, j = j + 3) {
-    if (Object.values(deviceF[j])[0] != '' || Object.values(deviceF[j+1])[0] != '' || Object.values(deviceF[j+2])[0] != '' ) {
-      arr2.push({ seriale: Object.values(deviceF[j])[0], modello: Object.values(deviceF[j+1])[0], info: Object.values(deviceF[j+2])[0] });
+  for (var i = 0; i < deviceF.length; i = i + 3) {
+    if (deviceF[i].value != '' || deviceF[i+1].value != '' || deviceF[i+2].value != '' ) {
+      arr2.push({ seriale: deviceF[i].value, modello: deviceF[i+1].value, info: deviceF[i+2].value });
     }
   }
   deviceF = arr2;
@@ -227,9 +223,9 @@ function formUpdate() {
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
-  console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
+  //console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
   mainF = JSON.stringify(mainF);
-  console.log(mainF);
+  //console.log(mainF);
 
   var client = new HttpClient();
   client.post('customer/update', function(response) {
@@ -238,9 +234,9 @@ function formUpdate() {
   }, mainF);
 }
 
-function addInput(formType) {
-  const appended = $('');
-}
+// function addInput(formType) {
+//   const appended = $('');
+// }
 
 function addResin() {
   const appended = $('<div class="row mb-2 gx-2"><div class="col-7"> <input type="text" class="form-control" list="resinDatalist" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3 text-nowrap"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
