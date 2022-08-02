@@ -10,10 +10,12 @@ const nano = require('nano')({
 const cookieParser = require('cookie-parser');
 const { adminAuth, userAuth } = require("./files/middleware/auth.js");
 const jwt = require('jsonwebtoken');
+const favicon = require('serve-favicon');
 
 const app = express();
 
 //middleware
+app.use(favicon(path.join(__dirname, 'favicon', 'favicon-sx32.png')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -463,7 +465,6 @@ app.get('resindbscript.js', function(req, res) {
 });
 
 app.get('/not_authorized', function(req, res) {
-  console.log("non aut");
   res.render('pages/unauthorized');
 });
 
