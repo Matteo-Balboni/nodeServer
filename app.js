@@ -15,7 +15,7 @@ const favicon = require('serve-favicon');
 const app = express();
 
 //middleware
-app.use(favicon(path.join(__dirname, 'favicon', 'favicon-sx32.png')));
+app.use(favicon(path.join(__dirname, 'favicon', 'favicon-32x32.png')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -48,7 +48,7 @@ console.log('\x1b[47m\x1b[34m  _____ \x1b[30m  ______  __  __  ______  ______   
 console.log('\x1b[47m\x1b[34m /\\  __-.\x1b[30m/\\  __ \\/\\ \\/\\ \\/\\  == \\/\\  ___\\   \x1b[0m');
 console.log('\x1b[47m\x1b[34m \\ \\ \\/\\ \x1b[30m\\ \\ \\/\\_\\ \\ \\_\\ \\ \\  __<\\ \\  __\\   \x1b[0m');
 console.log('\x1b[47m\x1b[34m  \\ \\____-\x1b[30m\\ \\___\\_\\ \\_____\\ \\_____\\ \\_____\\ \x1b[0m');
-console.log('\x1b[47m\x1b[34m   \\/____/ \x1b[30m\\/___/_/\\/_____/\\/_____/\\/_____/ ');
+console.log('\x1b[47m\x1b[34m   \\/____/ \x1b[30m\\/___/_/\\/_____/\\/_____/\\/_____/ \x1b[0m');
 console.log('\x1b[47m\x1b[34m        \x1b[30m                                    \x1b[0m');
 console.log('\x1b[44m -----< DQUBE Customer Service Server >-----\x1b[0m\n');
 

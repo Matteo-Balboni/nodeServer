@@ -51,8 +51,10 @@ exports.login = async function(req, res, next) {
 
   //controlla se vengono forniti i dati
   if (!username || !password) {
-    return res.render('./pages/errors', {message: "Username o Password non presenti", error: ""})// res.status(400).json({
+    return res.render('./pages/errors', {message: "Username o Password non presenti", error: ""})
+    // res.json({
     //   message: "Username o Password non presenti",
+    //   error: "Username o password non presenti",
     // });
   }
 
@@ -66,7 +68,7 @@ exports.login = async function(req, res, next) {
     const user = await userdb.find(query);
     if (user.docs.length == 0) {
       res.render('./pages/errors', {message: "Login non effettuato", error: "Utente non trovato"})
-      // res.status(401).json({
+      // res.json({
       //   message: "Login non effettuato",
       //   error: "Utente non trovato",
       // })
@@ -87,10 +89,10 @@ exports.login = async function(req, res, next) {
           });
           console.log('\x1b[46m Login da   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
           res.redirect('/');
-          //res.status(200).json({ message: "Login effettuato", user});
+          //res.status(200).json({ message: "Login effettuato"});
         } else {
           res.render('./pages/errors', {message: "Login non effettuato", error: "Credenziali errate"})
-          //res.status(400).json({ message: "Login non effettuato " });
+          //res.json({ message: "Login non effettuato ", error:"Credenziali errate" });
         }
       });
     }

@@ -234,10 +234,6 @@ function formUpdate() {
   }, mainF);
 }
 
-// function addInput(formType) {
-//   const appended = $('');
-// }
-
 function addResin() {
   const appended = $('<div class="row mb-2 gx-2"><div class="col-7"> <input type="text" class="form-control" list="resinDatalist" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3 text-nowrap"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#resinForm").prepend(appended);
