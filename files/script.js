@@ -251,7 +251,7 @@ function addResin() {
   $("#resinForm input").first().focus();
 }
 function addSoftware() {
-  const appended = $('<div class="row mb-2"><div class="col-10"> <input type="text" class="form-control" id="Software" list="softwareDatalist" name="SoftwareA" placeholder=""> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
+  const appended = $('<div class="row mb-2 gx-2"><div class="col-5"> <input type="text" class="form-control" id="Software" list="softwareDatalist" name="SoftwareA" placeholder="Nome"> </div> <div class="col-5"> <input type="text" class="form-control" id="SoftwareDongle" name="SoftwareDongle" placeholder="Dongle"> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#softwareForm").prepend(appended);
   $("#softwareForm input").first().focus();
 }
