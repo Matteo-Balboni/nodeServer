@@ -80,27 +80,26 @@ async function sanitize(req){
 
   if (!req.Resine || req.Resine.length == 0){
     req.Resine = [];
-    req.Resine[0] = {};
-    req.Resine[0].nome = '';
-    req.Resine[0].numero = 0;
+    req.Resine[0] = {nome: '', numero: 0};
   }
 
   if (!req.Macchine || req.Macchine.length == 0){
     req.Macchine = [];
-    req.Macchine[0] = {};
-    req.Macchine[0].seriale = '';
-    req.Macchine[0].modello = '';
-    req.Macchine[0].info = '';
+    req.Macchine[0] = {seriale: '', modello: '', info: ''};
   }
 
   if (!req.Software || req.Software.length == 0) {
     req.Software = [];
-    req.Software[0] = {};
-    req.Software[0].nome = '';
+    req.Software[0] = {nome: ''};
   }
 
   if (!req.Assistenze) {
     req.Assistenze = '';
+  }
+
+  if (!req.Assistenze2) {
+    req.Assistenze2 = [];
+    req.Assistenze2[0] = {data: '', ore: '', costo: '', testo: ''};
   }
 
   return req;
@@ -198,7 +197,8 @@ app.post('/customer/update', adminAuth, async function(req, res) {
     Resine: obj.Resine,
     Macchine: obj.Macchine,
     Software: obj.Software,
-    Assistenze: obj.Assistenze
+    Assistenze: obj.Assistenze,
+    Assistenze2: obj.Assistenze2
 
   }).then(function(data) {
     console.log("\x1b[43m Aggiornato -> \x1b[0m id: " + obj._id + " da: " + req.ip + "\x1b[0m");

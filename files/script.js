@@ -188,11 +188,13 @@ function formUpdate() {
   var softwareF = $("#softwareForm").serializeArray();
   var deviceF = $("#deviceForm").serializeArray();
   var txtarea = $("#assistenzeArea").val();
+  var repairF = $("#assistenze2form").serializeArray();
   var arr2 = [];
   var tokenExp = $("#TokenExpirationDate").attr("fulldate");
   mainF = objectify(mainF, 'object');
 
-  for (var i = 0; i < resinF.length; i = i + 2) {
+  //Per impostare i form (che vengono convertiti ad array) come oggetti
+  for (var i = 0; i < resinF.length; i = i + 2) { //form resina -> oggetto
     if (resinF[i].value != '' || resinF[i+1].value > 0) {
       arr2.push({ nome: resinF[i].value, numero: resinF[i+1].value });
     }
@@ -200,7 +202,7 @@ function formUpdate() {
   resinF = arr2;
   arr2 = [];
 
-  for (var i = 0; i < softwareF.length; i = i + 2) {
+  for (var i = 0; i < softwareF.length; i = i + 2) { //form software -> oggetto
     if (softwareF[i].value != '') {
       arr2.push({ nome: softwareF[i].value, dongle: softwareF[i+1].value });
     }
@@ -209,11 +211,19 @@ function formUpdate() {
   arr2 = [];
 
   for (var i = 0; i < deviceF.length; i = i + 3) {
-    if (deviceF[i].value != '' || deviceF[i+1].value != '' || deviceF[i+2].value != '' ) {
+    if (deviceF[i].value != '' || deviceF[i+1].value != '' || deviceF[i+2].value != '' ) { //form macchine -> oggetto
       arr2.push({ seriale: deviceF[i].value, modello: deviceF[i+1].value, info: deviceF[i+2].value });
     }
   }
   deviceF = arr2;
+  arr2 = [];
+
+  for (var i = 0; i < repairF.length; i = i + 4) {
+    if (repairF[i].value != '' || repairF[i+1].value != '' || repairF[i+2].value != '' || repairF[i+3].value) { //form assistenze -> oggetto
+      arr2.push({ data: repairF[i].value, ore: repairF[i+1].value, costo: repairF[i+2].value, testo: repairF[i+3].value });
+    }
+  }
+  repairF = arr2;
 
   mainF.NomeCliente = $("#customerName").text();
   mainF._id = $("#customerName").attr("customerId");
@@ -223,6 +233,7 @@ function formUpdate() {
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
   mainF.Assistenze = txtarea;
+  mainF.Assistenze2 = repairF;
   //console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
   mainF = JSON.stringify(mainF);
   //console.log(mainF);

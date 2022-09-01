@@ -88,26 +88,28 @@
             </datalist>
           </div>
         </div>
-        <form id="resinForm">
-          <% if (customer.value.resine) { %>
-            <% var i = 0 %>
-            <% customer.value.resine.forEach(function(resin){%>
-              <% i++ %>
-              <div class="row mb-2 Resine gx-2" id="div<%= i %>">
-                <div class="col-7">
-                  <input type="text" class="form-control" list="resinDatalist" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
+        <div class="overflow-auto" style="max-height: 300px;">
+          <form id="resinForm" class="me-1">
+            <% if (customer.value.resine) { %>
+              <% var i = 0 %>
+              <% customer.value.resine.forEach(function(resin){%>
+                <% i++ %>
+                <div class="row mb-2 Resine gx-2" id="div<%= i %>">
+                  <div class="col-7">
+                    <input type="text" class="form-control" list="resinDatalist" id="Resina<%= i %>" name="Resina<%= i %>" placeholder="" value="<%= resin.nome %>">
+                  </div>
+                  <div class="col-3 text-nowrap">
+                    <input type="number" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>">
+                  </div>
+                  <div class="col text-center">
+                    <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
+                  </div>
                 </div>
-                <div class="col-3 text-nowrap">
-                  <input type="number" class="form-control" id="Resina<%= i %>" name="Resina<%= i %>num" placeholder="" value="<%= resin.numero %>">
-                </div>
-                <div class="col text-center">
-                  <button type="button" class="btn-close" aria-label="Delete" title="Elimina tipologia di resina"></button>
-                </div>
-              </div>
 
-              <% }); %>
-            <% } %>
-        </form>
+                <% }); %>
+              <% } %>
+          </form>
+        </div>
       </div>
 
       <div class="col-lg">
@@ -124,32 +126,34 @@
             </datalist>
           </div>
         </div>
-        <form id="deviceForm">
-        <% if (customer.value.macchine) { %>
-          <% var i = 0 %>
-          <% customer.value.macchine.forEach(function(device){ %>
-            <% i++ %>
-            <div class="row mb-2">
-              <div class="col-10 border rounded">
-                <div class="form-floating text-nowrap">
-                  <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="Macchina<%= i %>seriale" placeholder="" value="<%= device.seriale %>">
-                  <label for="serialeMacchina">Seriale</label>
+        <div style="max-height: 300px;overflow-y: auto; overflow-x: hidden;">
+          <form id="deviceForm">
+          <% if (customer.value.macchine) { %>
+            <% var i = 0 %>
+            <% customer.value.macchine.forEach(function(device){ %>
+              <% i++ %>
+              <div class="row mb-2">
+                <div class="col-10 border rounded">
+                  <div class="form-floating text-nowrap">
+                    <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="Macchina<%= i %>seriale" placeholder="" value="<%= device.seriale %>">
+                    <label for="serialeMacchina">Seriale</label>
+                  </div>
+                  <div class="form-floating text-nowrap">
+                    <input type="text" id="modelloMacchina" list="deviceDatalist" class="form-control mb-1" name="Macchina<%= i %>modello" placeholder="" value="<%= device.modello %>">
+                    <label for="modelloMacchina">Modello</label>
+                  </div>
+                  <div class="form-floating text-nowrap">
+                    <textarea id="infoMacchina" class="form-control mt-2 mb-2" name="Macchina<%= i %>info" placeholder="" style="height: 100px" ><%= device.info %></textarea>
+                    <label for="infoMacchina">Informazioni Macchina</label>
+                  </div>
                 </div>
-                <div class="form-floating text-nowrap">
-                  <input type="text" id="modelloMacchina" list="deviceDatalist" class="form-control mb-1" name="Macchina<%= i %>modello" placeholder="" value="<%= device.modello %>">
-                  <label for="modelloMacchina">Modello</label>
-                </div>
-                <div class="form-floating text-nowrap">
-                  <textarea id="infoMacchina" class="form-control mt-2 mb-2" name="Macchina<%= i %>info" placeholder="" style="height: 100px" ><%= device.info %></textarea>
-                  <label for="infoMacchina">Informazioni Macchina</label>
+                <div class="col-2 text-center">
+                  <button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button>
                 </div>
               </div>
-              <div class="col-2 text-center">
-                <button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button>
-              </div>
-            </div>
-          <% }); %>
-        </form>
+            <% }); %>
+          </form>
+        </div>
       </div>
       <% } %>
     </div>
@@ -168,32 +172,67 @@
             </datalist>
           </div>
         </div>
-        <form id="softwareForm">
-          <% if (customer.value.software) { %>
-            <% var i = 0 %>
-            <% customer.value.software.forEach(function(software){%>
-              <% i++ %>
-              <div class="row mb-2 gx-2" id="div<%= i %>">
-                <div class="col-5">
-                  <input type="text" class="form-control" id="Software<%= i %>" list="softwareDatalist" name="Software<%= i %>" placeholder="" value="<%= software.nome %>">
+        <div style="max-height: 500px; overflow-x: hidden; overflow-y: auto;">
+          <form id="softwareForm">
+            <% if (customer.value.software) { %>
+              <% var i = 0 %>
+              <% customer.value.software.forEach(function(software){%>
+                <% i++ %>
+                <div class="row mb-2 gx-2" id="div<%= i %>">
+                  <div class="col-5">
+                    <input type="text" class="form-control" id="Software<%= i %>" list="softwareDatalist" name="Software<%= i %>" placeholder="Nome" value="<%= software.nome %>">
+                  </div>
+                  <div class="col-5">
+                    <input type="text" class="form-control" id="Software<%= i %>Dongle" name="Software<%= i %>Dongle" placeholder="Dongle" value="<%= software?.dongle %>">
+                  </div>
+                  <div class="col-2 text-center">
+                    <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>
+                  </div>
                 </div>
-                <div class="col-5">
-                  <input type="text" class="form-control" id="Software<%= i %>Dongle" name="Software<%= i %>Dongle" value="<%= software?.dongle %>">
-                </div>
-                <div class="col-2 text-center">
-                  <button type="button" class="btn-close" aria-label="Delete" title="Elimina software"></button>
-                </div>
-              </div>
-            <% }); %>
-          <% } %>
-        </form>
+              <% }); %>
+            <% } %>
+          </form>
+        </div>
       </div>
       <div class="col-sm-8">
-        <h3>Assistenze</h3>
+        <!-- <h3>Assistenze</h3>
         <div class="form-floating text-truncate">
           <textarea id="assistenzeArea" class="form-control" placeholder="" style="height: 250px" ><%= customer.value.assistenze %></textarea>
           <label for="assistenzeArea">Cronologia Assistenze</label>
+        </div> -->
+
+        <!-- INIZIO PARTE NUOVA -->
+        <h3>Assistenze</h3>
+        <div class="overflow-auto" style="max-height: 500px;">
+          <form id="assistenze2form" class="me-2">
+            <% if (customer.value.assistenze2) { %>
+              <% var i = 0 %>
+              <% customer.value.assistenze2.forEach(function(assistenza){%>
+                <% i++ %>
+                <div class="row mb-2 gx-2" id="div<%= i %>">
+                  <div class="col-4">
+                    <input type="date" class="form-control" id="Assistenza<%= i %>Data" name="Assistenza<%= i %>" placeholder="" value="<%= assistenza?.data %>">  <!-- formato: YYYY-MM-DD (es. 2022-09-01) -->
+                  </div>
+                  <div class="col-3">
+                    <input type="number" class="form-control" id="Assistenza<%= i %>Ore" name="Assistenza<%= i %>Ore" placeholder="Ore" value="<%= assistenza?.ore %>">
+                  </div>
+                  <div class="col-3">
+                    <input type="text" class="form-control" id="Assistenza<%= i %>Importo" name="Assistenza<%= i %>Importo" placeholder="Importo" value="<%= assistenza?.costo %>">
+                  </div>
+                  <div class="col-2 text-center">
+                    <button type="button" class="btn-close" aria-label="Delete" title="Elimina Assistenza"></button>
+                  </div>
+                  <div class="text-truncate mt-1 ">
+                    <textarea class="form-control" placeholder="Testo Assistenza" name="Assistenza<%= i %>Testo" style="height: 200px"><%= assistenza?.testo %></textarea>
+                    <hr class="mt-4">
+                  </div>
+                </div>
+              <% }); %>
+            <% } %>
+          </form>
         </div>
+        <!-- FINE PARTE NUOVA -->
+
       </div>
     </div>
   </div>

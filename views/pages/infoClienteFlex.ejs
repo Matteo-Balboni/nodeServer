@@ -144,11 +144,37 @@
           <% }); %>
         <% } %>
       </div>
-      <div class="col-sm-8 mt-2 mt-sm-0">
+      <div class="col-sm-8 mt-2 mt-sm-0 ">
         <h3>Assistenze</h3>
-        <div class="form-floating">
+        <!-- <div class="form-floating">
           <textarea id="assistenzeArea" class="form-control " placeholder="" style="height: 250px" readonly><% if (customer.value.software) { %><%= customer.value.assistenze %><% } %></textarea>
           <label for="assistenzeArea">Cronologia Assistenze</label>
+        </div> -->
+
+        <!-- PARTE PER CAMBIARE DA TEXTAREA A TABELLA, PER RENDERE TUTTO PIU' CARINO -->
+        <div class="overflow-auto" style="height: 500px;">
+
+          <table class="table table-striped table-hover">
+            <thead class="sticky-top bg-white">
+              <th scope="col">Data</th>
+              <th scope="col">Assistenza</th>
+              <th scope="col">Ore</th>
+              <th scope="col">Importo</th>
+            </thead>
+            <tbody>
+              <% if (customer.value.assistenze2) { %>
+                <% customer.value.assistenze2.forEach(function(assistenza){%>
+                  <tr>
+                    <% var splitDate = assistenza.data.split('-') //viene diviso nel formato [YYYY, MM, DD]%>
+                    <td class="col-2"><%= splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0] %></td>
+                    <td class="col-8"><%= assistenza.testo %></td>
+                    <td class="col-1"><%= assistenza.ore %></td>
+                    <td class="col-1"><%= assistenza.costo %></td>
+                  </tr>
+                <% }); %>
+              <% } %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
