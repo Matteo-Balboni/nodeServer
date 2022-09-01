@@ -245,18 +245,23 @@ function formUpdate() {
   }, mainF);
 }
 
-function addResin() {
+function addResin() { //aggiunge i campi di input quando si preme su + nel form resina
   const appended = $('<div class="row mb-2 gx-2"><div class="col-7"> <input type="text" class="form-control" list="resinDatalist" id="Resina" name="ResinaA" placeholder=""> </div> <div class="col-3 text-nowrap"> <input type="number" class="form-control" id="Resina" name="ResinaAnum" placeholder=""> </div> <div class="col text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#resinForm").prepend(appended);
   $("#resinForm input").first().focus();
 }
-function addSoftware() {
+function addSoftware() { //aggiunge i campi di input quando si preme su + nel form software
   const appended = $('<div class="row mb-2 gx-2"><div class="col-5"> <input type="text" class="form-control" id="Software" list="softwareDatalist" name="SoftwareA" placeholder="Nome"> </div> <div class="col-5"> <input type="text" class="form-control" id="SoftwareDongle" name="SoftwareDongle" placeholder="Dongle"> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete"></button> </div> </div>');
   $("#softwareForm").prepend(appended);
   $("#softwareForm input").first().focus();
 }
-function addDevice() {
+function addDevice() { //aggiunge i campi di input quando si preme su + nel form macchine
   const appended = $('<div class="row mb-2"><div class="col-10 border rounded"><div class="form-floating"> <input type="text" id="serialeMacchina" class="form-control mb-1 mt-2" name="MacchinaAseriale" placeholder="" value=""><label for="serialeMacchina">Seriale</label></div><div class="form-floating"><input type="text" id="modelloMacchina" list="deviceDatalist" class="form-control mb-1" name="MacchinaAmodello" placeholder="" value=""><label for="modelloMacchina">Modello</label></div><div class="form-floating"><textarea id="infoMacchina" class="form-control mt-2 mb-2" name="MacchinaAinfo" placeholder="" style="height: 100px" ></textarea><label for="infoMacchina">Informazioni Macchina</label></div></div><div class="col-2 text-center"><button type="button" class="btn-close" aria-label="Delete" title="Elimina macchina"></button></div></div>');
   $("#deviceForm").prepend(appended);
   $("#deviceForm input").first().focus();
+}
+function addRepair() { //aggiunge i campi di input quando si preme su + nel form assistenze
+  const appended = $('<div class="row mb-2 gx-2"> <div class="col-4"> <input type="date" class="form-control" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" placeholder="Ore"> </div> <div class="col-3"> <input type="text" class="form-control" placeholder="Importo"> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete" title="Elimina Assistenza"></button> </div> <div class="text-truncate mt-1"> <textarea class="form-control" placeholder="Testo Assistenza" style="height: 200px"></textarea> <hr class="mt-4"> </div> </div>');
+  $("#assistenze2form").prepend(appended);
+  $("#assistenze2form input").first().focus();
 }

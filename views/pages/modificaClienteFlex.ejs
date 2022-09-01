@@ -202,7 +202,15 @@
         </div> -->
 
         <!-- INIZIO PARTE NUOVA -->
-        <h3>Assistenze</h3>
+        <div class="row">
+          <div class="col">
+            <h3>Assistenze</h3>
+          </div>
+          <div class="col text-end text-lg-center mb-2">
+            <button type="button" class="btn btn-outline-primary btn-sm align-text-top" name="addrepair" onclick="addRepair()" title="Aggiungi un'Assistenza"><i class="bi bi-plus-lg"></i></button>
+          </div>
+        </div>
+
         <div class="overflow-auto" style="max-height: 500px;">
           <form id="assistenze2form" class="me-2">
             <% if (customer.value.assistenze2) { %>
