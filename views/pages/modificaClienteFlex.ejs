@@ -212,10 +212,10 @@
         </div>
 
         <div class="overflow-auto" style="max-height: 500px;">
-          <form id="assistenze2form" class="me-2">
-            <% if (customer.value.assistenze2) { %>
+          <form id="repairForm" class="me-2">
+            <% if (customer.value.assistenze) { %>
               <% var i = 0 %>
-              <% customer.value.assistenze2.forEach(function(assistenza){%>
+              <% customer.value.assistenze.forEach(function(assistenza){%>
                 <% i++ %>
                 <div class="row mb-2 gx-2" id="div<%= i %>">
                   <div class="col-4">
@@ -257,7 +257,7 @@
       $("body").on("click", "#tokenDel", function() {
         if (confirm('Sicuro di voler eliminare il token?')) {
           $( this ).siblings().remove();
-          $( this ).siblings().find("*").val(''); //continua poi da qua facendo la cosa per aggiungere un token
+          $( this ).siblings().find("*").val('');
           $( this ).fadeOut(100);
           $( this ).parent().append('<button type="button" name="btnTokenAdd" id="tokenAdd" class="btn btn-outline-primary btn-sm">Aggiungi Token</button>');
           $( this ).parent().append('<div class="col"><div><input type="text" class="form-control d-none" id="NoToken" name="NoToken" placeholder="" value="true"></div></div>');
@@ -268,7 +268,6 @@
 
     $(document).ready(function() {
       $("body").on("click", "#tokenAdd", function() {
-        //da fare la parte dell'add
         $( this ).siblings().remove();
         $( this ).parent().append('<div class="col"><div class="form-floating mb-2 text-truncate"><input type="number" class="form-control" id="TokenQuantity" name="TokenQty" placeholder="" value=""><label for="TokenQuantity">Quantità Token</label></div></div>');
         $( this ).parent().append('<button type="button" name="btnTokenDelete" id="tokenDel" class="btn btn-outline-danger btn-sm">Elimina Token</button>');

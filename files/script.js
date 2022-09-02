@@ -187,12 +187,11 @@ function formUpdate() {
   var resinF = $("#resinForm").serializeArray();
   var softwareF = $("#softwareForm").serializeArray();
   var deviceF = $("#deviceForm").serializeArray();
-  var txtarea = $("#assistenzeArea").val();
-  var repairF = $("#assistenze2form").serializeArray();
+  var repairF = $("#repairForm").serializeArray();
   var arr2 = [];
   var tokenExp = $("#TokenExpirationDate").attr("fulldate");
   mainF = objectify(mainF, 'object');
-
+  
   //Per impostare i form (che vengono convertiti ad array) come oggetti
   for (var i = 0; i < resinF.length; i = i + 2) { //form resina -> oggetto
     if (resinF[i].value != '' || resinF[i+1].value > 0) {
@@ -232,8 +231,7 @@ function formUpdate() {
   mainF.Resine = resinF;
   mainF.Macchine = deviceF;
   mainF.Software = softwareF;
-  mainF.Assistenze = txtarea;
-  mainF.Assistenze2 = repairF;
+  mainF.Assistenze = repairF;
   //console.log(mainF);       //{Assistenze: "assistenze", Email: "email", Macchine: Array [ {…} ], NomeCliente: "nome cliente", Resine: Array [ {…} ], Software: Array [], Telefono: "telefono", Token: "token", _id: "d83ef8426b5175d49b501145b1019710", _rev: "4-88523ded1c1651c80ad6e24765447d92"
   mainF = JSON.stringify(mainF);
   //console.log(mainF);
@@ -261,7 +259,7 @@ function addDevice() { //aggiunge i campi di input quando si preme su + nel form
   $("#deviceForm input").first().focus();
 }
 function addRepair() { //aggiunge i campi di input quando si preme su + nel form assistenze
-  const appended = $('<div class="row mb-2 gx-2"> <div class="col-4"> <input type="date" class="form-control" placeholder=""> </div> <div class="col-3"> <input type="number" class="form-control" placeholder="Ore"> </div> <div class="col-3"> <input type="text" class="form-control" placeholder="Importo"> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete" title="Elimina Assistenza"></button> </div> <div class="text-truncate mt-1"> <textarea class="form-control" placeholder="Testo Assistenza" style="height: 200px"></textarea> <hr class="mt-4"> </div> </div>');
-  $("#assistenze2form").prepend(appended);
+  const appended = $('<div class="row mb-2 gx-2"> <div class="col-4"> <input type="date" class="form-control" placeholder="" value="" name="date"> </div> <div class="col-3"> <input type="number" class="form-control" placeholder="Ore" value="" name="hours"> </div> <div class="col-3"> <input type="text" class="form-control" placeholder="Importo" value="" name="cost"> </div> <div class="col-2 text-center"> <button type="button" class="btn-close" aria-label="Delete" title="Elimina Assistenza"></button> </div> <div class="text-truncate mt-1"> <textarea class="form-control" name="text" placeholder="Testo Assistenza" style="height: 200px"></textarea> <hr class="mt-4"> </div> </div>');
+  $("#repairForm").prepend(appended);
   $("#assistenze2form input").first().focus();
 }

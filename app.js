@@ -94,12 +94,8 @@ async function sanitize(req){
   }
 
   if (!req.Assistenze) {
-    req.Assistenze = '';
-  }
-
-  if (!req.Assistenze2) {
-    req.Assistenze2 = [];
-    req.Assistenze2[0] = {data: '', ore: '', costo: '', testo: ''};
+    req.Assistenze = [];
+    req.Assistenze[0] = {data: '', ore: '', costo: '', testo: ''};
   }
 
   return req;
@@ -198,7 +194,6 @@ app.post('/customer/update', adminAuth, async function(req, res) {
     Macchine: obj.Macchine,
     Software: obj.Software,
     Assistenze: obj.Assistenze,
-    Assistenze2: obj.Assistenze2
 
   }).then(function(data) {
     console.log("\x1b[43m Aggiornato -> \x1b[0m id: " + obj._id + " da: " + req.ip + "\x1b[0m");
