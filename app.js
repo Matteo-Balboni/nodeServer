@@ -1,5 +1,5 @@
 const express = require('express');
-const config = require('./config.js');
+const config = require('./config/config.js');
 const bodyParser = require('body-parser');
 const path = require('path');
 const nano = require('nano')({

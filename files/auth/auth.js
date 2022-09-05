@@ -1,4 +1,4 @@
-const config = require('../../config.js');
+const config = require('../../config/config.js');
 const nano = require('nano')({
   url: 'http://' + config.couchCreds + '@127.0.0.1:5984',
   requestDefaults: {
