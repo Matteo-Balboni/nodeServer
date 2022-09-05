@@ -50,7 +50,7 @@ console.log('\x1b[47m\x1b[34m \\ \\ \\/\\ \x1b[30m\\ \\ \\/\\_\\ \\ \\_\\ \\ \\ 
 console.log('\x1b[47m\x1b[34m  \\ \\____-\x1b[30m\\ \\___\\_\\ \\_____\\ \\_____\\ \\_____\\ \x1b[0m');
 console.log('\x1b[47m\x1b[34m   \\/____/ \x1b[30m\\/___/_/\\/_____/\\/_____/\\/_____/ \x1b[0m');
 console.log('\x1b[47m\x1b[34m        \x1b[30m                                    \x1b[0m');
-console.log('\x1b[44m -----< DQUBE Customer Service Server >-----\x1b[0m\n');
+console.log('\x1b[44m\x1b[37m -----< DQUBE Customer Service Server >-----\x1b[0m\n');
 
 nano.db.list().then(function(dbs) {
     console.log(dbs);
