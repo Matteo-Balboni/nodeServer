@@ -4,4 +4,5 @@ const username = 'Admin'; //string, sets the username for accessing CouchDB
 const password = 'Admin'; //string, sets the password for accessing CouchDB
 const credentials = username + ':' + password; //packs the credentials ready for use, you should not change this
 const serverPort = 80; //number, sets the server port
-module.exports = { couchCreds: credentials, serverPort: serverPort }; //exports the configuration for use, you should also not change this
+const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee'; //string, your jwt (JsonWebToken) probably shoud not show this around
+module.exports = { couchCreds: credentials, serverPort: serverPort, jwtSecret: jwtSecret}; //exports the configuration for use, you should also not change this

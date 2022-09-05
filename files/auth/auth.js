@@ -8,7 +8,7 @@ const nano = require('nano')({
 const userdb = nano.db.use('userdb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
+// const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
 
 exports.register = async function(req, res, next) {
   const { username, password, role } = req.body;
@@ -23,7 +23,7 @@ exports.register = async function(req, res, next) {
         const maxAge = 10 * 60 * 60; //età massima messa come 10 ore (in secondi)
         const token = jwt.sign(
           { id: data.id, username, role},
-          jwtSecret,
+          config.jwtSecret,
           {
             expiresIn: maxAge //per l'appunto per ora 3 ore
           }
@@ -79,7 +79,7 @@ exports.login = async function(req, res, next) {
           const maxAge = 10 * 60 * 60;
           const token = jwt.sign(
             { id: user.docs[0]._id, username: username, role: user.docs[0].role},
-            jwtSecret,
+            config.jwtSecret,
             {
               expiresIn: maxAge //per l'appunto per ora 3 ore
             }

@@ -41,7 +41,7 @@ const resinDocId = 'd83ef8426b5175d49b501145b1001043';
 const tokenDocId = '27c178f04e717b96b94d316bc200174b';
 const softwareDocId = 'bda7c6faee2f1d25ffd9dcef370037e5';
 const devicesDocId = '5cc5e050c903f8137dbf0af46d00024c';
-const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
+// const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
 
 
 //Initial ASCII art
@@ -430,7 +430,7 @@ async function updateTokenSerial(rev, newSerial) {
 async function getRole(req) {
   const token = req.cookies.jwt;
   if (token) {
-    return jwt.verify(token, jwtSecret, (err, decodedToken) => {
+    return jwt.verify(token, config.jwtSecret, (err, decodedToken) => {
       if (err) {
         return "none";
       } else {
