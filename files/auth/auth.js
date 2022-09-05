@@ -1,5 +1,6 @@
+const config = require('../../config.js');
 const nano = require('nano')({
-  url: 'http://Admin:Admin@127.0.0.1:5984',
+  url: 'http://' + config.couchCreds + '@127.0.0.1:5984',
   requestDefaults: {
     jar: true
   }

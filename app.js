@@ -1,8 +1,9 @@
 const express = require('express');
+const config = require('./config.js');
 const bodyParser = require('body-parser');
 const path = require('path');
 const nano = require('nano')({
-  url: 'http://Admin:Admin@127.0.0.1:5984',
+  url: 'http://' + config.couchCreds + '@127.0.0.1:5984',
   requestDefaults: {
     jar: true
   }
@@ -447,8 +448,8 @@ async function getRole(req) {
   }
 }
 
-app.listen(80, function() {
-  console.log("Server started on port 80");
+app.listen(config.serverPort, function() {
+  console.log("Server started on port " + config.serverPort);
 });
 
 app.get('script.js', function(req, res) {
