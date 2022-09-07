@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'files'))); //serve per linkare il f
 
 const maindb = nano.db.use('cristiangay');
 const designName = 'all_customers';
+const allEssential = 'customers_essential';
 const viewName = 'all';
 const resindb = nano.db.use('resindb');
 const resinDes = 'all_resin'
@@ -41,8 +42,7 @@ const resinDocId = 'd83ef8426b5175d49b501145b1001043';
 const tokenDocId = '27c178f04e717b96b94d316bc200174b';
 const softwareDocId = 'bda7c6faee2f1d25ffd9dcef370037e5';
 const devicesDocId = '5cc5e050c903f8137dbf0af46d00024c';
-// const jwtSecret = '9e65be37f950cbd11d3d506bbf2207ba659e776913cd913e8f534751920aa3f146e0ee';  //in teoria dicono che è sicuro lasciarla qua così, ma in caso si vedrà
-
+const userdb = nano.db.use('userdb');
 
 //Initial ASCII art
 console.log('\x1b[47m\x1b[34m  _____ \x1b[30m  ______  __  __  ______  ______    \x1b[0m');
@@ -106,7 +106,7 @@ app.get('/',async function(req, res) {
   const role = await getRole(req);
   if (role == 'user' || role == 'admin') {
     //console.log('\x1b[46m Connesso   -> \x1b[0m \x1b[4m' + req.ip + '\x1b[0m');
-    maindb.view(designName, viewName).then(
+    maindb.view(designName, allEssential).then(
       function(data){
         //sort magico che ho trovato da qualche parte
         data.rows.sort((a, b) => {
@@ -362,8 +362,53 @@ app.post('/devices/update', adminAuth, function(req, res) {
 });
 
 app.get('/admin_interface', adminAuth, function(req, res) {
-  res.render('pages/admin');
+  userdb.view('usersView', 'no_pass').then(
+    function (data) {
+      data.rows.sort((a, b) => {
+        let fa = a.value.username.toLowerCase(), //se mai questo non dovesse andare, probabilmente è perchè qualcosa non ha registrato bene il nome, eliminarlo dal db
+            fb = b.value.username.toLowerCase();
+        if (fa < fb) {
+          return -1;
+        }
+        if (fa > fb) {
+          return 1;
+        }
+        return 0;
+      });
+      res.render('pages/admin', {users:data.rows});
+    },
+    function (err) {
+      res.send(err);
+  });
 });
+
+app.post('/admin/updateUser', adminAuth, function(req, res) { //tutta questa parte la potrei spostare in auth.js
+  userdb.atomic('usersView', 'update_user', req.body._id, {   //tanto tutte le altre cose che riguardano l'autenticazione sono lì
+    username: req.body.username,
+    role: req.body.role
+  }).then(
+    function(data, headers, status) {
+      console.log('AGGIORNATO UTENTE ' + req.body.username);
+      res.send('qualcosa che poi cambierò'); //placeholder
+    },
+    function(err) {
+      console.log(err);
+      res.send(err);
+    }
+  )
+});
+
+// app.get('/admin/viewUser', adminAuth, function(req, res) {
+//   const user = req.query.u;
+//   userdb.view('usersView', 'all_info', {key: user}).then(
+//     function (data) {
+//       res.render('pages/userInfo', {user: data.rows[0]});
+//     },
+//     function (err) {
+//       res.send(err);
+//     }
+//   );
+// });
 
 async function getToken(tokenquantity) {
   return resindb.view(resinDes, tokenUrl).then(
@@ -458,6 +503,10 @@ app.get('script.js', function(req, res) {
 
 app.get('resindbscript.js', function(req, res) {
   res.send('files/resindbscript.js');
+});
+
+app.get('userscript.js', function(req, res) {
+  res.send('files/userscript.js');
 });
 
 app.get('/not_authorized', function(req, res) {
