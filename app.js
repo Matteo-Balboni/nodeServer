@@ -32,8 +32,8 @@ const designName = 'all_customers';
 const allEssential = 'customers_essential';
 const viewName = 'all';
 const resindb = nano.db.use('resindb');
-const resinDes = 'all_resin'
-const allView = 'all'
+const resinDes = 'all_resin';
+const allView = 'all';
 const resinUrl = 'resinView';
 const tokenUrl = 'tokenSerialView';
 const softwareUrl ='softwareView';
@@ -389,26 +389,14 @@ app.post('/admin/updateUser', adminAuth, function(req, res) { //tutta questa par
   }).then(
     function(data, headers, status) {
       console.log('AGGIORNATO UTENTE ' + req.body.username);
-      res.send('qualcosa che poi cambierò'); //placeholder
+      res.send({status: 'ok', username: req.body.username, role: req.body.role});
     },
     function(err) {
       console.log(err);
-      res.send(err);
+      res.send({status: 'failed', message: 'Utente non aggiornato'});
     }
   )
 });
-
-// app.get('/admin/viewUser', adminAuth, function(req, res) {
-//   const user = req.query.u;
-//   userdb.view('usersView', 'all_info', {key: user}).then(
-//     function (data) {
-//       res.render('pages/userInfo', {user: data.rows[0]});
-//     },
-//     function (err) {
-//       res.send(err);
-//     }
-//   );
-// });
 
 async function getToken(tokenquantity) {
   return resindb.view(resinDes, tokenUrl).then(

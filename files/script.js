@@ -45,6 +45,17 @@ var HttpClient = function() {
         anHttpRequest.open( "GET", aUrl, true );
         anHttpRequest.send( null );
     }
+    this.delete = function(aUrl, aCallback, reqBody) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() {
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+        anHttpRequest.open( "DELETE", aUrl, true );
+        anHttpRequest.setRequestHeader("Content-Type", "application/json"); //questo è assolutamente necessario, non ti far neanche venire in mente di toglierlo
+        anHttpRequest.setRequestHeader("Accept", "application/json");
+        anHttpRequest.send(reqBody);
+    }
 }
 
 function objectify(data, option) {
@@ -140,6 +151,7 @@ function formSubmit() {
       $("#DeleteAlerts").hide();
       $("#DeleteAlerts").fadeIn('fast');
 
+      //riguarda questa parte e considera di fare come hai fatto per userscript
       client.get('infocliente?c=' + response.id + '&o=true', function(respo) {
         respo = JSON.parse(respo);
         let tokenDisplay = '';
@@ -152,7 +164,7 @@ function formSubmit() {
         } else {
           tokenDisplay = 'No token';
         }
-        console.log(tokenDisplay);
+        //console.log(tokenDisplay);
         $("#ListaClienti").prepend('<a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">'+ tokenDisplay +'</p></a>');
         $("#ListaClientiDel").prepend('<div class="d-flex" id="elementDelete-'+ respo.id +'"><div class="flex-grow-1 rounded-start"><a href="infoCliente?c='+ respo.id +'" class="fw-semibold list-group-item list-group-item-action" id="element-'+ respo.id +'">'+ respo.value.name +'<p class="fw-light">'+ tokenDisplay +'</p></a></div><div class="d-flex align-items-stretch float-end "><button type="button" class="btn btn-outline-danger list-group-item rounded-end border-start-0" name="delete" onclick="deleteElement(`'+ respo.id +'`, `'+ respo.value.rev +'`, `'+ respo.value.name +'`)">Elimina</button>');
       });
@@ -191,7 +203,7 @@ function formUpdate() {
   var arr2 = [];
   var tokenExp = $("#TokenExpirationDate").attr("fulldate");
   mainF = objectify(mainF, 'object');
-  
+
   //Per impostare i form (che vengono convertiti ad array) come oggetti
   for (var i = 0; i < resinF.length; i = i + 2) { //form resina -> oggetto
     if (resinF[i].value != '' || resinF[i+1].value > 0) {
