@@ -88,7 +88,7 @@ function newUser() {
 
         $("#UserList").prepend('<button onclick="showUser(`' + res.data.id + '`)" class="fw-semibold list-group-item list-group-item-action" id="button-'+ res.data.id +'">' + res.user.username + '<p class="fw-light" id="p-'+ res.data.id +'">Ruolo: '+ res.user.role +'</p></button>');
         $("#UserData").append(toAppend);
-        $("#" + res.data.id + "Data").append()
+        $("#" + res.data.id + "Data").append();
         $("#" + res.data.id + "Data").hide();
 
         alertFadeout();

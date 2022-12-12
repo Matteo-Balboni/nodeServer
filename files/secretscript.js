@@ -1,9 +1,37 @@
+//register starting keystrokes
+const key = 'cristiangay';
+let startingKeys = '';
+//console.log(key); //add back in case you want the secret to be more easily found
+document.addEventListener("keydown", handleStart, false);
+function functionName() {
+
+}
+
+function handleStart(e) {
+  //only register letters
+  if (e.keyCode > 64 && e.keyCode < 91) {
+    startingKeys = startingKeys + e.key;
+    console.log(startingKeys); //add back in case you want the secret to be more easily found
+    //if input == key starts the game
+    if (startingKeys.toLowerCase() === key.toLowerCase()) {
+      gameStart();
+      document.removeEventListener("keydown", handleStart, false);
+    }
+    //if input is longer than key, resets the input string
+    if (startingKeys.length >= key.length) {
+      startingKeys = '';
+    }
+  }
+  if (e.keyCode === 8) {
+    startingKeys = '';
+  }
+}
+
 function gameStart() {
   //shhh you cannot see me
 
   //recalculate physics so the ball always bounces in the right direction
   //if i want to add more levels, i need to change the way the bricks get handled and drawn
-  //change the way to start to direct keyboard input
   //add support for splash screens to indicate game states
 
   $("canvas").remove();
@@ -11,12 +39,14 @@ function gameStart() {
 
   const canvas = document.getElementById('gameArea');
   const ctx = canvas.getContext("2d");
-  const ball = { radius: 10, x: canvas.width / 2, y: canvas.height - 30, dx: 2, dy: -2 };
+  const speed = 4;
+  const ball = { radius: 10, x: canvas.width / 2, y: canvas.height - 30, dx: speed, dy: -speed };
   const paddle = { height: 10, width: 75, x: 0 };
   paddle.x = (canvas.width - paddle.width) / 2;
 
   let rightPressed = false;
   let leftPressed = false;
+  let stop = false;
 
   let score = 0;
   let lives = 3;
@@ -43,6 +73,13 @@ function gameStart() {
       rightPressed = true;
     } else if (e.key === "Left" || e.key === "ArrowLeft"){
       leftPressed = true;
+    } else if (e.key === "Escape") {
+      //starts and stops game
+      stop = !stop;
+      if (stop === false) {
+        $("canvas").show();
+        draw();
+      }
     }
   }
   function keyUpHandler(e) {
@@ -114,7 +151,19 @@ function gameStart() {
         const b = bricks[c][r];
         if (b.status === 1) {
           if ( checkForCollision(b) ) {
-            ball.dy = -ball.dy;
+            let nearestX = Math.max(b.x, Math.min(ball.x, b.x + brick.width));
+            let nearestY = Math.max(b.y, Math.min(ball.y, b.y + brick.height));
+
+            let dist = [ ball.x - nearestX, ball.y - nearestY ];
+            let dNormal = [ -dist[1], dist[0] ]; //in questo punto sono andato un po' a caso, se ci sono problemi guarda qua
+
+            let normalAngle = Math.atan2(dNormal[0], dNormal[1]);
+            let incomingAngle = Math.atan2(ball.dy, ball.dx);
+            let theta = normalAngle - incomingAngle;
+
+            //rotation
+            ball.dx = ball.dx * Math.cos(2*theta) - ball.dy * Math.sin(2*theta);
+            ball.dy = ball.dx * Math.sin(2*theta) + ball.dy * Math.cos(2*theta);
             b.status = 0;
             score++;
             if (score === brickRowCount * brickColumnCount) {
@@ -152,7 +201,6 @@ function gameStart() {
     drawScore();
     drawLives();
 
-
     //collision detection of the ball
     if ( ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius ) {
       ball.dx = -ball.dx;
@@ -171,8 +219,8 @@ function gameStart() {
         } else {
           ball.x = canvas.width / 2;
           ball.y = canvas.height - 30;
-          ball.dx = 2;
-          ball.dy = -2;
+          ball.dx = speed;
+          ball.dy = -speed;
           paddle.x = (canvas.width - paddle.width) / 2;
         }
       }
@@ -189,7 +237,12 @@ function gameStart() {
     ball.x += ball.dx;
     ball.y += ball.dy;
 
-    requestAnimationFrame(draw);
+    //stop execution of code on escape otherwise keep drawing
+    if (!stop) {
+      requestAnimationFrame(draw);
+    } else {
+      $("canvas").hide();
+    }
   }
   //Repeats draw every 10ms
   draw();
