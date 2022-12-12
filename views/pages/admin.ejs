@@ -19,7 +19,7 @@
             <h1 class="display-3 ms-4 d-inline align-middle">Interfaccia Amministratore</h1>
           </div>
           <div class="me-1 mt-2 mt-sm-0">
-            <button type="button" name="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" class="btn btn-outline-primary">Nuovo Utente</button>
+            <button type="button" name="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i><span class="ms-1 d-none d-md-inline">Nuovo Utente</span></button>
           </div>
         </div>
         <hr>
@@ -55,7 +55,7 @@
 
     <div class="container mt-4">
       <div class="row">
-        <div class="col">
+        <div class="col-sm mb-2">
           <div class="list-group" id="UserList">
             <% users.forEach(function(user){ %>
               <button onclick="showUser('<%= user.id %>')" class="fw-semibold list-group-item list-group-item-action" id="button-<%= user.id%>"><%= user.value.username %>
@@ -64,7 +64,7 @@
               <% }); %>
             </div>
         </div>
-        <div class="col border rounded" id="UserData">
+        <div class="col-sm border rounded me-2" id="UserData" style="max-height: 264px">
           <% users.forEach(function(user){ %>
             <div id="<%= user.id %>Data" class="mt-2" style="display:none">
               <form id="<%= user.id %>Form">
@@ -90,9 +90,9 @@
                 <button class="btn btn-outline-danger" name="button" data-bs-toggle="modal" data-bs-target="#resetPasswordModal" onclick="changeModal('<%= user.id %>', '<%= user.value.username %>')">Reset Password</button>
               </div>
               <div class="d-flex flex-row-reverse mt-5 me-1 mb-2">
-                <button type="button" class="btn btn-outline-success ms-auto" name="saveChanges" onclick="saveUserChanges('<%= user.id %>')">Salva</button>
+                <button type="button" class="btn btn-outline-success ms-auto" name="saveChanges" onclick="saveUserChanges('<%= user.id %>')"><i class="bi bi-check-lg"></i><span class="ms-1 d-none d-md-inline">Salva</span></button>
                 <div class="align-self-end">
-                  <button type="button" class="btn btn-outline-danger" onclick="deleteUser('<%= user.id %>')">Elimina Utente</button>
+                  <button type="button" class="btn btn-outline-danger" onclick="deleteUser('<%= user.id %>')"><i class="bi bi-x-lg"></i><span class="ms-1 d-none d-md-inline">Elimina Utente</span></button>
                 </div>
               </div>
             </div>

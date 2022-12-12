@@ -445,9 +445,9 @@ async function updateTokenSerial(rev, newSerial) {
     _rev: rev,
     tokenSerial: newSerial,
     lastUpdated: {
-      year: date.getUTCFullYear(),  //ci metto utc giusto perchè non sono sicuro di quale vogliano e questo dovrebbe andare bene
+      year: date.getUTCFullYear(),  // ci metto utc giusto perchè non sono sicuro di quale vogliano e questo dovrebbe andare bene
       utcDay: date.getUTCDate(),
-      Month: date.getUTCMonth() + 1
+      Month: date.getUTCMonth() + 1 // +1 dato che partono da 0, o almeno così mi ricordo, al massimo ci riguardo poi
     }
 
   }).then(function(data, headers, status) {
@@ -495,6 +495,10 @@ app.get('resindbscript.js', function(req, res) {
 
 app.get('userscript.js', function(req, res) {
   res.send('files/userscript.js');
+});
+
+app.get('secretscript.js', function(req, res) {
+  res.send('files/secretscript.js');
 });
 
 app.get('/not_authorized', function(req, res) {

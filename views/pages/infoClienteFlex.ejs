@@ -110,6 +110,7 @@
               </h2>
               <div id="collapse<%= i %>" class="accordion-collapse collapse <%= show %>" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
+                  <span><% if(device.seriale != ''){%> <b>Seriale:</b> <%= device.seriale %> <br> <% } %> </span>
                   <strong>Informazioni</strong>
                   <br>
                   <span style="white-space: pre-line"><% if(device.info != ''){%> <%= device.info %><%}else{%> <%='Nessun dato inserito'%><%} %></span>
@@ -167,7 +168,7 @@
                   <tr>
                     <% var splitDate = assistenza.data.split('-') //viene diviso nel formato [YYYY, MM, DD]%>
                     <td class="col-2"><%= splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0] %></td>
-                    <td class="col-8"><%= assistenza.testo %></td>
+                    <td class="col-8" style="white-space: pre-wrap"><%= assistenza.testo %></td>
                     <td class="col-1"><%= assistenza.ore %></td>
                     <td class="col-1"><%= assistenza.costo %></td>
                   </tr>
