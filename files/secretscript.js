@@ -1,12 +1,8 @@
 //register starting keystrokes
-const key = 'cristiangay';
+const key = 'a';
 let startingKeys = '';
 //console.log(key); //add back in case you want the secret to be more easily found
 document.addEventListener("keydown", handleStart, false);
-function functionName() {
-
-}
-
 function handleStart(e) {
   //only register letters
   if (e.keyCode > 64 && e.keyCode < 91) {
@@ -27,10 +23,29 @@ function handleStart(e) {
   }
 }
 
+//classes (i'm sorry but i have to do them all in a single file)
+class Brick {
+  constructor(x, y, height, width, rotation) {
+    this.pos = new p5.Vector(x, y);
+    this.height = height;
+    this.width = width;
+    this.rotation = rotation;
+    this.status = 1;
+  }
+}
+
+class Ball {
+  constructor(x, y, radius, dx, dy) {
+    this.pos = new p5.Vector(x, y);
+    this.radius = radius;
+    this.vel = new p5.Vector(dx, dy);
+  }
+}
+
 function gameStart() {
   //shhh you cannot see me
 
-  //recalculate physics so the ball always bounces in the right direction
+  //when ball hits right side of brick, it bounces upwards instead of downwards
   //if i want to add more levels, i need to change the way the bricks get handled and drawn
   //add support for splash screens to indicate game states
 
@@ -39,28 +54,34 @@ function gameStart() {
 
   const canvas = document.getElementById('gameArea');
   const ctx = canvas.getContext("2d");
-  const speed = 4;
-  const ball = { radius: 10, x: canvas.width / 2, y: canvas.height - 30, dx: speed, dy: -speed };
-  const paddle = { height: 10, width: 75, x: 0 };
-  paddle.x = (canvas.width - paddle.width) / 2;
+  const speed = 1;
+  const ball = new Ball(canvas.width / 2, canvas.height - 30, 10, speed, -speed); //{ radius: 10, x: canvas.width / 2, y: canvas.height - 30, dx: speed, dy: -speed };
+  const paddle = new Brick(10, canvas.height - 20, 10, 75); //{ height: 10, width: 75, x: 0 };
+  paddle.pos.x = (canvas.width - paddle.width) / 2;
 
   let rightPressed = false;
   let leftPressed = false;
+  let auto = true;
   let stop = false;
 
   let score = 0;
   let lives = 3;
 
   //bricks
-  const brickRowCount = 3;
-  const brickColumnCount = 5;
   const brick = { height: 20, width: 75, padding: 10, offsetTop: 30, offsetLeft: 30 };
-  const bricks = [];
-  //initialize the brick field
-  for (let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r++) {
-      bricks[c][r] = { x: 0, y: 0, status: 1}
+  var bricks = [];
+  initializeBricks();
+
+  function initializeBricks() {
+    //initialize the brick field
+    for (let i = 0, x = brick.offsetLeft, y = brick.offsetTop; i < 15; i++) {
+      bricks.push(new Brick(x, y, brick.height, brick.width, 0));
+      if ( (i + 1) % 5 == 0 ) {
+        x = brick.offsetLeft;
+        y = y + brick.height + brick.padding;
+      } else {
+        x = x + brick.width + brick.padding;
+      }
     }
   }
 
@@ -80,6 +101,8 @@ function gameStart() {
         $("canvas").show();
         draw();
       }
+    } else if (e.key === "à") {
+      auto = !auto;
     }
   }
   function keyUpHandler(e) {
@@ -92,14 +115,14 @@ function gameStart() {
   function mouseMoveHandler(e) {
     const relativeX = e.clientX - ((document.documentElement.clientWidth / 2) - 240); //240 is half the canvas width, this will cause problems in the future
     if (relativeX > 0 && relativeX < canvas.width) {
-      paddle.x = relativeX - paddle.width / 2;
+      paddle.pos.x = relativeX - paddle.width / 2;
     }
   }
 
   function drawBall() {
     //draws the ball
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2); //a circle
+    ctx.arc(ball.pos.x, ball.pos.y, ball.radius, 0, Math.PI * 2); //a circle
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
@@ -108,28 +131,27 @@ function gameStart() {
   function drawPaddle() {
     //draws the paddle
     ctx.beginPath();
-    ctx.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
+    ctx.rect(paddle.pos.x, paddle.pos.y, paddle.width, paddle.height);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
   }
 
   function drawBricks() {
+    if (bricks.length == 0 && ball.pos.y > 150) {
+      initializeBricks();
+    }
     //guess what this does
-    for (let c = 0; c < brickColumnCount; c++) {
-      for (let r = 0; r < brickRowCount; r++) {
-        if (bricks[c][r].status === 1) {
-          const brickX = c * (brick.width + brick.padding) + brick.offsetLeft;
-          const brickY = r * (brick.height + brick.padding) + brick.offsetTop;
-          bricks[c][r].x = brickX;
-          bricks[c][r].y = brickY;
-          ctx.beginPath();
-          ctx.rect(brickX, brickY, brick.width, brick.height);
-          ctx.fillStyle = "#ff6600";
-          ctx.fill();
-          ctx.closePath();
-        }
-      }
+    for (let i = 0; i < bricks.length; i++) {
+      // ctx.beginPath();
+      // ctx.rect(bricks[i].pos.x, bricks[i].pos.y, bricks[i].width, bricks[i].height);
+      // ctx.fillStyle = "#ff6600";
+      // ctx.fill();
+      // ctx.closePath();
+      ctx.beginPath();
+      ctx.fillStyle = "#ff6600";
+      roundRect(ctx, bricks[i].pos.x, bricks[i].pos.y, bricks[i].width, bricks[i].height, 3, true);
+      ctx.closePath();
     }
   }
 
@@ -146,49 +168,74 @@ function gameStart() {
 
   function collisionDetection() {
     //checks all the bricks for collision with the ball
-    for (let c = 0; c < brickColumnCount; c++) {
-      for (let r = 0; r < brickRowCount; r++) {
-        const b = bricks[c][r];
-        if (b.status === 1) {
-          if ( checkForCollision(b) ) {
-            let nearestX = Math.max(b.x, Math.min(ball.x, b.x + brick.width));
-            let nearestY = Math.max(b.y, Math.min(ball.y, b.y + brick.height));
-
-            let dist = [ ball.x - nearestX, ball.y - nearestY ];
-            let dNormal = [ -dist[1], dist[0] ]; //in questo punto sono andato un po' a caso, se ci sono problemi guarda qua
-
-            let normalAngle = Math.atan2(dNormal[0], dNormal[1]);
-            let incomingAngle = Math.atan2(ball.dy, ball.dx);
-            let theta = normalAngle - incomingAngle;
-
-            //rotation
-            ball.dx = ball.dx * Math.cos(2*theta) - ball.dy * Math.sin(2*theta);
-            ball.dy = ball.dx * Math.sin(2*theta) + ball.dy * Math.cos(2*theta);
-            b.status = 0;
-            score++;
-            if (score === brickRowCount * brickColumnCount) {
-              confirm("You Win! Try again?");
-              document.location.reload();
-            }
-          }
+    for (let c = 0; c < bricks.length; c++) {
+      const b = bricks[c];
+      if (b.status === 1) {
+        if ( checkForCollision(b) ) {
+          collisionReaction(b);
+          bricks.splice(c, 1);
+          score++;
+          // if (score === 15) {
+          //   confirm("You Win! Try again?");
+          //   document.location.reload();
+          // }
         }
       }
     }
   }
 
+  function collisionReaction(br) {
+    let nearest = new p5.Vector();
+    nearest.x = ( Math.max(br.pos.x, Math.min(ball.pos.x, br.pos.x + br.width)));
+    nearest.y = ( Math.max(br.pos.y, Math.min(ball.pos.y, br.pos.y + br.height)));
+    // let nearestX = Math.max( b.pos.x, ball.pos.x );
+    // let nearestY = Math.max( b.pos.y, ball.pos.y );
+    // let nearestX = Math.abs(Math.sqrt((b.pos.x - ball.pos.x) + (b.pos.y - ball.pos.y)) - ball.radius); //https://www.varsitytutors.com/hotmath/hotmath_help/topics/shortest-distance-between-a-point-and-a-circle
+    // let nearestY = ball.pos.y - b.pos.y;
+
+    let dist = new p5.Vector(ball.pos.x - nearest.x, ball.pos.y - nearest.y);
+    let overlap = ball.radius - dist.mag();
+    if (isNaN(overlap)) {
+      overlap = 0;
+    }
+    if (overlap > 0) {
+      ball.pos = ball.pos.sub(dist.normalize() * overlap);
+      console.log("overlap: " + overlap);
+    }
+    let dNormal = new p5.Vector(dist.x, -dist.y);
+    let normalAngle = Math.atan2(dNormal.x, dNormal.y);
+    let collisionAngle = Math.atan2(dist.y, dist.x);
+    let incomingAngle = Math.atan2(ball.vel.y, ball.vel.x);
+    let theta = normalAngle - incomingAngle;
+    console.log("Angle Stuff : na " + (normalAngle) + ", ia " + (incomingAngle) + ", theta " + (theta));
+
+    //rotation
+    ball.vel = ball.vel.rotate(2*theta);
+    if (Math.abs(ball.vel.x) + Math.abs(ball.vel.y) != speed * 2) {
+      console.error(ball.vel, {dist: dist, nearest:nearest, br:br}, "Lost speed: " + (speed * 2 - (Math.abs(ball.vel.x) + Math.abs(ball.vel.y))));
+    } else {
+      console.log(ball.vel, {dist: dist, nearest:nearest, br:br}, "Lost speed: " + (speed * 2 - (Math.abs(ball.vel.x) + Math.abs(ball.vel.y))));
+    }
+  }
+
   function checkForCollision(rect) {
-    var distX = Math.abs(ball.x - rect.x-brick.width/2);
-    var distY = Math.abs(ball.y - rect.y-brick.height/2);
+    var distX = Math.abs(ball.pos.x - rect.pos.x-rect.width/2);
+    var distY = Math.abs(ball.pos.y - rect.pos.y-rect.height/2);
 
-    if (distX > (brick.width/2 + ball.radius)) {return false;}
-    if (distY > (brick.height/2 + ball.radius)) {return false;}
+    if (distX > (rect.width/2 + ball.radius)) { return false; }
+    if (distY > (rect.height/2 + ball.radius)) { return false; }
 
-    if (distX <= (brick.width/2)) {return true;}
-    if (distY <= (brick.height/2)) {return true;}
+    if (distX <= (rect.width/2)) { return true; }
+    if (distY <= (rect.height/2)) { return true; }
 
-    let dix = distX - brick.width / 2;
-    let diy = distY - brick.height / 2;
-    return (ball.dx * ball.dx + ball.dy * ball.dy <= (ball.radius * ball.radius));
+    let dix = distX - rect.width / 2; //these do not get used anywhere
+    let diy = distY - rect.height / 2;
+    return (ball.vel.x * ball.vel.x + ball.vel.y * ball.vel.y <= (ball.radius * ball.radius));
+  }
+
+  function showBanner() {
+    stop = true;
+    ctx.rect(canvas.width / 4, canvas.height / 4, canvas.width - canvas.width / 4, canvas.height - canvas.height / 4);
   }
 
   function draw() {
@@ -201,41 +248,42 @@ function gameStart() {
     drawScore();
     drawLives();
 
-    //collision detection of the ball
-    if ( ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius ) {
-      ball.dx = -ball.dx;
+    //collision detection of the ball with walls
+    if ( ball.pos.x + ball.vel.x > canvas.width - ball.radius || ball.pos.x + ball.vel.x < ball.radius ) {
+      ball.vel.x = -ball.vel.x;
     }
-    if ( ball.y + ball.dy < ball.radius ) {
-      ball.dy = -ball.dy;
-    } else if ( ball.y + ball.dy + ball.radius > canvas.height - ball.radius) {
-      //detect collision with paddle
-      if ( ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-        ball.dy = -ball.dy;
+    if ( ball.pos.y + ball.vel.y < ball.radius ) {
+      ball.vel.y = -ball.vel.y;
+    } else if ( ball.pos.y + ball.vel.y + ball.radius > canvas.height - ball.radius) {
+      //detect collision with bottom of screen (lose ball)
+      lives--;
+      if (!lives) {
+        alert("GAME OVER!");
+        document.location.reload();
       } else {
-        lives--;
-        if (!lives) {
-          alert("GAME OVER!");
-          document.location.reload();
-        } else {
-          ball.x = canvas.width / 2;
-          ball.y = canvas.height - 30;
-          ball.dx = speed;
-          ball.dy = -speed;
-          paddle.x = (canvas.width - paddle.width) / 2;
-        }
+        ball.pos.x = canvas.width / 2;
+        ball.pos.y = canvas.height - 30;
+        ball.vel.x = speed;
+        ball.vel.y = -speed;
+        paddle.pos.x = (canvas.width - paddle.width) / 2;
       }
+    }
+    if ( ball.pos.x > paddle.pos.x && ball.pos.x < paddle.pos.x + paddle.width && ball.pos.y + ball.vel.y + ball.radius > paddle.pos.y) {
+      collisionReaction(paddle);
     }
 
     //move the paddle
     if (rightPressed) {
-      paddle.x = Math.min(paddle.x + 7, canvas.width - paddle.width);
+      paddle.pos.x = Math.min(paddle.pos.x + 7, canvas.width - paddle.width);
     } else if (leftPressed) {
-      paddle.x = Math.max(paddle.x - 7, 0);
+      paddle.pos.x = Math.max(paddle.pos.x - 7, 0);
+    } else if (auto){
+      paddle.pos.x = ball.pos.x + ball.vel.x - (paddle.width / 2);
     }
 
     //move the ball
-    ball.x += ball.dx;
-    ball.y += ball.dy;
+    ball.pos.x += ball.vel.x * 3;
+    ball.pos.y += ball.vel.y * 3;
 
     //stop execution of code on escape otherwise keep drawing
     if (!stop) {
@@ -246,4 +294,58 @@ function gameStart() {
   }
   //Repeats draw every 10ms
   draw();
+}
+
+// function dot(a, b) {
+//   //dot product
+//   return a.x * b.x + a.y * b.y;
+// }
+// function mag(vector) {
+//   //calculate magnitude of vector
+//   return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+// }
+// function norm(vector) {
+//   let m = mag(vector);
+//   if (m > 0) {
+//     vector.x = vector.x / m;
+//     vector.y = vector.y / m;
+//   }
+//
+//   return vector;
+// }
+// function mult(v, n) {
+//   return {x: v.x * n, y: v.y * n};
+// }
+// function sub(v1, v2) {
+//   return {x: v1.x - v2.x, y: v1.y - v2.y};
+// }
+// function toDegrees(angle) {
+//   return angle * 180 / Math.PI;
+// }
+function roundDecimal(num) {
+  return +(Math.round(num + "e+2") + "e-2");
+}
+function roundRect(ctx, x, y, width, height, radius = 5, fill = true, stroke = false) {
+  if (typeof radius === 'number') {
+    radius = {tl: radius, tr: radius, br: radius, bl: radius};
+  } else {
+    radius = {...{tl: 0, tr: 0, br: 0, bl: 0}, ...radius};
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + radius.tl, y);
+  ctx.lineTo(x + width - radius.tr, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+  ctx.lineTo(x + width, y + height - radius.br);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+  ctx.lineTo(x + radius.bl, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+  ctx.lineTo(x, y + radius.tl);
+  ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+  ctx.closePath();
+  if (fill) {
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.stroke();
+  }
 }
