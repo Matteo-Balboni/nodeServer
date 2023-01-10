@@ -264,7 +264,7 @@ app.get('/resina?e?', adminAuth, function(req, res) {
           }
           return 0;
       });
-      res.render('pages/resin', {resina:data.rows[0] });
+      res.render('pages/resin', { resina:data.rows[0] });
     },
     function(err) {
       res.send(err);
@@ -485,6 +485,7 @@ app.listen(config.serverPort, function() {
   console.log("Server started on port " + config.serverPort);
 });
 
+//Uhhhhh seems like i don't need these anymore? i should be testing more though, if they are useless i'll delete them
 app.get('script.js', function(req, res) {
   res.send('files/script.js');
 });
